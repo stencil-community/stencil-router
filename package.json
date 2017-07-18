@@ -3,6 +3,7 @@
   "private": true,
   "version": "0.0.1",
   "description": "Stencil Router",
+  "main": "dist/collection/collection-manifest.json",
   "scripts": {
     "build": "stencil build --prod",
     "dev": "stencil build --watch",

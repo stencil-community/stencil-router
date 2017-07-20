@@ -28,8 +28,12 @@ export class Route {
   componentWillLoad() {
     const routerElement = document.querySelector(this.router)
 
+    if(routerElement.$instance) {
+      this.routerInstance = routerElement.$instance;
+    }
+
     routerElement.addEventListener('stencilRouterLoaded', (e) => {
-      this.routerInstance = routerElement;
+      this.routerInstance = routerElement.$instance;
     })
 
     routerElement.addEventListener('stencilRouterNavigation', (e) => {
@@ -38,9 +42,12 @@ export class Route {
   }
 
   render() {
-    if(!this.routerInstance) { return null; }
+    if(!this.routerInstance) {
+      console.log('No router instance here', this);
+      return null;
+    }
 
-    this.match.url = this.routerInstance.$instance.routeMatch.url;
+    this.match.url = this.routerInstance.routeMatch.url;
     const match = this.match
     const ChildComponent = this.component
 

@@ -25,6 +25,8 @@ export class RouteLink {
     }
 
     router.navigateTo(this.url);
+
+    e.preventDefault();
   }
 
   render() {
@@ -36,7 +38,7 @@ export class RouteLink {
       );
     } else {
       return (
-        <a href="#" onClick={this.handleClick.bind(this)}>
+        <a href={this.url} onClick={this.handleClick.bind(this)}>
           <slot></slot>
         </a>
       )

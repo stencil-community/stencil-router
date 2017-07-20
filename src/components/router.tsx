@@ -29,9 +29,6 @@ export class Router {
     this.routeMatch = {
       url: '/' + url.replace(this.root, '')
     }
-    console.log('Route match', this.routeMatch);
-
-    console.log('Emitting event');
     this.$el.dispatchEvent(new (window as any).CustomEvent('stencilRouterNavigation', { detail: this.routeMatch }))
   }
 
@@ -46,7 +43,6 @@ export class Router {
     this.routeMatch = {
       url: "/" + withoutBase
     }
-    console.log('Route match', this.routeMatch);
   }
 
   componentDidLoad() {
@@ -62,7 +58,6 @@ export class Router {
   }
 
   render() {
-    console.log('<ion-router> rendering')
     return (
       <slot></slot>
     );

@@ -24,15 +24,17 @@ export class Router {
 
   @Prop()
   navigateTo(url, data={}) {
+    const self = (this as any).$instance || this;
+
     console.log('navigateTo', url, data);
     window.history.pushState(null, null, url);
-    this.routeMatch = {
-      url: '/' + url.replace(this.root, '')
+    self.routeMatch = {
+      url: '/' + url.replace(self.root, '')
     }
-    console.log('Route match', this.routeMatch);
+    console.log('Route match', self.routeMatch);
 
     console.log('Emitting event');
-    //Ionic.emit(this.$instance, 'ionRouterNavigation', { detail: this.routeMatch });
+    self.$el.dispatchEvent(new (window as any).CustomEvent('stencilRouterNavigation', { detail: self.routeMatch }))
   }
 
   componentWillLoad() {

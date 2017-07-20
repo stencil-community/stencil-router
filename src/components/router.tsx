@@ -29,11 +29,13 @@ export class Router {
     this.routeMatch = {
       url: '/' + url.replace(this.root, '')
     }
+
+    console.log('<stencil-router> dispatching event', this.routeMatch)
     this.$el.dispatchEvent(new (window as any).CustomEvent('stencilRouterNavigation', { detail: this.routeMatch }))
   }
 
   componentWillLoad() {
-    console.log('<ion-router> loaded');
+    console.log('<stencil-router> loaded');
     window.addEventListener('popstate', this.handlePopState.bind(this));
     window.addEventListener('hashchange', this.handleHashChange.bind(this));
 

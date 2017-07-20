@@ -37,11 +37,13 @@ export class Route {
     })
 
     routerElement.addEventListener('stencilRouterNavigation', (e) => {
+      console.log(`<stencil-route> for ${this.url} got nav event`, e.detail);
       this.match = e.detail;
     })
   }
 
   render() {
+    console.log(`<stencil-route> for ${this.url} rendering`);
     if(!this.routerInstance) {
       console.log('No router instance here', this);
       return null;

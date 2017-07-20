@@ -26,7 +26,8 @@ export class RouteLink {
 
     router.navigateTo(this.url);
 
-    e.preventDefault();
+    //Uncomment once https://github.com/ionic-team/stencil/issues/58 is fixed
+    //e.preventDefault();
   }
 
   render() {
@@ -38,7 +39,7 @@ export class RouteLink {
       );
     } else {
       return (
-        <a href={this.url} onClick={this.handleClick.bind(this)}>
+        <a onClick={this.handleClick.bind(this)}>
           <slot></slot>
         </a>
       )

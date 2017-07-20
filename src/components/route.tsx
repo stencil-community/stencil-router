@@ -29,7 +29,6 @@ export class Route {
     const routerElement = document.querySelector(this.router)
 
     routerElement.addEventListener('stencilRouterLoaded', (e) => {
-      console.log('Stencil router loaded', e);
       this.routerInstance = routerElement;
     })
 
@@ -53,7 +52,7 @@ export class Route {
       console.log(`  <ion-route> Rendering route ${this.url}`, this.router, match);
       return (<ChildComponent props={this.componentProps} />);
     } else {
-      return null;
+      return <span></span>;
     }
   }
 }

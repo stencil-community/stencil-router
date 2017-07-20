@@ -1,4 +1,4 @@
-import { Component, h, Prop, State } from '@stencil/core';
+import { Component, h, Prop, Method, State } from '@stencil/core';
 
 /**
   * @name Router
@@ -13,7 +13,7 @@ export class Router {
 
   base: string;
 
-  @Prop() root: string = '';
+  @Prop() root: string = '/';
 
   @State() routeMatch: any = {};
 
@@ -22,19 +22,17 @@ export class Router {
     return this.routeMatch
   }
 
-  @Prop()
+  @Method()
   navigateTo(url, data={}) {
-    const self = (this as any).$instance || this;
-
     console.log('navigateTo', url, data);
     window.history.pushState(null, null, url);
-    self.routeMatch = {
-      url: '/' + url.replace(self.root, '')
+    this.routeMatch = {
+      url: '/' + url.replace(this.root, '')
     }
-    console.log('Route match', self.routeMatch);
+    console.log('Route match', this.routeMatch);
 
     console.log('Emitting event');
-    self.$el.dispatchEvent(new (window as any).CustomEvent('stencilRouterNavigation', { detail: self.routeMatch }))
+    this.$el.dispatchEvent(new (window as any).CustomEvent('stencilRouterNavigation', { detail: this.routeMatch }))
   }
 
   componentWillLoad() {

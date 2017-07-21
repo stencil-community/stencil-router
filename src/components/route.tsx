@@ -51,7 +51,7 @@ export class Route {
       return null;
     }
 
-    console.log(`<stencil-route> for ${this.path} rendering`);
+    //console.log(`<stencil-route> for ${this.path} rendering`);
     this.match.url = this.routerInstance.routeMatch.url;
     const match = this.match
     const ChildComponent = this.component
@@ -61,7 +61,7 @@ export class Route {
 
     const matches = this.exact ? match.url == this.path: isInPath;
 
-    console.log(`\tDoes ${match.url} match our path ${this.path}?`, matches)
+    //console.log(`\tDoes ${match.url} match our path ${this.path}?`, matches)
 
     if(matches) {
       console.log(`  <ion-route> Rendering route ${this.path}`, this.router, match);

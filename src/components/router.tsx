@@ -25,9 +25,9 @@ export class Router {
   @Method()
   navigateTo(url, data={}) {
     console.log('navigateTo', url, data);
-    window.history.pushState(null, null, url);
+    window.history.pushState(null, null, url || '/');
     this.routeMatch = {
-      url: '/' + url.replace(this.root, '')
+      url: url
     }
 
     console.log('\n<stencil-router> dispatching event', this.routeMatch)
@@ -39,8 +39,8 @@ export class Router {
     window.addEventListener('popstate', this.handlePopState.bind(this));
     window.addEventListener('hashchange', this.handleHashChange.bind(this));
 
-    const initialPath = window.location.pathname
-    const withoutBase = initialPath.replace(this.root, '')
+    const initialPath = window.location.pathname;
+    const withoutBase = '';//initialPath.replace(this.root, '')
 
     this.routeMatch = {
       url: "/" + withoutBase

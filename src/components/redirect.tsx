@@ -9,7 +9,6 @@ export class Redirect {
   @Prop() url: string;
 
   componentWillLoad() {
-    console.log('Reidrect loading');;
     const router = document.querySelector(this.router);
     router.navigateTo(this.url);
   }

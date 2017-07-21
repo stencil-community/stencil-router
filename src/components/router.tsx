@@ -30,7 +30,7 @@ export class Router {
       url: '/' + url.replace(this.root, '')
     }
 
-    console.log('<stencil-router> dispatching event', this.routeMatch)
+    console.log('\n<stencil-router> dispatching event', this.routeMatch)
     this.$el.dispatchEvent(new (window as any).CustomEvent('stencilRouterNavigation', { detail: this.routeMatch }))
   }
 

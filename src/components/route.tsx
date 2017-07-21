@@ -19,6 +19,8 @@ export class Route {
 
   @Prop() componentProps: any = {};
 
+  @Prop() exact: boolean = false;
+
   // The instance of the router
   @Prop() router: any;
 
@@ -37,27 +39,29 @@ export class Route {
     })
 
     routerElement.addEventListener('stencilRouterNavigation', (e) => {
-      console.log(`<stencil-route> for ${this.url} got nav event`, e.detail);
+      //console.log(`<stencil-route> for ${this.url} got nav event`, e.detail);
       this.match = e.detail;
     })
   }
 
   render() {
-    console.log(`<stencil-route> for ${this.url} rendering`);
     if(!this.routerInstance) {
-      console.log('No router instance here', this);
       return null;
     }
 
+    console.log(`<stencil-route> for ${this.url} rendering`);
     this.match.url = this.routerInstance.routeMatch.url;
     const match = this.match
     const ChildComponent = this.component
 
-    console.log('Does match match?', match.url, this.url)
+    // Check if this route is in the matching URL (for example, a parent route)
+    const isInPath = this.match.url.indexOf(this.url) == 0
 
-    //return <p></p>;
+    const matches = this.exact ? match.url == this.url : isInPath;
 
-    if(match.url == this.url) {
+    console.log(`\tDoes ${match.url} match our path ${this.url}?`, matches)
+
+    if(matches) {
       console.log(`  <ion-route> Rendering route ${this.url}`, this.router, match);
       return (<ChildComponent props={this.componentProps} />);
     } else {

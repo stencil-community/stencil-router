@@ -6,18 +6,21 @@
   "main": "dist/collection/collection-manifest.json",
   "scripts": {
     "build": "stencil build --prod",
-    "dev": "stencil build --watch",
-    "start": "npm install && npm run dev"
+    "dev": "sd concurrent \"stencil build --watch\" \"stencil-dev-server\" ",
+    "test": "stencil build --watch",
+    "serve": "stencil-dev-server",
+    "start": "npm run dev"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/ionic-team/stencil-router.git"
   },
   "dependencies": {
-    "@stencil/core": "next"
+    "@stencil/core": "0.0.4-3"
   },
   "devDependencies": {
-    "@stencil/dev-server": "latest"
+    "@stencil/dev-server": "0.0.11",
+    "@stencil/utils": "0.0.4"
   },
   "author": "Ionic Team",
   "license": "MIT",

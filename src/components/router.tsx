@@ -1,4 +1,4 @@
-import { Component, h, Prop, Method, State } from '@stencil/core';
+import { Component, Prop, Method, State, Element } from '@stencil/core';
 
 /**
   * @name Router
@@ -9,7 +9,7 @@ import { Component, h, Prop, Method, State } from '@stencil/core';
   tag: 'stencil-router'
 })
 export class Router {
-  $el: any;
+  @Element() el: HTMLElement;
 
   base: string;
 
@@ -17,8 +17,8 @@ export class Router {
 
   @State() routeMatch: any = {};
 
-  @Prop()
-  get match() {
+  @Method()
+  match() {
     return this.routeMatch
   }
 
@@ -31,7 +31,7 @@ export class Router {
     }
 
     console.log('\n<stencil-router> dispatching event', this.routeMatch)
-    this.$el.dispatchEvent(new (window as any).CustomEvent('stencilRouterNavigation', { detail: this.routeMatch }))
+    this.el.dispatchEvent(new (window as any).CustomEvent('stencilRouterNavigation', { detail: this.routeMatch }))
   }
 
   componentWillLoad() {
@@ -40,7 +40,8 @@ export class Router {
     window.addEventListener('hashchange', this.handleHashChange.bind(this));
 
     const initialPath = window.location.pathname;
-    const withoutBase = '';//initialPath.replace(this.root, '')
+    //const withoutBase = '';
+    const withoutBase = initialPath.replace(this.root, '')
 
     this.routeMatch = {
       url: "/" + withoutBase
@@ -48,11 +49,16 @@ export class Router {
   }
 
   componentDidLoad() {
-    this.$el.dispatchEvent(new (window as any).CustomEvent('stencilRouterLoaded'))
+    this.el.dispatchEvent(new (window as any).CustomEvent('stencilRouterLoaded'))
   }
 
-  handlePopState(e) {
-    console.log('Pop state', e)
+  handlePopState() {
+    console.log('handled pop state called', window.location.pathname);
+    window.history.pushState(null, null, window.location.pathname || '/');
+    this.routeMatch = {
+      url: window.location.pathname
+    }
+    this.el.dispatchEvent(new (window as any).CustomEvent('stencilRouterNavigation', { detail: this.routeMatch}));
   }
 
   handleHashChange(e) {

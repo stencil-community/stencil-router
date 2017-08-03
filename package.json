@@ -3,7 +3,9 @@
   "private": true,
   "version": "0.0.1",
   "description": "Stencil Router",
-  "main": "dist/collection/collection-manifest.json",
+  "main": "dist/collection/index.js",
+  "types": "dist/collection/index.d.ts",
+  "collection": "dist/collection/collection-manifest.json",
   "scripts": {
     "build": "stencil build --prod",
     "dev": "sd concurrent \"stencil build --watch\" \"stencil-dev-server\" ",
@@ -16,7 +18,7 @@
     "url": "git+https://github.com/ionic-team/stencil-router.git"
   },
   "dependencies": {
-    "@stencil/core": "0.0.4-3"
+    "@stencil/core": "0.0.4-4"
   },
   "devDependencies": {
     "@stencil/dev-server": "0.0.11",

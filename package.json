@@ -7,8 +7,8 @@
   "types": "dist/collection/index.d.ts",
   "collection": "dist/collection/collection-manifest.json",
   "scripts": {
-    "build": "stencil build --prod",
-    "dev": "sd concurrent \"stencil build --watch\" \"stencil-dev-server\" ",
+    "build": "stencil build",
+    "dev": "sd concurrent \"stencil build --dev --watch\" \"stencil-dev-server\" ",
     "test": "stencil build --watch",
     "serve": "stencil-dev-server",
     "start": "npm run dev"

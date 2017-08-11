@@ -11,7 +11,7 @@
     "publish" : "np",
     "serve": "stencil-dev-server",
     "start": "npm run dev",
-    "test": "stencil build --watch"
+    "test": "echo \"Error: no test specified\" && exit 0"
   },
   "repository": {
     "type": "git",

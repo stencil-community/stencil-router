@@ -1,4 +1,4 @@
-import { Component, Prop } from '@stencil/core';
+import { Component, Prop, Element } from '@stencil/core';
 
 /**
   * @name Route
@@ -9,6 +9,7 @@ import { Component, Prop } from '@stencil/core';
   tag: 'stencil-route-link'
 })
 export class RouteLink {
+  @Element() el: HTMLElement;
   @Prop() url: string;
 
   @Prop() custom: boolean = false;
@@ -17,7 +18,7 @@ export class RouteLink {
   @Prop() router: any;
 
   handleClick(e) {
-    console.log('Route link click', e);
+    e.preventDefault();
     const router = document.querySelector(this.router);
     if(!router) {
       console.warn('<stencil-route-link> wasn\'t passed an instance of the router as the "router" prop!');
@@ -25,9 +26,6 @@ export class RouteLink {
     }
 
     router.navigateTo(this.url);
-
-    //Uncomment once https://github.com/ionic-team/stencil/issues/58 is fixed
-    //e.preventDefault();
   }
 
   render() {
@@ -39,7 +37,7 @@ export class RouteLink {
       );
     } else {
       return (
-        <a onClick={this.handleClick.bind(this)}>
+        <a href={this.url} onClick={this.handleClick.bind(this)}>
           <slot></slot>
         </a>
       )

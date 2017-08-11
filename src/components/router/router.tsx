@@ -23,21 +23,18 @@ export class Router {
   }
 
   @Method()
-  navigateTo(url, data={}) {
-    console.log('navigateTo', url, data);
+  navigateTo(url: string, _data: any = {}) {
     window.history.pushState(null, null, url || '/');
     this.routeMatch = {
       url: url
     }
 
-    console.log('\n<stencil-router> dispatching event', this.routeMatch)
     this.el.dispatchEvent(new (window as any).CustomEvent('stencilRouterNavigation', { detail: this.routeMatch }))
   }
 
   componentWillLoad() {
-    console.log('<stencil-router> loaded');
     window.addEventListener('popstate', this.handlePopState.bind(this));
-    window.addEventListener('hashchange', this.handleHashChange.bind(this));
+    window.onhashchange = this.handleHashChange.bind(this);
 
     const initialPath = window.location.pathname;
     //const withoutBase = '';
@@ -53,16 +50,20 @@ export class Router {
   }
 
   handlePopState() {
-    console.log('handled pop state called', window.location.pathname);
-    window.history.pushState(null, null, window.location.pathname || '/');
-    this.routeMatch = {
-      url: window.location.pathname
+    if (window.location.pathname !== oldPathName) {
+      this.routeMatch = {
+        url: window.location.pathname
+      }
+
+      this.el.dispatchEvent(new (window as any).CustomEvent('stencilRouterNavigation', { detail: this.routeMatch }))
+    } else {
+      this.navigateTo(window.location.pathname);
     }
-    this.el.dispatchEvent(new (window as any).CustomEvent('stencilRouterNavigation', { detail: this.routeMatch}));
+
+    var oldPathName = window.location.pathname;
   }
 
-  handleHashChange(e) {
-    console.log('Hash change', e)
+  handleHashChange(_event: UIEvent) {
   }
 
   render() {

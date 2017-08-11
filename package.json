@@ -1,7 +1,6 @@
 {
   "name": "@stencil/router",
-  "private": true,
-  "version": "0.0.1",
+  "version": "0.0.0",
   "description": "Stencil Router",
   "main": "dist/collection/index.js",
   "types": "dist/collection/index.d.ts",
@@ -9,16 +8,17 @@
   "scripts": {
     "build": "stencil build",
     "dev": "sd concurrent \"stencil build --dev --watch\" \"stencil-dev-server\" ",
-    "test": "stencil build --watch",
+    "publish" : "np",
     "serve": "stencil-dev-server",
-    "start": "npm run dev"
+    "start": "npm run dev",
+    "test": "stencil build --watch"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/ionic-team/stencil-router.git"
   },
   "dependencies": {
-    "@stencil/core": "latest"
+    "@stencil/core": "0.0.4"
   },
   "devDependencies": {
     "@stencil/dev-server": "latest",

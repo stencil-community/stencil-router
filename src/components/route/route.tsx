@@ -34,17 +34,21 @@ export class Route {
       if (routerElement) {
         setTimeout(() => {
           this.routerInstance = routerElement;
-        })
+        });
       }
 
-      routerElement.addEventListener('stencilRouterLoaded', (_event: UIEvent) => {
+      routerElement.addEventListener(
+        'stencilRouterLoaded',
+        (_event: UIEvent) => {}
+      );
 
-      })
-
-      routerElement.addEventListener('stencilRouterNavigation', (e) => {
-        this.match = e.detail;
-      })
-    })
+      routerElement.addEventListener(
+        'stencilRouterNavigation',
+        (e: UIEvent) => {
+          this.match = e.detail;
+        }
+      );
+    });
   }
 
   render() {
@@ -64,11 +68,10 @@ export class Route {
 
     const matches = this.exact ? cleanedMatchUrl === cleanedUrl : isInPath;
 
-
     if (matches) {
-      return (<ChildComponent props={this.componentProps} />);
+      return <ChildComponent props={this.componentProps} />;
     } else {
-      return <span></span>;
+      return <span />;
     }
   }
 }

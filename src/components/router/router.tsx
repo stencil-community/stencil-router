@@ -1,4 +1,12 @@
-import { Component, Prop, Method, State, Element } from '@stencil/core';
+import {
+  Component,
+  Prop,
+  Method,
+  State,
+  Element,
+  Event,
+  EventEmitter
+} from '@stencil/core';
 
 /**
   * @name Router
@@ -17,9 +25,11 @@ export class Router {
 
   @State() routeMatch: any = {};
 
+  @Event() private stencilRouterNavigation: EventEmitter;
+  @Event() private stencilRouterLoaded: EventEmitter;
   @Method()
   match() {
-    return this.routeMatch
+    return this.routeMatch;
   }
 
   @Method()
@@ -27,9 +37,8 @@ export class Router {
     window.history.pushState(null, null, url || '/');
     this.routeMatch = {
       url: url
-    }
-
-    this.el.dispatchEvent(new (window as any).CustomEvent('stencilRouterNavigation', { detail: this.routeMatch }))
+    };
+    this.stencilRouterNavigation.emit(this.routeMatch);
   }
 
   componentWillLoad() {
@@ -38,24 +47,23 @@ export class Router {
 
     const initialPath = window.location.pathname;
     //const withoutBase = '';
-    const withoutBase = initialPath.replace(this.root, '')
+    const withoutBase = initialPath.replace(this.root, '');
 
     this.routeMatch = {
-      url: "/" + withoutBase
-    }
+      url: '/' + withoutBase
+    };
   }
 
   componentDidLoad() {
-    this.el.dispatchEvent(new (window as any).CustomEvent('stencilRouterLoaded'))
+    this.stencilRouterLoaded.emit({ url: window.location.pathname });
   }
 
   handlePopState() {
     if (window.location.pathname !== oldPathName) {
       this.routeMatch = {
         url: window.location.pathname
-      }
-
-      this.el.dispatchEvent(new (window as any).CustomEvent('stencilRouterNavigation', { detail: this.routeMatch }))
+      };
+      this.stencilRouterNavigation.emit(this.routeMatch);
     } else {
       this.navigateTo(window.location.pathname);
     }
@@ -63,12 +71,9 @@ export class Router {
     var oldPathName = window.location.pathname;
   }
 
-  handleHashChange(_event: UIEvent) {
-  }
+  handleHashChange(_event: UIEvent) {}
 
   render() {
-    return (
-      <slot></slot>
-    );
+    return <slot />;
   }
 }

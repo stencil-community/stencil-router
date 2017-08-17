@@ -1,4 +1,5 @@
 import { Component, Prop, State, Element } from '@stencil/core';
+import matchPath, { MatchOptions } from '../../utils/match-path';
 
 /**
   * @name Route
@@ -11,67 +12,62 @@ import { Component, Prop, State, Element } from '@stencil/core';
 export class Route {
   @Element() el: HTMLElement;
 
+  unsubscribe: Function = () =>{}
+
+  @Prop({ context: 'activeRouter' }) activeRouter: any;
   @State() routerInstance: any;
-
   @Prop() url: string;
-
   @Prop() component: string;
-
   @Prop() componentProps: any = {};
-
   @Prop() exact: boolean = false;
+  @Prop() routeRender: Function;
 
-  // The instance of the router
-  @Prop() router: any;
-
-  //@Prop() match: any;
   @State() match: any = {};
 
+  computeMatch(pathname?: string) {
+    pathname = pathname || this.activeRouter.get('location').pathname;
+    const options: MatchOptions = {
+      path: this.url,
+      exact: this.exact,
+      strict: true
+    }
+
+    return matchPath(pathname, options);
+  }
+
   componentWillLoad() {
-    setTimeout(() => {
-      const routerElement = document.querySelector(this.router);
-
-      if (routerElement) {
-        setTimeout(() => {
-          this.routerInstance = routerElement;
-        });
-      }
-
-      routerElement.addEventListener(
-        'stencilRouterLoaded',
-        (_event: UIEvent) => {}
-      );
-
-      routerElement.addEventListener(
-        'stencilRouterNavigation',
-        (e: UIEvent) => {
-          this.match = e.detail;
-        }
-      );
+    this.unsubscribe = this.activeRouter.subscribe(() => {
+      this.match = this.computeMatch();
     });
+    this.match = this.computeMatch();
+  }
+
+  componentWillUnmount() {
+    this.unsubscribe();
   }
 
   render() {
-    if (!this.routerInstance) {
+    if (!this.activeRouter) {
       return null;
     }
 
-    this.match.url = this.routerInstance.match().url;
-    const match = this.match;
-    const ChildComponent = this.component;
-
-    const cleanedUrl = this.url.split('/').join().replace(/ /g, '');
-    const cleanedMatchUrl = match.url.split('/').join().replace(/ /g, '');
-
     // Check if this route is in the matching URL (for example, a parent route)
-    const isInPath = cleanedMatchUrl.indexOf(cleanedUrl) === 0;
+    if (!this.match) {
+      return <span />
+    }
 
-    const matches = this.exact ? cleanedMatchUrl === cleanedUrl : isInPath;
+    const childProps = {
+      ...this.componentProps,
+      history: this.activeRouter.get('history'),
+      match: this.match
+    }
 
-    if (matches) {
-      return <ChildComponent props={this.componentProps} />;
-    } else {
-      return <span />;
+    if (this.routeRender) {
+      return this.routeRender(childProps);
+    }
+    if (this.component) {
+      const ChildComponent = this.component;
+      return <ChildComponent {...childProps} />;
     }
   }
 }

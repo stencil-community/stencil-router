@@ -22,35 +22,26 @@ export class Router {
   base: string;
 
   @Prop() root: string = '/';
+  @Prop({ context: 'activeRouter' }) activeRouter: any;
 
-  @State() routeMatch: any = {};
+  @State() history: any = {};
 
   @Event() private stencilRouterNavigation: EventEmitter;
   @Event() private stencilRouterLoaded: EventEmitter;
-  @Method()
-  match() {
-    return this.routeMatch;
-  }
-
-  @Method()
-  navigateTo(url: string, _data: any = {}) {
-    window.history.pushState(null, null, url || '/');
-    this.routeMatch = {
-      url: url
-    };
-    this.stencilRouterNavigation.emit(this.routeMatch);
-  }
 
   componentWillLoad() {
-    window.addEventListener('popstate', this.handlePopState.bind(this));
-    window.onhashchange = this.handleHashChange.bind(this);
+    this.activeRouter.set({
+      location,
+      history: this.history
+    });
+  }
 
-    const initialPath = window.location.pathname;
-    //const withoutBase = '';
-    const withoutBase = initialPath.replace(this.root, '');
-
-    this.routeMatch = {
-      url: '/' + withoutBase
+  computeMatch(pathname) {
+    return {
+      path: '/',
+      url: '/',
+      params: {},
+      isExact: pathname === '/'
     };
   }
 

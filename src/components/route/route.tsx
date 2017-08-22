@@ -1,5 +1,5 @@
-import { Component, Prop, State, Element } from '@stencil/core';
-import matchPath, { MatchOptions } from '../../utils/match-path';
+import { Component, Prop, State } from '@stencil/core';
+import matchPath, { MatchOptions, MatchResults } from '../../utils/match-path';
 import { ActiveRouter } from '../../global/interfaces';
 
 /**
@@ -11,18 +11,16 @@ import { ActiveRouter } from '../../global/interfaces';
   tag: 'stencil-route'
 })
 export class Route {
-  @Element() el: HTMLElement;
-
+  @Prop({ context: 'activeRouter' }) activeRouter: ActiveRouter;
   unsubscribe: Function = () =>{}
 
-  @Prop({ context: 'activeRouter' }) activeRouter: ActiveRouter;
   @Prop() url: string;
   @Prop() component: string;
   @Prop() componentProps: any = {};
   @Prop() exact: boolean = false;
   @Prop() routeRender: Function = null;
 
-  @State() match: any = {};
+  @State() match: MatchResults | null = null;
 
   // Identify if the current route is a match.
   computeMatch(pathname?: string) {

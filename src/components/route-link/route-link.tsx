@@ -1,5 +1,5 @@
 import { Component, Prop, State } from '@stencil/core';
-import matchPath, { MatchOptions } from '../../utils/match-path';
+import matchPath, { MatchOptions, MatchResults } from '../../utils/match-path';
 import { ActiveRouter } from '../../global/interfaces';
 
 /**
@@ -15,7 +15,7 @@ export class RouteLink {
   @Prop() custom: boolean = false;
   @Prop() activeClass: string = 'link-active';
 
-  @State() match: any = {};
+  @State() match: MatchResults | null = null;
 
   // The instance of the router
   @Prop({ context: 'activeRouter' }) activeRouter: ActiveRouter;

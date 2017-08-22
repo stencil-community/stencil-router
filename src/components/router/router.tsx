@@ -1,9 +1,7 @@
-import {
-  Component,
-  Prop,
-  Element
-} from '@stencil/core';
+import { Component, Prop } from '@stencil/core';
 import createHistory from '../../utils/history';
+import { ActiveRouter } from '../../global/interfaces';
+import { MatchResults } from '../../utils/match-path';
 
 /**
   * @name Router
@@ -14,28 +12,24 @@ import createHistory from '../../utils/history';
   tag: 'stencil-router'
 })
 export class Router {
-  @Element() el: HTMLElement;
-
-  base: string;
-
   @Prop() root: string = '/';
-  @Prop({ context: 'activeRouter' }) activeRouter: any;
+  @Prop({ context: 'activeRouter' }) activeRouter: ActiveRouter;
 
   componentWillLoad() {
     const history = createHistory();
     this.activeRouter.set({
       location,
-      history: history
+      history
     });
   }
 
   computeMatch(pathname) {
     return {
-      path: '/',
-      url: '/',
-      params: {},
-      isExact: pathname === '/'
-    };
+      path: this.root,
+      url: this.root,
+      isExact: pathname === this.root,
+      params: {}
+    } as MatchResults;
   }
 
   render() {

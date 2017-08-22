@@ -22,7 +22,9 @@ export class Route {
   @Prop() exact: boolean = false;
 
   // The instance of the router
-  @Prop() router: any;
+  @Prop() router: string;
+
+  @Prop() scrollContainerSelector: string = 'body';
 
   //@Prop() match: any;
   @State() match: any = {};
@@ -46,6 +48,8 @@ export class Route {
         'stencilRouterNavigation',
         (e: UIEvent) => {
           this.match = e.detail;
+          const scrollContainerElemenet = document.querySelector(this.scrollContainerSelector);
+          scrollContainerElemenet.scrollTop = 0;
         }
       );
     });

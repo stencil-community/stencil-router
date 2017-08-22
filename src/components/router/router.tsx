@@ -1,12 +1,9 @@
 import {
   Component,
   Prop,
-  Method,
-  State,
-  Element,
-  Event,
-  EventEmitter
+  Element
 } from '@stencil/core';
+import createHistory from '../../utils/history';
 
 /**
   * @name Router
@@ -24,15 +21,11 @@ export class Router {
   @Prop() root: string = '/';
   @Prop({ context: 'activeRouter' }) activeRouter: any;
 
-  @State() history: any = {};
-
-  @Event() private stencilRouterNavigation: EventEmitter;
-  @Event() private stencilRouterLoaded: EventEmitter;
-
   componentWillLoad() {
+    const history = createHistory();
     this.activeRouter.set({
       location,
-      history: this.history
+      history: history
     });
   }
 
@@ -44,25 +37,6 @@ export class Router {
       isExact: pathname === '/'
     };
   }
-
-  componentDidLoad() {
-    this.stencilRouterLoaded.emit({ url: window.location.pathname });
-  }
-
-  handlePopState() {
-    if (window.location.pathname !== oldPathName) {
-      this.routeMatch = {
-        url: window.location.pathname
-      };
-      this.stencilRouterNavigation.emit(this.routeMatch);
-    } else {
-      this.navigateTo(window.location.pathname);
-    }
-
-    var oldPathName = window.location.pathname;
-  }
-
-  handleHashChange(_event: UIEvent) {}
 
   render() {
     return <slot />;

@@ -1,3 +1,5 @@
+import { ActiveRouter } from './interfaces';
+
 Context.activeRouter = (function() {
   let state: { [key: string]: any } = {};
   const nextListeners = [];
@@ -52,5 +54,5 @@ Context.activeRouter = (function() {
     set,
     get,
     subscribe
-  };
+  } as ActiveRouter;
 })();

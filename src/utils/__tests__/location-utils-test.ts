@@ -116,7 +116,7 @@ describe('createLocation', () => {
     describe('given as a string', () => {
       it('throws custom message when decodeURI throws a URIError', () => {
         expect(() => {
-          createLocation('/test%')
+          createLocation('/test%');
         }).toThrow('Pathname "/test%" could not be decoded.');
       });
     });
@@ -124,7 +124,7 @@ describe('createLocation', () => {
     describe('given as an object', () => {
       it('throws custom message when decodeURI throws a URIError', () => {
         expect(() => {
-          createLocation({ pathname: '/test%' })
+          createLocation({ pathname: '/test%' });
         }).toThrow('Pathname "/test%" could not be decoded.');
       });
     });

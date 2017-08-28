@@ -1,23 +1,23 @@
 import pathToRegexp from 'path-to-regexp';
 
 interface CompileOptions {
-  end: boolean,
-  strict: boolean
+  end: boolean;
+  strict: boolean;
 }
 
 export interface MatchOptions {
-  path?: string
-  exact?: boolean
-  strict?: boolean
+  path?: string;
+  exact?: boolean;
+  strict?: boolean;
 }
 
 export interface MatchResults {
-  path: string,
-  url: string,
-  isExact: boolean,
+  path: string;
+  url: string;
+  isExact: boolean;
   params: {
     [key: string]: string
-  }
+  };
 }
 
 const patternCache: {[key: string]: any } = {};
@@ -73,8 +73,8 @@ export default function matchPath(pathname: string, options: MatchOptions = {}):
     url: path === '/' && url === '' ? '/' : url, // the matched portion of the URL
     isExact, // whether or not we matched exactly
     params: keys.reduce((memo, key: pathToRegexp.Key, index) => {
-      memo[key.name] = values[index]
-      return memo
+      memo[key.name] = values[index];
+      return memo;
     }, {} as {[key: string]: string})
   };
 }

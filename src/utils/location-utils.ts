@@ -14,7 +14,7 @@ function spliceOne(list: string[], index: number) {
 }
 
 // This implementation is based heavily on node's url.parse
-function resolvePathname(to: string, from = '') {
+export function resolvePathname(to: string, from = '') {
   const toParts = to && to.split('/') || [];
   let fromParts = from && from.split('/') || [];
 
@@ -77,7 +77,7 @@ function resolvePathname(to: string, from = '') {
   return result;
 }
 
-function valueEqual(a: any, b: any): boolean {
+export function valueEqual(a: any, b: any): boolean {
   if (a === b) {
     return true;
   }

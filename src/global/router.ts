@@ -1,4 +1,5 @@
-import { ActiveRouter } from './interfaces';
+import { ActiveRouter, Listener } from './interfaces';
+
 
 Context.activeRouter = (function() {
   let state: { [key: string]: any } = {};
@@ -29,9 +30,9 @@ Context.activeRouter = (function() {
   }
 
 
-  function subscribe(listener: Function) {
+  function subscribe(listener: Listener) {
     if (typeof listener !== 'function') {
-      throw new Error('Expected listener to be a function.')
+      throw new Error('Expected listener to be a function.');
     }
 
     let isSubscribed = true;
@@ -40,14 +41,14 @@ Context.activeRouter = (function() {
 
     return function unsubscribe() {
       if (!isSubscribed) {
-        return
+        return;
       }
 
       isSubscribed = false;
 
       const index = nextListeners.indexOf(listener);
       nextListeners.splice(index, 1);
-    }
+    };
   }
 
   return {

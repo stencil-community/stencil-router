@@ -1,6 +1,6 @@
 import { Component, Prop, State } from '@stencil/core';
 import matchPath, { MatchOptions, MatchResults } from '../../utils/match-path';
-import { ActiveRouter } from '../../global/interfaces';
+import { ActiveRouter, Listener } from '../../global/interfaces';
 
 /**
   * @name Route
@@ -12,7 +12,7 @@ import { ActiveRouter } from '../../global/interfaces';
 })
 export class Route {
   @Prop({ context: 'activeRouter' }) activeRouter: ActiveRouter;
-  unsubscribe: Function = () =>{}
+  unsubscribe: Listener = () => { return; };
 
   @Prop() url: string;
   @Prop() component: string;

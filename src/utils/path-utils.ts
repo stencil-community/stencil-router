@@ -1,10 +1,4 @@
-export interface LocationSegments {
-  pathname?: string;
-  search?: string;
-  hash?: string;
-  state?: any;
-  key?: string;
-}
+import { LocationSegments } from '../global/interfaces';
 
 export function hasBasename(path: string, prefix: string) {
   return (new RegExp('^' + prefix + '(\\/|\\?|#|$)', 'i')).test(path);

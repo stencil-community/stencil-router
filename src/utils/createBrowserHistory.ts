@@ -1,5 +1,5 @@
 import { createLocation } from './location-utils';
-import { LocationSegments } from './path-utils';
+import { RouterHistory, LocationSegments } from '../global/interfaces';
 import { invariant, warning } from './log';
 import {
   addLeadingSlash,
@@ -19,7 +19,7 @@ import {
   isExtraneousPopstateEvent
 } from './dom-utils';
 
-interface CreateBrowserHistoryOptions {
+export interface CreateBrowserHistoryOptions {
   getUserConfirmation?: (message: string, callback: (confirmed: boolean) => {}) => {};
   forceRefresh?: boolean;
   keyLength?: number;
@@ -43,7 +43,7 @@ const getHistoryState = () => {
  * Creates a history object that uses the HTML5 history API including
  * pushState, replaceState, and the popstate event.
  */
-const createBrowserHistory = (props: CreateBrowserHistoryOptions = {}) => {
+const createBrowserHistory = (props: CreateBrowserHistoryOptions = {}): RouterHistory => {
   invariant(
     canUseDOM,
     'Browser history needs a DOM'

@@ -1,5 +1,5 @@
 import { createLocation, locationsAreEqual } from './location-utils';
-import { LocationSegments } from './path-utils';
+import { RouterHistory, LocationSegments } from '../global/interfaces';
 import { invariant, warning } from './log';
 import {
   addLeadingSlash,
@@ -18,7 +18,7 @@ import {
   supportsGoWithoutReloadUsingHash
 } from './dom-utils';
 
-interface CreateHashHistoryOptions {
+export interface CreateHashHistoryOptions {
   getUserConfirmation?: (message: string, callback: (confirmed: boolean) => {}) => {};
   hashType?: 'hashbang' | 'noslash' | 'slash';
   basename?: string;
@@ -60,7 +60,7 @@ const replaceHashPath = (path: string) => {
   );
 };
 
-const createHashHistory = (props: CreateHashHistoryOptions = {}) => {
+const createHashHistory = (props: CreateHashHistoryOptions = {}): RouterHistory => {
   invariant(
     canUseDOM,
     'Hash history needs a DOM'

@@ -20,13 +20,12 @@
     "type": "git",
     "url": "git+https://github.com/ionic-team/stencil-router.git"
   },
-  "dependencies": {
-    "@stencil/core": "0.0.4",
-    "path-to-regexp": "^1.7.0"
-  },
+  "dependencies": {},
   "devDependencies": {
+    "@stencil/core": "0.0.4",
     "@stencil/dev-server": "latest",
     "@stencil/utils": "latest",
+    "path-to-regexp": "^1.7.0",
     "np": "^2.16.0"
   },
   "author": "Ionic Team",

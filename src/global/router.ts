@@ -2,7 +2,7 @@ import { ActiveRouter } from './interfaces';
 
 Context.activeRouter = (function() {
   let state: { [key: string]: any } = {};
-  const nextListeners = [];
+  const nextListeners: Function[] = [];
 
   function set(value: { [key: string]: any }) {
     state = {
@@ -29,7 +29,7 @@ Context.activeRouter = (function() {
   }
 
 
-  function subscribe(listener) {
+  function subscribe(listener: Function) {
     if (typeof listener !== 'function') {
       throw new Error('Expected listener to be a function.')
     }

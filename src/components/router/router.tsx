@@ -1,5 +1,5 @@
-import { Component, Prop } from '@stencil/core';
-import createHistory from '../../utils/history';
+import { Component, Prop, State } from '@stencil/core';
+import createHistory from '../../utils/createBrowserHistory';
 import { ActiveRouter } from '../../global/interfaces';
 import { MatchResults } from '../../utils/match-path';
 
@@ -15,21 +15,39 @@ export class Router {
   @Prop() root: string = '/';
   @Prop({ context: 'activeRouter' }) activeRouter: ActiveRouter;
 
-  componentWillLoad() {
-    const history = createHistory();
-    this.activeRouter.set({
-      location,
-      history
-    });
-  }
+  @State() match: MatchResults | null = null;
 
-  computeMatch(pathname) {
+  unsubscribe: Function = () => {};
+
+  computeMatch(pathname?: string) {
     return {
       path: this.root,
       url: this.root,
       isExact: pathname === this.root,
       params: {}
     } as MatchResults;
+  }
+
+  componentWillLoad() {
+    const history = createHistory();
+    this.activeRouter.set({
+      location: history.location,
+      history
+    });
+
+    // subscribe the project's active router and listen
+    // for changes. Recompute the match if any updates get
+    // pushed
+    this.unsubscribe = this.activeRouter.subscribe(() => {
+      this.match = this.computeMatch();
+    });
+    this.match = this.computeMatch();
+  }
+
+  componentWillUnmount() {
+    // be sure to unsubscribe to the router so that we don't
+    // get any memory leaks
+    this.unsubscribe();
   }
 
   render() {

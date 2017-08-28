@@ -24,13 +24,16 @@ export class Route {
 
   // Identify if the current route is a match.
   computeMatch(pathname?: string) {
+    const location = this.activeRouter.get('location');
+    if (!location) {
+      return null;
+    }
     pathname = pathname || this.activeRouter.get('location').pathname;
     const options: MatchOptions = {
       path: this.url,
       exact: this.exact,
       strict: true
     }
-
     return matchPath(pathname, options);
   }
 

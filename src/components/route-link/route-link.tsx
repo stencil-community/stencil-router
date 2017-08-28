@@ -1,6 +1,6 @@
 import { Component, Prop, State } from '@stencil/core';
 import matchPath, { MatchOptions, MatchResults } from '../../utils/match-path';
-import { ActiveRouter } from '../../global/interfaces';
+import { RouterHistory, ActiveRouter, Listener } from '../../global/interfaces';
 
 /**
   * @name Route
@@ -19,7 +19,7 @@ export class RouteLink {
 
   // The instance of the router
   @Prop({ context: 'activeRouter' }) activeRouter: ActiveRouter;
-  unsubscribe: Function = () =>{}
+  unsubscribe: Listener = () => { return; };
 
   // Identify if the current route is a match.
   computeMatch(pathname?: string) {
@@ -48,7 +48,7 @@ export class RouteLink {
     this.unsubscribe();
   }
 
-  handleClick(e) {
+  handleClick(e: MouseEvent) {
     e.preventDefault();
     if (!this.activeRouter) {
       console.warn(
@@ -57,7 +57,7 @@ export class RouteLink {
       return;
     }
 
-    this.activeRouter.get('history').navigateTo(this.url);
+    (this.activeRouter.get('history') as RouterHistory).push(this.url, {});
   }
 
   render() {

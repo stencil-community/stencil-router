@@ -1,6 +1,6 @@
 import { Component, Prop, State } from '@stencil/core';
 import matchPath, { MatchOptions, MatchResults } from '../../utils/match-path';
-import { ActiveRouter, Listener } from '../../global/interfaces';
+import { RouterHistory, ActiveRouter, Listener } from '../../global/interfaces';
 
 /**
   * @name Route
@@ -65,9 +65,9 @@ export class Route {
     // current match data including params
     const childProps = {
       ...this.componentProps,
-      history: this.activeRouter.get('history'),
+      history: this.activeRouter.get('history') as RouterHistory,
       match: this.match
-    }
+    };
 
     // If there is a routerRender defined then use
     // that and pass the component and component props with it.

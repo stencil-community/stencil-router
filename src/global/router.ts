@@ -30,7 +30,7 @@ Context.activeRouter = (function() {
   }
 
 
-  function subscribe(listener: Listener) {
+  function subscribe(listener: Function): Listener {
     if (typeof listener !== 'function') {
       throw new Error('Expected listener to be a function.');
     }

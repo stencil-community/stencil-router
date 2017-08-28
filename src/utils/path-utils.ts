@@ -1,7 +1,7 @@
 export interface LocationSegments {
-  pathname: string;
-  search: string;
-  hash: string;
+  pathname?: string;
+  search?: string;
+  hash?: string;
   state?: any;
   key?: string;
 }

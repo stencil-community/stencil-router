@@ -22,6 +22,7 @@ export class Route {
 
   @State() match: MatchResults | null = null;
 
+
   // Identify if the current route is a match.
   computeMatch(pathname?: string) {
     const location = this.activeRouter.get('location');

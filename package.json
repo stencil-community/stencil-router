@@ -39,12 +39,13 @@
   "jest": {
     "moduleFileExtensions": [
       "ts",
+      "tsx",
       "js"
     ],
     "transform": {
-      ".(ts)": "<rootDir>/node_modules/ts-jest/preprocessor.js"
+      ".(ts|tsx)": "<rootDir>/node_modules/ts-jest/preprocessor.js"
     },
-    "testRegex": "/__tests__/.*\\.(ts|js)$"
+    "testRegex": "/__tests__/.*(test|spec)\\.(ts|tsx)$"
   },
   "homepage": "https://github.com/ionic-team/stencil-router"
 }

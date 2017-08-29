@@ -1,5 +1,5 @@
 import { warning } from './log';
-import { LocationSegments } from './path-utils';
+import { LocationSegments } from '../global/interfaces';
 
 const createTransitionManager = () => {
   let prompt: string = null;

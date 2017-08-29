@@ -1,4 +1,5 @@
-import { LocationSegments, parsePath } from './path-utils';
+import { parsePath } from './path-utils';
+import { LocationSegments } from '../global/interfaces';
 
 function isAbsolute(pathname: string) {
   return pathname.charAt(0) === '/';

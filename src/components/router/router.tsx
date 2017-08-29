@@ -1,12 +1,7 @@
-import {
-  Component,
-  Prop,
-  Method,
-  State,
-  Element,
-  Event,
-  EventEmitter
-} from '@stencil/core';
+import { Component, Prop, State } from '@stencil/core';
+import createHistory from '../../utils/createBrowserHistory';
+import { ActiveRouter } from '../../global/interfaces';
+import { MatchResults } from '../../utils/match-path';
 
 /**
   * @name Router
@@ -17,61 +12,43 @@ import {
   tag: 'stencil-router'
 })
 export class Router {
-  @Element() el: HTMLElement;
-
-  base: string;
-
   @Prop() root: string = '/';
+  @Prop({ context: 'activeRouter' }) activeRouter: ActiveRouter;
 
-  @State() routeMatch: any = {};
+  @State() match: MatchResults | null = null;
 
-  @Event() private stencilRouterNavigation: EventEmitter;
-  @Event() private stencilRouterLoaded: EventEmitter;
-  @Method()
-  match() {
-    return this.routeMatch;
-  }
+  unsubscribe: Function = () => {};
 
-  @Method()
-  navigateTo(url: string, _data: any = {}) {
-    window.history.pushState(null, null, url || '/');
-    this.routeMatch = {
-      url: url
-    };
-    this.stencilRouterNavigation.emit(this.routeMatch);
+  computeMatch(pathname?: string) {
+    return {
+      path: this.root,
+      url: this.root,
+      isExact: pathname === this.root,
+      params: {}
+    } as MatchResults;
   }
 
   componentWillLoad() {
-    window.addEventListener('popstate', this.handlePopState.bind(this));
-    window.onhashchange = this.handleHashChange.bind(this);
+    const history = createHistory();
+    this.activeRouter.set({
+      location: history.location,
+      history
+    });
 
-    const initialPath = window.location.pathname;
-    //const withoutBase = '';
-    const withoutBase = initialPath.replace(this.root, '');
-
-    this.routeMatch = {
-      url: '/' + withoutBase
-    };
+    // subscribe the project's active router and listen
+    // for changes. Recompute the match if any updates get
+    // pushed
+    this.unsubscribe = this.activeRouter.subscribe(() => {
+      this.match = this.computeMatch();
+    });
+    this.match = this.computeMatch();
   }
 
-  componentDidLoad() {
-    this.stencilRouterLoaded.emit({ url: window.location.pathname });
+  componentWillUnmount() {
+    // be sure to unsubscribe to the router so that we don't
+    // get any memory leaks
+    this.unsubscribe();
   }
-
-  handlePopState() {
-    if (window.location.pathname !== oldPathName) {
-      this.routeMatch = {
-        url: window.location.pathname
-      };
-      this.stencilRouterNavigation.emit(this.routeMatch);
-    } else {
-      this.navigateTo(window.location.pathname);
-    }
-
-    var oldPathName = window.location.pathname;
-  }
-
-  handleHashChange(_event: UIEvent) {}
 
   render() {
     return <slot />;

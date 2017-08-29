@@ -1,5 +1,7 @@
 {
   "rules": {
+    "semicolon": [true, "always"],
+    "curly": [true],
     "quotemark": [true, "single", "jsx-double"],
     "no-duplicate-variable": true,
     "no-unused-variable": [

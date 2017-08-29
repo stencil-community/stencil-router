@@ -1,4 +1,6 @@
-import { Component, Prop, Element, Listen } from '@stencil/core';
+import { Component, Prop, State } from '@stencil/core';
+import matchPath, { MatchOptions, MatchResults } from '../../utils/match-path';
+import { RouterHistory, ActiveRouter, Listener } from '../../global/interfaces';
 
 /**
   * @name Route
@@ -9,57 +11,69 @@ import { Component, Prop, Element, Listen } from '@stencil/core';
   tag: 'stencil-route-link'
 })
 export class RouteLink {
-  @Element() el: HTMLElement;
   @Prop() url: string;
-
   @Prop() custom: boolean = false;
-
   @Prop() activeClass: string = 'link-active';
 
+  @State() match: MatchResults | null = null;
+
   // The instance of the router
-  @Prop() router: any;
+  @Prop({ context: 'activeRouter' }) activeRouter: ActiveRouter;
+  unsubscribe: Listener = () => { return; };
 
-  @Listen('body:stencilRouterNavigation')
-  handleRouteChange(ev) {
-    if (this.url === ev.detail.url) {
-      this.el.classList.add(this.activeClass);
-    } else {
-      this.el.classList.remove(this.activeClass);
+  // Identify if the current route is a match.
+  computeMatch(pathname?: string) {
+    pathname = pathname || this.activeRouter.get('location').pathname;
+    const options: MatchOptions = {
+      path: this.url,
+      strict: true
     }
+
+    return matchPath(pathname, options);
   }
 
-  @Listen('body:stencilRouterLoaded')
-  handleRouterLoaded(ev) {
-    if (this.url === ev.detail.url) {
-      this.el.classList.add(this.activeClass);
-    } else {
-      this.el.classList.remove(this.activeClass);
-    }
+  componentWillLoad() {
+    // subscribe the project's active router and listen
+    // for changes. Recompute the match if any updates get
+    // pushed
+    this.unsubscribe = this.activeRouter.subscribe(() => {
+      this.match = this.computeMatch();
+    });
+    this.match = this.computeMatch();
   }
 
-  handleClick(e) {
+  componentWillUnmount() {
+    // be sure to unsubscribe to the router so that we don't
+    // get any memory leaks
+    this.unsubscribe();
+  }
+
+  handleClick(e: MouseEvent) {
     e.preventDefault();
-    const router = document.querySelector(this.router);
-    if (!router) {
+    if (!this.activeRouter) {
       console.warn(
         '<stencil-route-link> wasn\'t passed an instance of the router as the "router" prop!'
       );
       return;
     }
 
-    router.navigateTo(this.url);
+    (this.activeRouter.get('history') as RouterHistory).push(this.url, {});
   }
 
   render() {
+    const classes = {
+      [this.activeClass]: this.match !== null
+    };
+
     if (this.custom) {
       return (
-        <span onClick={this.handleClick.bind(this)}>
+        <span class={classes} onClick={this.handleClick.bind(this)}>
           <slot />
         </span>
       );
     } else {
       return (
-        <a href={this.url} onClick={this.handleClick.bind(this)}>
+        <a class={classes} href={this.url} onClick={this.handleClick.bind(this)}>
           <slot />
         </a>
       );

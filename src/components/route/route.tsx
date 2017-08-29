@@ -1,4 +1,6 @@
-import { Component, Prop, State, Element } from '@stencil/core';
+import { Component, Prop, State } from '@stencil/core';
+import matchPath, { MatchOptions, MatchResults } from '../../utils/match-path';
+import { RouterHistory, ActiveRouter, Listener } from '../../global/interfaces';
 
 /**
   * @name Route
@@ -9,73 +11,77 @@ import { Component, Prop, State, Element } from '@stencil/core';
   tag: 'stencil-route'
 })
 export class Route {
-  @Element() el: HTMLElement;
-
-  @State() routerInstance: any;
+  @Prop({ context: 'activeRouter' }) activeRouter: ActiveRouter;
+  unsubscribe: Listener = () => { return; };
 
   @Prop() url: string;
-
   @Prop() component: string;
-
   @Prop() componentProps: any = {};
-
   @Prop() exact: boolean = false;
+  @Prop() routeRender: Function = null;
 
-  // The instance of the router
-  @Prop() router: string;
+  @State() match: MatchResults | null = null;
 
-  @Prop() scrollContainerSelector: string = 'body';
 
-  //@Prop() match: any;
-  @State() match: any = {};
+  // Identify if the current route is a match.
+  computeMatch(pathname?: string) {
+    const location = this.activeRouter.get('location');
+    if (!location) {
+      return null;
+    }
+    pathname = pathname || this.activeRouter.get('location').pathname;
+    const options: MatchOptions = {
+      path: this.url,
+      exact: this.exact,
+      strict: true
+    }
+    return matchPath(pathname, options);
+  }
 
   componentWillLoad() {
-    setTimeout(() => {
-      const routerElement = document.querySelector(this.router);
-
-      if (routerElement) {
-        setTimeout(() => {
-          this.routerInstance = routerElement;
-        });
-      }
-
-      routerElement.addEventListener(
-        'stencilRouterLoaded',
-        (_event: UIEvent) => {}
-      );
-
-      routerElement.addEventListener(
-        'stencilRouterNavigation',
-        (e: UIEvent) => {
-          this.match = e.detail;
-          const scrollContainerElemenet = document.querySelector(this.scrollContainerSelector);
-          scrollContainerElemenet.scrollTop = 0;
-        }
-      );
+    // subscribe the project's active router and listen
+    // for changes. Recompute the match if any updates get
+    // pushed
+    this.unsubscribe = this.activeRouter.subscribe(() => {
+      this.match = this.computeMatch();
     });
+    this.match = this.computeMatch();
+  }
+
+  componentWillUnmount() {
+    // be sure to unsubscribe to the router so that we don't
+    // get any memory leaks
+    this.unsubscribe();
   }
 
   render() {
-    if (!this.routerInstance) {
+    // If there is no activeRouter then do not render
+    // Check if this route is in the matching URL (for example, a parent route)
+    if (!this.activeRouter || !this.match) {
       return null;
     }
 
-    this.match.url = this.routerInstance.match().url;
-    const match = this.match;
-    const ChildComponent = this.component;
+    // component props defined in route
+    // the history api
+    // current match data including params
+    const childProps = {
+      ...this.componentProps,
+      history: this.activeRouter.get('history') as RouterHistory,
+      match: this.match
+    };
 
-    const cleanedUrl = this.url.split('/').join().replace(/ /g, '');
-    const cleanedMatchUrl = match.url.split('/').join().replace(/ /g, '');
+    // If there is a routerRender defined then use
+    // that and pass the component and component props with it.
+    if (this.routeRender) {
+      return this.routeRender({
+        ...childProps,
+        component: this.component
+      });
+    }
 
-    // Check if this route is in the matching URL (for example, a parent route)
-    const isInPath = cleanedMatchUrl.indexOf(cleanedUrl) === 0;
-
-    const matches = this.exact ? cleanedMatchUrl === cleanedUrl : isInPath;
-
-    if (matches) {
-      return <ChildComponent props={this.componentProps} />;
-    } else {
-      return <span />;
+    if (this.component) {
+      const ChildComponent = this.component;
+      return <ChildComponent {...childProps} />;
     }
   }
 }

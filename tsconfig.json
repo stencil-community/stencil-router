@@ -11,6 +11,7 @@
     "moduleResolution": "node",
     "module": "es2015",
     "target": "es2015",
+    "noImplicitAny": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "jsx": "react",
@@ -21,6 +22,7 @@
     "types/jsx.d.ts"
   ],
   "exclude": [
-    "node_modules"
+    "node_modules",
+    "src/**/__tests__/*.ts"
   ]
 }

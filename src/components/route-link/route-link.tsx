@@ -1,6 +1,6 @@
 import { Component, Prop, State } from '@stencil/core';
-import matchPath, { MatchOptions, MatchResults } from '../../utils/match-path';
-import { RouterHistory, ActiveRouter, Listener } from '../../global/interfaces';
+import matchPath, { MatchResults } from '../../utils/match-path';
+import { RouterHistory, ActiveRouter, Listener, LocationSegments } from '../../global/interfaces';
 
 /**
   * @name Route
@@ -11,25 +11,32 @@ import { RouterHistory, ActiveRouter, Listener } from '../../global/interfaces';
   tag: 'stencil-route-link'
 })
 export class RouteLink {
+  @Prop({ context: 'activeRouter' }) activeRouter: ActiveRouter;
+  unsubscribe: Listener = () => { return; };
+
   @Prop() url: string;
+  @Prop() exact: boolean = false;
   @Prop() custom: boolean = false;
   @Prop() activeClass: string = 'link-active';
 
   @State() match: MatchResults | null = null;
 
-  // The instance of the router
-  @Prop({ context: 'activeRouter' }) activeRouter: ActiveRouter;
-  unsubscribe: Listener = () => { return; };
 
   // Identify if the current route is a match.
   computeMatch(pathname?: string) {
-    pathname = pathname || this.activeRouter.get('location').pathname;
-    const options: MatchOptions = {
-      path: this.url,
-      strict: true
+    if (!pathname) {
+      const location: LocationSegments = this.activeRouter.get('location');
+      if (!location) {
+        return null;
+      }
+      pathname = location.pathname;
     }
 
-    return matchPath(pathname, options);
+    return matchPath(pathname, {
+      path: this.url,
+      exact: this.exact,
+      strict: true
+    });
   }
 
   componentWillLoad() {

@@ -1,6 +1,6 @@
 import { Component, Prop, State } from '@stencil/core';
-import matchPath, { MatchOptions, MatchResults } from '../../utils/match-path';
-import { RouterHistory, ActiveRouter, Listener } from '../../global/interfaces';
+import matchPath, { MatchResults } from '../../utils/match-path';
+import { RouterHistory, ActiveRouter, Listener, LocationSegments } from '../../global/interfaces';
 
 /**
   * @name Route
@@ -25,17 +25,19 @@ export class Route {
 
   // Identify if the current route is a match.
   computeMatch(pathname?: string) {
-    const location = this.activeRouter.get('location');
-    if (!location) {
-      return null;
+    if (!pathname) {
+      const location: LocationSegments = this.activeRouter.get('location');
+      if (!location) {
+        return null;
+      }
+      pathname = location.pathname;
     }
-    pathname = pathname || this.activeRouter.get('location').pathname;
-    const options: MatchOptions = {
+
+    return matchPath(pathname, {
       path: this.url,
       exact: this.exact,
       strict: true
-    }
-    return matchPath(pathname, options);
+    });
   }
 
   componentWillLoad() {

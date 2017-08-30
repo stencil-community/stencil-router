@@ -60,7 +60,8 @@ export class Route {
     // If there is no activeRouter then do not render
     // Check if this route is in the matching URL (for example, a parent route)
     if (!this.activeRouter || !this.match) {
-      return null;
+      // I would prefer to return null, but there is an error in stencil that requires this right now.
+      return <span></span>;
     }
 
     // component props defined in route

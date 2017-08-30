@@ -49,7 +49,13 @@ export class TestApp {
           }
         }></stencil-route>
 
-        <stencil-route url="/demo3" component='test-page'></stencil-route>
+        <stencil-route
+          url="/demo3"
+          componentProps={{
+            pages: ['intro/index.html']
+          }}
+          component='test-page'
+        ></stencil-route>
 
       </stencil-router>
     );

@@ -1,11 +1,14 @@
-import { Component } from '@stencil/core';
+import { Component, Prop } from '@stencil/core';
 
 @Component({
   tag: 'test-page'
 })
 export class TestPage {
 
+  @Prop() pages: string[];
+
   render() {
+    debugger;
     return [
       <span>Demo 3 Test Page<br/></span>,
       <stencil-route url="/demo3/page1" exact={true} routeRender={

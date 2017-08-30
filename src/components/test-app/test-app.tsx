@@ -14,6 +14,8 @@ export class TestApp {
           <li><stencil-route-link url="/demo">Demo Link</stencil-route-link></li>
           <li><stencil-route-link url="/demo2">Demo2 Link</stencil-route-link></li>
           <li><stencil-route-link url="/demo3">Demo3 Link</stencil-route-link></li>
+          <li><stencil-route-link url="/demo3/page1">Demo3 Page1 Link</stencil-route-link></li>
+          <li><stencil-route-link url="/demo3/page2">Demo3 Page2 Link</stencil-route-link></li>
         </ul>
 
         <stencil-route url="/" exact={true} routeRender={
@@ -46,6 +48,8 @@ export class TestApp {
             return <span>rendering /demo 3</span>
           }
         }></stencil-route>
+
+        <stencil-route url="/demo3" component='test-page'></stencil-route>
 
       </stencil-router>
     );

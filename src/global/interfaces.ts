@@ -12,6 +12,7 @@ export interface LocationSegments {
   hash?: string;
   state?: any;
   key?: string;
+  query?: { [key: string]: any };
 }
 
 export interface RouterHistory {

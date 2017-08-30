@@ -62,3 +62,17 @@ export function createPath(location: LocationSegments): string {
 
   return path;
 }
+
+export function parseQueryString(query: string) {
+  if (!query) {
+    return { };
+  }
+
+  return (/^[?#]/.test(query) ? query.slice(1) : query)
+    .split('&')
+    .reduce((params, param) => {
+      let [ key, value ] = param.split('=');
+      params[key] = value ? decodeURIComponent(value.replace(/\+/g, ' ')) : '';
+      return params;
+    }, {} as { [key: string]: any });
+};

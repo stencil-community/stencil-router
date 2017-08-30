@@ -1,4 +1,4 @@
-import { parsePath } from './path-utils';
+import { parsePath, parseQueryString } from './path-utils';
 import { LocationSegments } from '../global/interfaces';
 
 function isAbsolute(pathname: string) {
@@ -132,7 +132,7 @@ export function locationsAreEqual(a: LocationSegments, b: LocationSegments) {
   valueEqual(a.state, b.state);
 }
 
-export const createLocation = (path: string | LocationSegments, state?: any, key?: string, currentLocation?: LocationSegments) => {
+export function createLocation(path: string | LocationSegments, state?: any, key?: string, currentLocation?: LocationSegments): LocationSegments {
   let location;
   if (typeof path === 'string') {
     // Two-arg form: push(path, state)
@@ -197,6 +197,8 @@ export const createLocation = (path: string | LocationSegments, state?: any, key
       location.pathname = '/';
     }
   }
+
+  location.query = parseQueryString(location.search);
 
   return location;
 };

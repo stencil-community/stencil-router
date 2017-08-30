@@ -8,6 +8,14 @@ export class TestApp {
   render() {
     return (
       <stencil-router>
+        <ul>
+          <li><stencil-route-link url="/" exact={true}>Exact Base Link</stencil-route-link></li>
+          <li><stencil-route-link url="/">Base Link</stencil-route-link></li>
+          <li><stencil-route-link url="/demo">Demo Link</stencil-route-link></li>
+          <li><stencil-route-link url="/demo2">Demo2 Link</stencil-route-link></li>
+          <li><stencil-route-link url="/demo3">Demo3 Link</stencil-route-link></li>
+        </ul>
+
         <stencil-route url="/" exact={true} routeRender={
           (props: { [key: string]: any}) => {
             console.log(props);

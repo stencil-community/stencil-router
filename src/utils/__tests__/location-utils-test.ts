@@ -75,7 +75,10 @@ describe('createLocation', () => {
         expect(createLocation('/the/path?the=query#the-hash')).toEqual({
           pathname: '/the/path',
           search: '?the=query',
-          hash: '#the-hash'
+          hash: '#the-hash',
+          query: {
+            'the': 'query'
+          }
         });
       });
     });
@@ -85,7 +88,10 @@ describe('createLocation', () => {
         expect(createLocation({ pathname: '/the/path', search: '?the=query', hash: '#the-hash' })).toEqual({
           pathname: '/the/path',
           search: '?the=query',
-          hash: '#the-hash'
+          hash: '#the-hash',
+          query: {
+            'the': 'query'
+          }
         });
       });
     });
@@ -97,7 +103,10 @@ describe('createLocation', () => {
         expect(createLocation('the/path?the=query#the-hash')).toEqual({
           pathname: 'the/path',
           search: '?the=query',
-          hash: '#the-hash'
+          hash: '#the-hash',
+          query: {
+            'the': 'query'
+          }
         });
       });
     });
@@ -107,7 +116,10 @@ describe('createLocation', () => {
         expect(createLocation({ pathname: 'the/path', search: '?the=query', hash: '#the-hash' })).toEqual({
           pathname: 'the/path',
           search: '?the=query',
-          hash: '#the-hash'
+          hash: '#the-hash',
+          query: {
+            'the': 'query'
+          }
         });
       });
     });
@@ -119,7 +131,10 @@ describe('createLocation', () => {
         expect(createLocation('?the=query#the-hash')).toEqual({
           pathname: '/',
           search: '?the=query',
-          hash: '#the-hash'
+          hash: '#the-hash',
+          query: {
+            'the': 'query'
+          }
         });
       });
     });
@@ -129,7 +144,10 @@ describe('createLocation', () => {
         expect(createLocation({ search: '?the=query', hash: '#the-hash' })).toEqual({
           pathname: '/',
           search: '?the=query',
-          hash: '#the-hash'
+          hash: '#the-hash',
+          query: {
+            'the': 'query'
+          }
         });
       });
     });
@@ -141,7 +159,8 @@ describe('createLocation', () => {
         expect(createLocation('/the/path#the-hash')).toEqual({
           pathname: '/the/path',
           search: '',
-          hash: '#the-hash'
+          hash: '#the-hash',
+          query: {}
         });
       });
     });
@@ -151,7 +170,8 @@ describe('createLocation', () => {
         expect(createLocation({ pathname: '/the/path', hash: '#the-hash' })).toEqual({
           pathname: '/the/path',
           search: '',
-          hash: '#the-hash'
+          hash: '#the-hash',
+          query: {}
         });
       });
     });
@@ -163,7 +183,10 @@ describe('createLocation', () => {
         expect(createLocation('/the/path?the=query')).toEqual({
           pathname: '/the/path',
           search: '?the=query',
-          hash: ''
+          hash: '',
+          query: {
+            'the': 'query'
+          }
         });
       });
     });
@@ -173,7 +196,10 @@ describe('createLocation', () => {
         expect(createLocation({ pathname: '/the/path', search: '?the=query' })).toEqual({
           pathname: '/the/path',
           search: '?the=query',
-          hash: ''
+          hash: '',
+          query: {
+            'the': 'query'
+          }
         });
       });
     });

@@ -1,5 +1,5 @@
 import { Component, Prop } from '@stencil/core';
-import { ActiveRouter } from '../../global/interfaces';
+import { ActiveRouter, RouterHistory } from '../../global/interfaces';
 
 @Component({
   tag: 'stencil-router-redirect'
@@ -9,6 +9,10 @@ export class Redirect {
   @Prop() url: string;
 
   componentWillLoad() {
-    this.activeRouter.get('history').navigateTo(this.url);
+    const history: RouterHistory = this.activeRouter.get('history');
+    if (!history) {
+      return;
+    }
+    return history.replace(this.url, {});
   }
 }

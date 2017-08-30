@@ -1,6 +1,6 @@
 import { Component, Prop, State } from '@stencil/core';
 import createHistory from '../../utils/createBrowserHistory';
-import { ActiveRouter } from '../../global/interfaces';
+import { ActiveRouter, LocationSegments } from '../../global/interfaces';
 import { MatchResults } from '../../utils/match-path';
 
 /**
@@ -30,6 +30,11 @@ export class Router {
 
   componentWillLoad() {
     const history = createHistory();
+
+    history.listen((location: LocationSegments) => {
+      this.activeRouter.set({ location });
+    });
+
     this.activeRouter.set({
       location: history.location,
       history

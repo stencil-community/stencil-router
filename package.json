@@ -1,6 +1,6 @@
 {
   "name": "@stencil/router",
-  "version": "0.0.7-7",
+  "version": "0.0.7",
   "description": "Stencil Router",
   "main": "dist/collection/index.js",
   "types": "dist/collection/index.d.ts",

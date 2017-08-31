@@ -84,7 +84,7 @@ export class Route {
 
     if (this.component) {
       const ChildComponent = this.component;
-      return <ChildComponent {...childProps} />;
+      return <ChildComponent match={childProps.match} history={childProps.history} {...this.componentProps} />;
     }
   }
 }

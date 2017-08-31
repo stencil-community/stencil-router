@@ -1,23 +1,9 @@
 import pathToRegexp from 'path-to-regexp';
+import { MatchOptions, MatchResults } from '../global/interfaces';
 
 interface CompileOptions {
   end: boolean;
   strict: boolean;
-}
-
-export interface MatchOptions {
-  path?: string;
-  exact?: boolean;
-  strict?: boolean;
-}
-
-export interface MatchResults {
-  path: string;
-  url: string;
-  isExact: boolean;
-  params: {
-    [key: string]: string
-  };
 }
 
 const patternCache: {[key: string]: any } = {};

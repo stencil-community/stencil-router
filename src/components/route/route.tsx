@@ -1,6 +1,6 @@
 import { Component, Prop, State } from '@stencil/core';
-import matchPath, { MatchResults } from '../../utils/match-path';
-import { RouterHistory, ActiveRouter, Listener, LocationSegments } from '../../global/interfaces';
+import matchPath from '../../utils/match-path';
+import { RouterHistory, ActiveRouter, Listener, LocationSegments, MatchResults } from '../../global/interfaces';
 
 /**
   * @name Route

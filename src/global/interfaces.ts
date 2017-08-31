@@ -29,3 +29,17 @@ export interface RouterHistory {
   listen: (listener: Function) => () => void;
 }
 
+export interface MatchOptions {
+  path?: string;
+  exact?: boolean;
+  strict?: boolean;
+}
+
+export interface MatchResults {
+  path: string;
+  url: string;
+  isExact: boolean;
+  params: {
+    [key: string]: string
+  };
+}

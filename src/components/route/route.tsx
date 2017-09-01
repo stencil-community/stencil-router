@@ -1,4 +1,4 @@
-import { Component, Prop, State } from '@stencil/core';
+import { Component, Prop, State, VNodeData } from '@stencil/core';
 import matchPath from '../../utils/match-path';
 import { RouterHistory, ActiveRouter, Listener, LocationSegments, MatchResults } from '../../global/interfaces';
 
@@ -84,7 +84,9 @@ export class Route {
 
     if (this.component) {
       const ChildComponent = this.component;
-      return <ChildComponent match={childProps.match} history={childProps.history} {...this.componentProps} />;
+      // This is a temporary fix until we get the JSX transform working correctly with child components
+      var vdomrender = h;
+      return vdomrender(ChildComponent, {p: childProps} as VNodeData);
     }
   }
 }

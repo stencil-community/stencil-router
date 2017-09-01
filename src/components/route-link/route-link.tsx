@@ -64,7 +64,8 @@ export class RouteLink {
       return;
     }
 
-    (this.activeRouter.get('history') as RouterHistory).push(this.url, {});
+    const history: RouterHistory = this.activeRouter.get('history');
+    return history.push(this.url, {});
   }
 
   render() {

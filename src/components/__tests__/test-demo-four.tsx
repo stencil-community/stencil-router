@@ -10,11 +10,9 @@ export class TestDemoFour {
   @Prop() match: MatchResults;
   @Prop() history: RouterHistory;
 
-  handleClick(e: MouseEvent) {
+  handleClick(e: MouseEvent, linkLocation: string) {
     e.preventDefault();
-    const link = e.currentTarget as HTMLAnchorElement;
-debugger;
-    this.history.push(link.href, { 'blue': 'blue'});
+    this.history.push(linkLocation, { 'blue': 'blue'});
   }
 
   render() {
@@ -26,8 +24,8 @@ debugger;
 
     return (
       <div>
-        <a href={linkLocation} onClick={(e) => this.handleClick(e)}>
-          History push to /demo3/page2
+        <a href={linkLocation} onClick={(e) => this.handleClick(e, linkLocation)}>
+          History push to {linkLocation}
         </a>
         <pre>
           <b>this.pages</b>:<br/>

@@ -49,7 +49,7 @@ export class RouteLink {
     this.match = this.computeMatch();
   }
 
-  componentWillUnmount() {
+  componentDidUnload() {
     // be sure to unsubscribe to the router so that we don't
     // get any memory leaks
     this.unsubscribe();

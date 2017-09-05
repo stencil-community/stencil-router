@@ -13,10 +13,9 @@ import { ActiveRouter, LocationSegments, MatchResults } from '../../global/inter
 export class Router {
   @Prop() root: string = '/';
   @Prop({ context: 'activeRouter' }) activeRouter: ActiveRouter;
+  unsubscribe: Function = () => {};
 
   @State() match: MatchResults | null = null;
-
-  unsubscribe: Function = () => {};
 
   computeMatch(pathname?: string) {
     return {

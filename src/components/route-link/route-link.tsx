@@ -12,6 +12,7 @@ import { RouterHistory, ActiveRouter, Listener, LocationSegments, MatchResults }
 })
 export class RouteLink {
   @Prop({ context: 'activeRouter' }) activeRouter: ActiveRouter;
+  @Prop({ context: 'location' }) location: Location;
   unsubscribe: Listener = () => { return; };
 
   @Prop() url: string;
@@ -26,9 +27,6 @@ export class RouteLink {
   computeMatch(pathname?: string) {
     if (!pathname) {
       const location: LocationSegments = this.activeRouter.get('location');
-      if (!location) {
-        return null;
-      }
       pathname = location.pathname;
     }
 
@@ -46,6 +44,8 @@ export class RouteLink {
     this.unsubscribe = this.activeRouter.subscribe(() => {
       this.match = this.computeMatch();
     });
+
+    // Likely that this route link could receive a location prop
     this.match = this.computeMatch();
   }
 

@@ -12,6 +12,7 @@ import { RouterHistory, ActiveRouter, Listener, LocationSegments, MatchResults }
 })
 export class Route {
   @Prop({ context: 'activeRouter' }) activeRouter: ActiveRouter;
+  @Prop({ context: 'location' }) location: Location;
   unsubscribe: Listener = () => { return; };
 
   @Prop() url: string;
@@ -27,9 +28,6 @@ export class Route {
   computeMatch(pathname?: string) {
     if (!pathname) {
       const location: LocationSegments = this.activeRouter.get('location');
-      if (!location) {
-        return null;
-      }
       pathname = location.pathname;
     }
 
@@ -61,7 +59,7 @@ export class Route {
     // Check if this route is in the matching URL (for example, a parent route)
     if (!this.activeRouter || !this.match) {
       // I would prefer to return null, but there is an error in stencil that requires this right now.
-      return <span></span>;
+      return null;
     }
 
     // component props defined in route

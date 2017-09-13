@@ -4,6 +4,15 @@ Context.activeRouter = (function() {
   let state: { [key: string]: any } = {};
   const nextListeners: Function[] = [];
 
+  function getDefaultState() {
+    return {
+      location: {
+        pathname: Context.window.location.pathname,
+        search: Context.window.location.search
+      }
+    };
+  }
+
   function set(value: { [key: string]: any }) {
     state = {
       ...state,
@@ -13,6 +22,9 @@ Context.activeRouter = (function() {
   }
 
   function get(attrName?: string) {
+    if (Object.keys(state).length === 0) {
+      return getDefaultState();
+    }
     if (!attrName) {
       return state;
     }

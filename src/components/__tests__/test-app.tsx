@@ -11,7 +11,7 @@ export class TestApp {
         <ul>
           <li><stencil-route-link url="/" exact={true}>Exact Base Link</stencil-route-link></li>
           <li><stencil-route-link url="/">Base Link</stencil-route-link></li>
-          <li><stencil-route-link url="/demo">Demo Link</stencil-route-link></li>
+          <li><stencil-route-link url="/demo" urlMatch="/:var(demo|demo3)">Demo Link</stencil-route-link></li>
           <li><stencil-route-link url="/demo2">Demo2 Link</stencil-route-link></li>
           <li><stencil-route-link url="/demo3">Demo3 Link</stencil-route-link></li>
           <li><stencil-route-link url="/demo3/page1">Demo3 Page1 Link</stencil-route-link></li>

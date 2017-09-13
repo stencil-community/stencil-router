@@ -16,6 +16,7 @@ export class RouteLink {
   unsubscribe: Listener = () => { return; };
 
   @Prop() url: string;
+  @Prop() urlMatch: string;
   @Prop() exact: boolean = false;
   @Prop() custom: boolean = false;
   @Prop() activeClass: string = 'link-active';
@@ -29,12 +30,13 @@ export class RouteLink {
       const location: LocationSegments = this.activeRouter.get('location');
       pathname = location.pathname;
     }
-
-    return matchPath(pathname, {
-      path: this.url,
+    const match = matchPath(pathname, {
+      path: this.urlMatch || this.url,
       exact: this.exact,
       strict: true
     });
+
+    return match;
   }
 
   componentWillLoad() {

@@ -16,7 +16,7 @@ export class RouteLink {
   unsubscribe: Listener = () => { return; };
 
   @Prop() url: string;
-  @Prop() urlMatch: string;
+  @Prop() urlMatch: string | string[];
   @Prop() exact: boolean = false;
   @Prop() custom: boolean = false;
   @Prop() activeClass: string = 'link-active';

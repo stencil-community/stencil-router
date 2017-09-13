@@ -11,7 +11,7 @@ export class TestApp {
         <ul>
           <li><stencil-route-link url="/" exact={true}>Exact Base Link</stencil-route-link></li>
           <li><stencil-route-link url="/">Base Link</stencil-route-link></li>
-          <li><stencil-route-link url="/demo" urlMatch="/:var(demo|demo3)">Demo Link</stencil-route-link></li>
+          <li><stencil-route-link url="/demo" urlMatch={['/demo', '/demox']} exact={true}>Demo Link</stencil-route-link></li>
           <li><stencil-route-link url="/demo2">Demo2 Link</stencil-route-link></li>
           <li><stencil-route-link url="/demo3">Demo3 Link</stencil-route-link></li>
           <li><stencil-route-link url="/demo3/page1">Demo3 Page1 Link</stencil-route-link></li>
@@ -26,7 +26,7 @@ export class TestApp {
           }
         }></stencil-route>
 
-        <stencil-route url="/demo" exact={true} routeRender={
+        <stencil-route url={['/demo', '/demox']} exact={true} routeRender={
           (props: { [key: string]: any}) => {
             console.log(props);
             return <span>rendering /demo</span>;

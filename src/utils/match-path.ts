@@ -11,12 +11,13 @@ const cacheLimit = 10000;
 let cacheCount = 0;
 
 // Memoized function for creating the path match regex
-function compilePath(pattern: string, options: CompileOptions): { re: pathToRegexp.PathRegExp, keys: pathToRegexp.Key[]} {
+function compilePath(pattern: string | string[], options: CompileOptions): { re: pathToRegexp.PathRegExp, keys: pathToRegexp.Key[]} {
   const cacheKey = `${options.end}${options.strict}`;
   const cache = patternCache[cacheKey] || (patternCache[cacheKey] = {});
+  const cachePattern = JSON.stringify(pattern);
 
-  if (cache[pattern]) {
-    return cache[pattern];
+  if (cache[cachePattern]) {
+    return cache[cachePattern];
   }
 
   const keys: pathToRegexp.Key[] = [];
@@ -24,7 +25,7 @@ function compilePath(pattern: string, options: CompileOptions): { re: pathToRege
   const compiledPattern = { re, keys };
 
   if (cacheCount < cacheLimit) {
-    cache[pattern] = compiledPattern;
+    cache[cachePattern] = compiledPattern;
     cacheCount += 1;
   }
 

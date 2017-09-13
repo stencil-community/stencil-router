@@ -15,7 +15,7 @@ export class Route {
   @Prop({ context: 'location' }) location: Location;
   unsubscribe: Listener = () => { return; };
 
-  @Prop() url: string;
+  @Prop() url: string | string[];
   @Prop() component: string;
   @Prop() componentProps: any = {};
   @Prop() exact: boolean = false;

@@ -30,7 +30,7 @@ export interface RouterHistory {
 }
 
 export interface MatchOptions {
-  path?: string;
+  path?: string | string[];
   exact?: boolean;
   strict?: boolean;
 }

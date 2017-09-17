@@ -3,10 +3,11 @@
   "version": "0.0.12",
   "description": "Stencil Router",
   "main": "dist/collection/index.js",
+  "browser": "dist/stencilrouter.js",
   "types": "dist/collection/index.d.ts",
   "collection": "dist/collection/collection-manifest.json",
   "files": [
-    "dist"
+    "dist/"
   ],
   "scripts": {
     "build": "stencil build",

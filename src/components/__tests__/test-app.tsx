@@ -63,6 +63,7 @@ export class TestApp {
           component="test-demo-four"
         ></stencil-route>
 
+        <stencil-route url="/demo5" component="async-content" componentProps={{ location: '/' }}></stencil-route>
       </stencil-router>
     );
   }

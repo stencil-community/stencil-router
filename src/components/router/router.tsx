@@ -10,7 +10,7 @@ import { ActiveRouter, LocationSegments, MatchResults } from '../../global/inter
 @Component({
   tag: 'stencil-router'
 })
-export class Router {
+export default class Router {
   @Prop() root: string = '/';
   @Prop({ context: 'activeRouter' }) activeRouter: ActiveRouter;
   unsubscribe: Function = () => {};

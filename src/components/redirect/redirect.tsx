@@ -4,7 +4,7 @@ import { ActiveRouter, RouterHistory } from '../../global/interfaces';
 @Component({
   tag: 'stencil-router-redirect'
 })
-export class Redirect {
+export default class Redirect {
   @Prop({ context: 'activeRouter' }) activeRouter: ActiveRouter;
   @Prop() url: string;
 

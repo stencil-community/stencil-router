@@ -3,7 +3,7 @@ import { Component, Prop, PropDidChange, State } from '@stencil/core';
 @Component({
   tag: 'stencil-async-content'
 })
-export default class AsyncContent {
+export class AsyncContent {
   @Prop() documentLocation: string;
   @State() content: string;
 

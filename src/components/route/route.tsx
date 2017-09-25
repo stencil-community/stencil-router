@@ -10,7 +10,7 @@ import { RouterHistory, ActiveRouter, Listener, LocationSegments, MatchResults }
 @Component({
   tag: 'stencil-route'
 })
-export default class Route {
+export class Route {
   @Prop({ context: 'activeRouter' }) activeRouter: ActiveRouter;
   @Prop({ context: 'location' }) location: Location;
   unsubscribe: Listener = () => { return; };

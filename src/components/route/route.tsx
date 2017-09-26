@@ -19,6 +19,7 @@ export class Route {
   @Prop() component: string;
   @Prop() componentProps: any = {};
   @Prop() exact: boolean = false;
+  @Prop() group: string = null;
   @Prop() routeRender: Function = null;
 
   @State() match: MatchResults | null = null;
@@ -31,17 +32,32 @@ export class Route {
       pathname = location.pathname;
     }
 
-    return matchPath(pathname, {
+    const newMatch = matchPath(pathname, {
       path: this.url,
       exact: this.exact,
       strict: true
     });
+
+    // If we have a match and we've already matched for the group, don't set the match
+    if (newMatch) {
+      if (this.group && this.activeRouter.didGroupAlreadyMatch(this.group)) {
+        return null;
+      }
+      this.group && this.activeRouter.setGroupMatched(this.group);
+    }
+
+    return newMatch;
   }
 
   componentWillLoad() {
     // subscribe the project's active router and listen
     // for changes. Recompute the match if any updates get
     // pushed
+
+    if (this.group) {
+      this.activeRouter.addToGroup(this, this.group);
+    }
+
     this.unsubscribe = this.activeRouter.subscribe(() => {
       this.match = this.computeMatch();
     });
@@ -51,6 +67,9 @@ export class Route {
   componentDidUnload() {
     // be sure to unsubscribe to the router so that we don't
     // get any memory leaks
+
+    this.activeRouter.removeFromGroups(this);
+
     this.unsubscribe();
   }
 
@@ -58,7 +77,6 @@ export class Route {
     // If there is no activeRouter then do not render
     // Check if this route is in the matching URL (for example, a parent route)
     if (!this.activeRouter || !this.match) {
-      // I would prefer to return null, but there is an error in stencil that requires this right now.
       return null;
     }
 

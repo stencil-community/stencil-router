@@ -17,6 +17,7 @@ export class TestApp {
           <li><stencil-route-link url="/demo3/page1">Demo3 Page1 Link</stencil-route-link></li>
           <li><stencil-route-link url="/demo3/page2">Demo3 Page2 Link</stencil-route-link></li>
           <li><stencil-route-link url="/demo4">Demo4 Link</stencil-route-link></li>
+          <li><stencil-route-link url="/demo6/">Demo6 Link</stencil-route-link></li>
         </ul>
 
         <stencil-route url="/" exact={true} routeRender={
@@ -70,6 +71,8 @@ export class TestApp {
         ></stencil-route>
 
         <stencil-route url="/demo5" component="async-content" componentProps={{ location: '/' }}></stencil-route>
+
+        <stencil-route url="/demo6" component="test-demo-six"></stencil-route>
       </stencil-router>
     );
   }

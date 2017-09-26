@@ -2,6 +2,14 @@ export interface ActiveRouter {
   subscribe: (callback: Function) => () => void;
   set: (value: {[key: string]: any}) => void;
   get: (attrName?: string) => any;
+  addToGroup: (route: any, groupName: string) => void;
+  removeFromGroups: (route: any) => void;
+  didGroupAlreadyMatch: (groupName: string) => boolean;
+  setGroupMatched: (groupName: string) => void;
+}
+
+export interface Route {
+
 }
 
 export type Listener = () => void;

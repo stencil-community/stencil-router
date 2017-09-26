@@ -1,7 +1,11 @@
 import { ActiveRouter, Listener } from './interfaces';
 
+declare var Context: any;
+
 Context.activeRouter = (function() {
   let state: { [key: string]: any } = {};
+  let groups: { [key: string]: any[] } = {};
+  let matchedGroups: { [key: string]: boolean } = {};
   const nextListeners: Function[] = [];
 
   function getDefaultState() {
@@ -18,6 +22,7 @@ Context.activeRouter = (function() {
       ...state,
       ...value
     };
+    clearGroups();
     dispatch();
   }
 
@@ -31,6 +36,13 @@ Context.activeRouter = (function() {
     return state[attrName];
   }
 
+  /**
+   *  When we get a new location, clear matching groups
+   *  so we give them a chance to re-match and re-render.
+   */
+  function clearGroups() {
+    matchedGroups = {};
+  }
 
   function dispatch() {
     const listeners = nextListeners;
@@ -62,9 +74,48 @@ Context.activeRouter = (function() {
     };
   }
 
+  /**
+   * Remove a Route from all groups
+   */
+  function removeFromGroups(route: any) {
+    for(let groupName in groups) {
+      const group = groups[groupName];
+      groups[groupName] = group.filter(r => r !== route);
+    }
+  }
+
+  /**
+   * Add a Route to the given group
+   */
+  function addToGroup(route: any, groupName: string) {
+    if (!(groupName in groups)) {
+      groups[groupName] = [];
+    } 
+    groups[groupName].push(route);
+  }
+
+  /**
+   * Check if a group already matched once
+   */
+  function didGroupAlreadyMatch(groupName: string) {
+    if (!groupName) { return false; }
+    return matchedGroups[groupName] === true;
+  }
+
+  /**
+   * Set that a group has matched
+   */
+  function setGroupMatched(groupName: string) {
+    matchedGroups[groupName] = true;
+  }
+
   return {
     set,
     get,
-    subscribe
+    subscribe,
+    addToGroup,
+    removeFromGroups,
+    didGroupAlreadyMatch,
+    setGroupMatched
   } as ActiveRouter;
 })();

@@ -1,4 +1,4 @@
-import { Component, Prop, State } from '@stencil/core';
+import { Component, Prop, PropDidChange, State } from '@stencil/core';
 import createHistory from '../../utils/createBrowserHistory';
 import { ActiveRouter, LocationSegments, MatchResults } from '../../global/interfaces';
 
@@ -12,6 +12,18 @@ import { ActiveRouter, LocationSegments, MatchResults } from '../../global/inter
 })
 export class Router {
   @Prop() root: string = '/';
+
+  // A suffix to append to the page title whenever 
+  // it's updated through RouteTitle
+  @Prop() titleSuffix: string = '';
+  @PropDidChange('titleSuffix')
+  titleSuffixChanged(newValue: string) {
+    console.log('title suffix changed');
+    this.activeRouter.set({
+      titleSuffix: newValue
+    });
+  }
+
   @Prop({ context: 'activeRouter' }) activeRouter: ActiveRouter;
   unsubscribe: Function = () => {};
 
@@ -35,6 +47,7 @@ export class Router {
 
     this.activeRouter.set({
       location: history.location,
+      titleSuffix: this.titleSuffix,
       history
     });
 

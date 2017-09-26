@@ -7,7 +7,7 @@ export class TestApp {
 
   render() {
     return (
-      <stencil-router>
+      <stencil-router title-suffix=" - Stencil Router Demos">
         <ul>
           <li><stencil-route-link url="/" exact={true}>Exact Base Link</stencil-route-link></li>
           <li><stencil-route-link url="/">Base Link</stencil-route-link></li>
@@ -30,7 +30,10 @@ export class TestApp {
         <stencil-route url={['/demo', '/demox']} exact={true} routeRender={
           (props: { [key: string]: any}) => {
             console.log(props);
-            return <span>rendering /demo</span>;
+            return [
+              <stencil-route-title title="DEMO"></stencil-route-title>,
+              <span>rendering /demo</span>
+            ]
           }
         }></stencil-route>
 
@@ -47,7 +50,10 @@ export class TestApp {
         <stencil-route url="/demo3" exact={true} routeRender={
           (props: { [key: string]: any}) => {
             console.log(props);
-            return <span>rendering /demo 3</span>
+            return [
+              <stencil-route-title title="Demo 3"></stencil-route-title>,
+              <span>rendering /demo 3</span>
+            ]
           }
         }></stencil-route>
 

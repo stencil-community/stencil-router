@@ -2,6 +2,8 @@ import { Router } from './components/router/router';
 import { Route } from './components/route/route';
 import { Redirect } from './components/redirect/redirect';
 import { RouteLink } from './components/route-link/route-link';
+import { RouteTitle } from './components/route-title/route-title';
+
 import {
   ActiveRouter,
   Listener,
@@ -16,6 +18,7 @@ export {
   Route,
   Redirect,
   RouteLink,
+  RouteTitle,
   ActiveRouter,
   Listener,
   LocationSegments,

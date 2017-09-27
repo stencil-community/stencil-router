@@ -178,40 +178,6 @@ declare global {
 }
 
 
-import { Route as StencilRoute } from './components/route/route';
-
-interface HTMLStencilRouteElement extends StencilRoute, HTMLElement {
-}
-declare var HTMLStencilRouteElement: {
-  prototype: HTMLStencilRouteElement;
-  new (): HTMLStencilRouteElement;
-};
-declare global {
-  interface HTMLElementTagNameMap {
-      "stencil-route": HTMLStencilRouteElement;
-  }
-  interface ElementTagNameMap {
-      "stencil-route": HTMLStencilRouteElement;
-  }
-  namespace JSX {
-      interface IntrinsicElements {
-          "stencil-route": JSXElements.StencilRouteAttributes;
-      }
-  }
-  namespace JSXElements {
-      export interface StencilRouteAttributes extends HTMLAttributes {
-        
-          url?: any,
-          component?: any,
-          componentProps?: any,
-          exact?: boolean | "true" | "false",
-          group?: any,
-          routeRender?: any
-      }
-  }
-}
-
-
 import { RouteLink as StencilRouteLink } from './components/route-link/route-link';
 
 interface HTMLStencilRouteLinkElement extends StencilRouteLink, HTMLElement {
@@ -269,6 +235,40 @@ declare global {
       export interface StencilRouteTitleAttributes extends HTMLAttributes {
         
           title?: any
+      }
+  }
+}
+
+
+import { Route as StencilRoute } from './components/route/route';
+
+interface HTMLStencilRouteElement extends StencilRoute, HTMLElement {
+}
+declare var HTMLStencilRouteElement: {
+  prototype: HTMLStencilRouteElement;
+  new (): HTMLStencilRouteElement;
+};
+declare global {
+  interface HTMLElementTagNameMap {
+      "stencil-route": HTMLStencilRouteElement;
+  }
+  interface ElementTagNameMap {
+      "stencil-route": HTMLStencilRouteElement;
+  }
+  namespace JSX {
+      interface IntrinsicElements {
+          "stencil-route": JSXElements.StencilRouteAttributes;
+      }
+  }
+  namespace JSXElements {
+      export interface StencilRouteAttributes extends HTMLAttributes {
+        
+          url?: any,
+          component?: any,
+          componentProps?: any,
+          exact?: boolean | "true" | "false",
+          group?: any,
+          routeRender?: any
       }
   }
 }

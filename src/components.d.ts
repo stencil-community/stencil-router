@@ -27,37 +27,6 @@ declare global {
 }
 
 
-import { TestDemoThree as TestDemoThree } from './components/__tests__/test-demo-three';
-
-interface HTMLTestDemoThreeElement extends TestDemoThree, HTMLElement {
-}
-declare var HTMLTestDemoThreeElement: {
-  prototype: HTMLTestDemoThreeElement;
-  new (): HTMLTestDemoThreeElement;
-};
-declare global {
-  interface HTMLElementTagNameMap {
-      "test-demo-three": HTMLTestDemoThreeElement;
-  }
-  interface ElementTagNameMap {
-      "test-demo-three": HTMLTestDemoThreeElement;
-  }
-  namespace JSX {
-      interface IntrinsicElements {
-          "test-demo-three": JSXElements.TestDemoThreeAttributes;
-      }
-  }
-  namespace JSXElements {
-      export interface TestDemoThreeAttributes extends HTMLAttributes {
-        
-          pages?: any,
-          match?: any,
-          history?: any
-      }
-  }
-}
-
-
 import { TestDemoFour as TestDemoFour } from './components/__tests__/test-demo-four';
 
 interface HTMLTestDemoFourElement extends TestDemoFour, HTMLElement {
@@ -80,6 +49,68 @@ declare global {
   }
   namespace JSXElements {
       export interface TestDemoFourAttributes extends HTMLAttributes {
+        
+          pages?: any,
+          match?: any,
+          history?: any
+      }
+  }
+}
+
+
+import { TestDemoSix as TestDemoSix } from './components/__tests__/test-demo-six';
+
+interface HTMLTestDemoSixElement extends TestDemoSix, HTMLElement {
+}
+declare var HTMLTestDemoSixElement: {
+  prototype: HTMLTestDemoSixElement;
+  new (): HTMLTestDemoSixElement;
+};
+declare global {
+  interface HTMLElementTagNameMap {
+      "test-demo-six": HTMLTestDemoSixElement;
+  }
+  interface ElementTagNameMap {
+      "test-demo-six": HTMLTestDemoSixElement;
+  }
+  namespace JSX {
+      interface IntrinsicElements {
+          "test-demo-six": JSXElements.TestDemoSixAttributes;
+      }
+  }
+  namespace JSXElements {
+      export interface TestDemoSixAttributes extends HTMLAttributes {
+        
+          pages?: any,
+          match?: any,
+          history?: any
+      }
+  }
+}
+
+
+import { TestDemoThree as TestDemoThree } from './components/__tests__/test-demo-three';
+
+interface HTMLTestDemoThreeElement extends TestDemoThree, HTMLElement {
+}
+declare var HTMLTestDemoThreeElement: {
+  prototype: HTMLTestDemoThreeElement;
+  new (): HTMLTestDemoThreeElement;
+};
+declare global {
+  interface HTMLElementTagNameMap {
+      "test-demo-three": HTMLTestDemoThreeElement;
+  }
+  interface ElementTagNameMap {
+      "test-demo-three": HTMLTestDemoThreeElement;
+  }
+  namespace JSX {
+      interface IntrinsicElements {
+          "test-demo-three": JSXElements.TestDemoThreeAttributes;
+      }
+  }
+  namespace JSXElements {
+      export interface TestDemoThreeAttributes extends HTMLAttributes {
         
           pages?: any,
           match?: any,
@@ -174,6 +205,7 @@ declare global {
           component?: any,
           componentProps?: any,
           exact?: boolean | "true" | "false",
+          group?: any,
           routeRender?: any
       }
   }
@@ -213,6 +245,35 @@ declare global {
 }
 
 
+import { RouteTitle as StencilRouteTitle } from './components/route-title/route-title';
+
+interface HTMLStencilRouteTitleElement extends StencilRouteTitle, HTMLElement {
+}
+declare var HTMLStencilRouteTitleElement: {
+  prototype: HTMLStencilRouteTitleElement;
+  new (): HTMLStencilRouteTitleElement;
+};
+declare global {
+  interface HTMLElementTagNameMap {
+      "stencil-route-title": HTMLStencilRouteTitleElement;
+  }
+  interface ElementTagNameMap {
+      "stencil-route-title": HTMLStencilRouteTitleElement;
+  }
+  namespace JSX {
+      interface IntrinsicElements {
+          "stencil-route-title": JSXElements.StencilRouteTitleAttributes;
+      }
+  }
+  namespace JSXElements {
+      export interface StencilRouteTitleAttributes extends HTMLAttributes {
+        
+          title?: any
+      }
+  }
+}
+
+
 import { Router as StencilRouter } from './components/router/router';
 
 interface HTMLStencilRouterElement extends StencilRouter, HTMLElement {
@@ -236,7 +297,8 @@ declare global {
   namespace JSXElements {
       export interface StencilRouterAttributes extends HTMLAttributes {
         
-          root?: any
+          root?: any,
+          titleSuffix?: any
       }
   }
 }

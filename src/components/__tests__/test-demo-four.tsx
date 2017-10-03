@@ -16,10 +16,6 @@ export class TestDemoFour {
   }
 
   render() {
-    console.log('pages: ', this.pages);
-    console.log('match: ', this.match);
-    console.log('history: ', this.history.location);
-
     const linkLocation = '/demo3/page1';
 
     return (

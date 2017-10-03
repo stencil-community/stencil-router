@@ -13,12 +13,11 @@ import { ActiveRouter, LocationSegments, MatchResults } from '../../global/inter
 export class Router {
   @Prop() root: string = '/';
 
-  // A suffix to append to the page title whenever 
+  // A suffix to append to the page title whenever
   // it's updated through RouteTitle
   @Prop() titleSuffix: string = '';
   @PropDidChange('titleSuffix')
   titleSuffixChanged(newValue: string) {
-    console.log('title suffix changed');
     this.activeRouter.set({
       titleSuffix: newValue
     });

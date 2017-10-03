@@ -11,15 +11,10 @@ export class TestDemoThree {
   @Prop() history: RouterHistory;
 
   render() {
-    console.log('pages: ', this.pages);
-    console.log('match: ', this.match);
-    console.log('history: ', this.history.location);
-
     return [
       <span>Demo 3 Test Page<br/></span>,
       <stencil-route url="/demo3/page1" exact={true} routeRender={
         (props: { [key: string]: any}) => {
-          console.log(props);
           return [
             <a href="#" onClick={(e) => {
               e.preventDefault();
@@ -45,7 +40,6 @@ export class TestDemoThree {
 
       <stencil-route url="/demo3/page2" exact={true} routeRender={
         (props: { [key: string]: any}) => {
-          console.log(props);
           return [
             <a href="#" onClick={(e) => {
               e.preventDefault();

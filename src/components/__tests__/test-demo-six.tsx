@@ -11,10 +11,6 @@ export class TestDemoSix {
   @Prop() history: RouterHistory;
 
   render() {
-    console.log('pages: ', this.pages);
-    console.log('match: ', this.match);
-    console.log('history: ', this.history.location);
-
     return [
       <span>Demo 6 Test Page<br/></span>,
       <stencil-route url="/demo6/" exact={true} group="main" routeRender={
@@ -27,7 +23,6 @@ export class TestDemoSix {
       }></stencil-route>,
       <stencil-route url="/demo6/:any*" group="main" routeRender={
         (props: { [key: string]: any}) => {
-          console.log('Got match props:', props.match);
           return [
             <h1>Two: {props.match}</h1>,
             <stencil-route-link url="/demo6/">Back</stencil-route-link>

@@ -20,7 +20,7 @@ export class RouteTitle {
     document.title = `${this.title}${suffix}`;
   }
 
-  render() {
+  render(): null {
     return null;
   }
 }

@@ -144,7 +144,7 @@ declare global {
   namespace JSXElements {
       export interface StencilAsyncContentAttributes extends HTMLAttributes {
         
-          documentLocation?: any
+          documentLocation?: string
       }
   }
 }
@@ -172,7 +172,7 @@ declare global {
   namespace JSXElements {
       export interface StencilRouterRedirectAttributes extends HTMLAttributes {
         
-          url?: any
+          url?: string
       }
   }
 }
@@ -200,11 +200,11 @@ declare global {
   namespace JSXElements {
       export interface StencilRouteLinkAttributes extends HTMLAttributes {
         
-          url?: any,
+          url?: string,
           urlMatch?: any,
           exact?: boolean | "true" | "false",
           custom?: boolean | "true" | "false",
-          activeClass?: any
+          activeClass?: string
       }
   }
 }
@@ -232,7 +232,7 @@ declare global {
   namespace JSXElements {
       export interface StencilRouteTitleAttributes extends HTMLAttributes {
         
-          title?: any
+          title?: string
       }
   }
 }
@@ -261,10 +261,10 @@ declare global {
       export interface StencilRouteAttributes extends HTMLAttributes {
         
           url?: any,
-          component?: any,
+          component?: string,
           componentProps?: any,
           exact?: boolean | "true" | "false",
-          group?: any,
+          group?: string,
           routeRender?: any
       }
   }
@@ -293,8 +293,8 @@ declare global {
   namespace JSXElements {
       export interface StencilRouterAttributes extends HTMLAttributes {
         
-          root?: any,
-          titleSuffix?: any
+          root?: string,
+          titleSuffix?: string
       }
   }
 }

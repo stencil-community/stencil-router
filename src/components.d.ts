@@ -26,6 +26,8 @@ declare global {
   }
   namespace JSXElements {
       export interface TestAppAttributes extends HTMLAttributes {
+          mode?: string,
+          color?: string,
         
       }
   }
@@ -53,6 +55,8 @@ declare global {
   }
   namespace JSXElements {
       export interface TestDemoFourAttributes extends HTMLAttributes {
+          mode?: string,
+          color?: string,
         
           pages?: any,
           match?: any,
@@ -83,6 +87,8 @@ declare global {
   }
   namespace JSXElements {
       export interface TestDemoSixAttributes extends HTMLAttributes {
+          mode?: string,
+          color?: string,
         
           pages?: any,
           match?: any,
@@ -113,6 +119,8 @@ declare global {
   }
   namespace JSXElements {
       export interface TestDemoThreeAttributes extends HTMLAttributes {
+          mode?: string,
+          color?: string,
         
           pages?: any,
           match?: any,
@@ -143,6 +151,8 @@ declare global {
   }
   namespace JSXElements {
       export interface StencilAsyncContentAttributes extends HTMLAttributes {
+          mode?: string,
+          color?: string,
         
           documentLocation?: string
       }
@@ -171,6 +181,8 @@ declare global {
   }
   namespace JSXElements {
       export interface StencilRouterRedirectAttributes extends HTMLAttributes {
+          mode?: string,
+          color?: string,
         
           url?: string
       }
@@ -199,11 +211,13 @@ declare global {
   }
   namespace JSXElements {
       export interface StencilRouteLinkAttributes extends HTMLAttributes {
+          mode?: string,
+          color?: string,
         
           url?: string,
           urlMatch?: any,
-          exact?: boolean | "true" | "false",
-          custom?: boolean | "true" | "false",
+          exact?: boolean,
+          custom?: boolean,
           activeClass?: string
       }
   }
@@ -231,6 +245,8 @@ declare global {
   }
   namespace JSXElements {
       export interface StencilRouteTitleAttributes extends HTMLAttributes {
+          mode?: string,
+          color?: string,
         
           title?: string
       }
@@ -259,11 +275,13 @@ declare global {
   }
   namespace JSXElements {
       export interface StencilRouteAttributes extends HTMLAttributes {
+          mode?: string,
+          color?: string,
         
           url?: any,
           component?: string,
           componentProps?: any,
-          exact?: boolean | "true" | "false",
+          exact?: boolean,
           group?: string,
           routeRender?: any
       }
@@ -292,6 +310,8 @@ declare global {
   }
   namespace JSXElements {
       export interface StencilRouterAttributes extends HTMLAttributes {
+          mode?: string,
+          color?: string,
         
           root?: string,
           titleSuffix?: string

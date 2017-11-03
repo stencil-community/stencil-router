@@ -65,6 +65,38 @@ declare global {
   }
 }
 
+import { TestDemoSeven as TestDemoSeven } from './components/__tests__/test-demo-seven';
+
+interface HTMLTestDemoSevenElement extends TestDemoSeven, HTMLElement {
+}
+declare var HTMLTestDemoSevenElement: {
+  prototype: HTMLTestDemoSevenElement;
+  new (): HTMLTestDemoSevenElement;
+};
+declare global {
+  interface HTMLElementTagNameMap {
+      "test-demo-seven": HTMLTestDemoSevenElement;
+  }
+  interface ElementTagNameMap {
+      "test-demo-seven": HTMLTestDemoSevenElement;
+  }
+  namespace JSX {
+      interface IntrinsicElements {
+          "test-demo-seven": JSXElements.TestDemoSevenAttributes;
+      }
+  }
+  namespace JSXElements {
+      export interface TestDemoSevenAttributes extends HTMLAttributes {
+          mode?: string,
+          color?: string,
+        
+          pages?: any,
+          match?: any,
+          history?: any
+      }
+  }
+}
+
 import { TestDemoSix as TestDemoSix } from './components/__tests__/test-demo-six';
 
 interface HTMLTestDemoSixElement extends TestDemoSix, HTMLElement {
@@ -217,7 +249,7 @@ declare global {
           url?: string,
           urlMatch?: any,
           exact?: boolean,
-          custom?: boolean,
+          custom?: string,
           activeClass?: string
       }
   }

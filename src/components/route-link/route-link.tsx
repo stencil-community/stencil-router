@@ -18,7 +18,7 @@ export class RouteLink {
   @Prop() url: string;
   @Prop() urlMatch: string | string[];
   @Prop() exact: boolean = false;
-  @Prop() custom: boolean = false;
+  @Prop() custom: string;
   @Prop() activeClass: string = 'link-active';
 
   @State() match: MatchResults | null = null;
@@ -77,9 +77,9 @@ export class RouteLink {
 
     if (this.custom) {
       return (
-        <span class={classes} onClick={this.handleClick.bind(this)}>
+        <this.custom class={classes} onClick={this.handleClick.bind(this)}>
           <slot />
-        </span>
+        </this.custom>
       );
     } else {
       return (

@@ -1,5 +1,4 @@
 import { Component, Prop } from '@stencil/core';
-import { RouterHistory, MatchResults } from '../../global/interfaces';
 import RouterDetails, { RenderProps } from '../../components/router/routerDetails';
 
 @Component({

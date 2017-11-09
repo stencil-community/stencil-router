@@ -12,7 +12,7 @@ export interface Props {
 }
 
 const RouterDetails = (props: Props) => {
-  return <stencil-route routeRender={props.children[0]} />
+  return <stencil-route routeRender={props.children[0] as ChildFunction} />
 }
 
 export default RouterDetails;

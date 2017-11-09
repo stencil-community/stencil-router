@@ -4,7 +4,14 @@
  * and imports for stencil collections that might be configured in your stencil.config.js file
  */
 
-import { TestApp as TestApp } from './components/__tests__/test-app';
+import {
+  MatchResults,
+  RouterHistory,
+} from './global/interfaces';
+
+import {
+  TestApp as TestApp
+} from './components/__tests__/test-app';
 
 interface HTMLTestAppElement extends TestApp, HTMLElement {
 }
@@ -33,7 +40,10 @@ declare global {
   }
 }
 
-import { TestDemoFour as TestDemoFour } from './components/__tests__/test-demo-four';
+
+import {
+  TestDemoFour as TestDemoFour
+} from './components/__tests__/test-demo-four';
 
 interface HTMLTestDemoFourElement extends TestDemoFour, HTMLElement {
 }
@@ -58,14 +68,15 @@ declare global {
           mode?: string,
           color?: string,
         
-          pages?: any,
-          match?: any,
-          history?: any
+          pages?: string[]
       }
   }
 }
 
-import { TestDemoSix as TestDemoSix } from './components/__tests__/test-demo-six';
+
+import {
+  TestDemoSix as TestDemoSix
+} from './components/__tests__/test-demo-six';
 
 interface HTMLTestDemoSixElement extends TestDemoSix, HTMLElement {
 }
@@ -90,14 +101,17 @@ declare global {
           mode?: string,
           color?: string,
         
-          pages?: any,
-          match?: any,
-          history?: any
+          pages?: string[],
+          match?: MatchResults,
+          history?: RouterHistory
       }
   }
 }
 
-import { TestDemoThree as TestDemoThree } from './components/__tests__/test-demo-three';
+
+import {
+  TestDemoThree as TestDemoThree
+} from './components/__tests__/test-demo-three';
 
 interface HTMLTestDemoThreeElement extends TestDemoThree, HTMLElement {
 }
@@ -122,14 +136,17 @@ declare global {
           mode?: string,
           color?: string,
         
-          pages?: any,
-          match?: any,
-          history?: any
+          pages?: string[],
+          match?: MatchResults,
+          history?: RouterHistory
       }
   }
 }
 
-import { AsyncContent as StencilAsyncContent } from './components/async-content/async-content';
+
+import {
+  AsyncContent as StencilAsyncContent
+} from './components/async-content/async-content';
 
 interface HTMLStencilAsyncContentElement extends StencilAsyncContent, HTMLElement {
 }
@@ -159,7 +176,10 @@ declare global {
   }
 }
 
-import { Redirect as StencilRouterRedirect } from './components/redirect/redirect';
+
+import {
+  Redirect as StencilRouterRedirect
+} from './components/redirect/redirect';
 
 interface HTMLStencilRouterRedirectElement extends StencilRouterRedirect, HTMLElement {
 }
@@ -189,7 +209,10 @@ declare global {
   }
 }
 
-import { RouteLink as StencilRouteLink } from './components/route-link/route-link';
+
+import {
+  RouteLink as StencilRouteLink
+} from './components/route-link/route-link';
 
 interface HTMLStencilRouteLinkElement extends StencilRouteLink, HTMLElement {
 }
@@ -215,7 +238,7 @@ declare global {
           color?: string,
         
           url?: string,
-          urlMatch?: any,
+          urlMatch?: string | string[],
           exact?: boolean,
           custom?: boolean,
           activeClass?: string
@@ -223,7 +246,10 @@ declare global {
   }
 }
 
-import { RouteTitle as StencilRouteTitle } from './components/route-title/route-title';
+
+import {
+  RouteTitle as StencilRouteTitle
+} from './components/route-title/route-title';
 
 interface HTMLStencilRouteTitleElement extends StencilRouteTitle, HTMLElement {
 }
@@ -253,7 +279,10 @@ declare global {
   }
 }
 
-import { Route as StencilRoute } from './components/route/route';
+
+import {
+  Route as StencilRoute
+} from './components/route/route';
 
 interface HTMLStencilRouteElement extends StencilRoute, HTMLElement {
 }
@@ -278,17 +307,20 @@ declare global {
           mode?: string,
           color?: string,
         
-          url?: any,
+          url?: string | string[],
           component?: string,
-          componentProps?: any,
+          componentProps?: { [key: string]: any },
           exact?: boolean,
           group?: string,
-          routeRender?: any
+          routeRender?: Function
       }
   }
 }
 
-import { Router as StencilRouter } from './components/router/router';
+
+import {
+  Router as StencilRouter
+} from './components/router/router';
 
 interface HTMLStencilRouterElement extends StencilRouter, HTMLElement {
 }

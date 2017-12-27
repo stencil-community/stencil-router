@@ -41,12 +41,13 @@ export class Router {
     const history = createHistory();
 
     history.listen((location: LocationSegments) => {
-      this.activeRouter.set({ location });
+      this.activeRouter.set({ location: this.getLocation(location) });
     });
 
     this.activeRouter.set({
-      location: history.location,
+      location: this.getLocation(history.location),
       titleSuffix: this.titleSuffix,
+      root: this.root,
       history
     });
 
@@ -57,6 +58,18 @@ export class Router {
       this.match = this.computeMatch();
     });
     this.match = this.computeMatch();
+  }
+
+  getLocation(location: LocationSegments): LocationSegments {
+    // Remove the root URL if found at beginning of string
+    const pathname = location.pathname.indexOf(this.root) == 0 ?
+                     '/' + location.pathname.slice(this.root.length) :
+                     location.pathname;
+
+    return {
+      ...location,
+      pathname
+    };
   }
 
   componentDidUnload() {

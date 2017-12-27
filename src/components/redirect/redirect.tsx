@@ -13,6 +13,17 @@ export class Redirect {
     if (!history) {
       return;
     }
-    return history.replace(this.url, {});
+    return history.replace(this.getUrl(this.url), {});
+  }
+
+  // Get the URL for this route link without the root from the router
+  getUrl(url: string) {
+    const root: string = this.activeRouter.get('root') || '/';
+
+    // Don't allow double slashes
+    if(url.charAt(0) == '/' && root.charAt(root.length - 1) == '/') {
+      return root.slice(0, root.length-1) + url;
+    }
+    return root + url;
   }
 }

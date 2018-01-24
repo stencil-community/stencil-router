@@ -1,5 +1,19 @@
 import { Component } from '@stencil/core';
 
+
+const PrivateRoute = ({ component, ...props}: { [key: string]: any}) => (
+  <stencil-route {...props} routeRender={
+    (props: { [key: string]: any}) => {
+      if ((window as any).userAuthenticated) {
+        const Component = component;
+        return <Component {...props.componentProps}></Component>;
+      }
+      return <stencil-router-redirect url="/"></stencil-router-redirect>
+    }
+  }/>
+)
+
+
 @Component({
   tag: 'test-app'
 })
@@ -18,6 +32,7 @@ export class TestApp {
           <li><stencil-route-link url="/demo3/page2">Demo3 Page2 Link</stencil-route-link></li>
           <li><stencil-route-link url="/demo4">Demo4 Link</stencil-route-link></li>
           <li><stencil-route-link url="/demo6/">Demo6 Link</stencil-route-link></li>
+          <li><stencil-route-link url="/demo7/">Demo7 Link</stencil-route-link></li>
         </ul>
 
         <stencil-route url="/" exact={true} routeRender={
@@ -69,6 +84,8 @@ export class TestApp {
         <stencil-route url="/demo5" component="async-content" componentProps={{ location: '/' }}></stencil-route>
 
         <stencil-route url="/demo6" component="test-demo-six"></stencil-route>
+
+        <PrivateRoute url="/demo7" component="test-demo-six" componentProps={{ testing: true }}></PrivateRoute>
       </stencil-router>
     );
   }

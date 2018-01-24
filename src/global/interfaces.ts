@@ -12,6 +12,8 @@ export interface Route {
 
 }
 
+export type HistoryType = 'browser' | 'hash';
+
 export type Listener = () => void;
 
 export interface LocationSegments {

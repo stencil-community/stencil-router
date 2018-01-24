@@ -5,6 +5,7 @@
  */
 
 import {
+  HistoryType,
   MatchResults,
   RouterHistory,
 } from './global/interfaces';
@@ -318,6 +319,7 @@ declare global {
   }
   namespace JSXElements {
     export interface StencilRouterAttributes extends HTMLAttributes {
+      historyType?: HistoryType;
       root?: string;
       titleSuffix?: string;
     }

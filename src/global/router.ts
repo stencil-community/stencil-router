@@ -1,11 +1,11 @@
-import { ActiveRouter, Listener } from './interfaces';
+import { ActiveRouter, Listener, RouterGroup, MatchResults } from './interfaces';
 
 declare var Context: any;
 
 Context.activeRouter = (function() {
   let state: { [key: string]: any } = {};
-  let groups: { [key: string]: any[] } = {};
-  let matchedGroups: { [key: string]: boolean } = {};
+  let groups: { [key: string]: RouterGroup } = {};
+  let activeGroupId: number = 0;
   const nextListeners: Function[] = [];
 
   function getDefaultState() {
@@ -22,7 +22,6 @@ Context.activeRouter = (function() {
       ...state,
       ...value
     };
-    clearGroups();
     dispatch();
   }
 
@@ -36,14 +35,6 @@ Context.activeRouter = (function() {
     return state[attrName];
   }
 
-  /**
-   *  When we get a new location, clear matching groups
-   *  so we give them a chance to re-match and re-render.
-   */
-  function clearGroups() {
-    matchedGroups = {};
-  }
-
   function dispatch() {
     const listeners = nextListeners;
     for (let i = 0; i < listeners.length; i++) {
@@ -53,69 +44,62 @@ Context.activeRouter = (function() {
   }
 
 
-  function subscribe(listener: Function): Listener {
+  function createGroup() {
+    activeGroupId += 1;
+    groups[activeGroupId] = [];
+    function groupedListener() {
+      groups[activeGroupId].listenerList.some(listener => listener() !== null)
+    }
+
+    nextListeners.push(groups[])
+    return activeGroupId;
+  }
+
+  function addGroupListener(listener: () => null | MatchResults, groupName?: string, groupIndex?: number) {
+    groups[groupName].listenerList[groupIndex] = listener;
+  }
+
+  function removeGroupListener(groupName: string, groupIndex: number) {
+    groups[groupName].listenerList.splice(groupIndex, 1);
+    if (groups[groupName].listenerList.length === 0) {
+      delete groups[groupName];
+    }
+  }
+
+
+  function subscribe(listener: () => null | MatchResults, groupName?: string, groupIndex?: number): Listener {
     if (typeof listener !== 'function') {
       throw new Error('Expected listener to be a function.');
     }
 
-    let isSubscribed = true;
+    if (groupName) {
+      addGroupListener(listener, groupName, groupIndex);
+    } else {
+      nextListeners.push(listener);
+    }
 
-    nextListeners.push(listener);
+    let isSubscribed = true;
 
     return function unsubscribe() {
       if (!isSubscribed) {
         return;
       }
 
+      if (groupName) {
+        removeGroupListener(groupName, groupIndex);
+      } else {
+        const index = nextListeners.indexOf(listener);
+        nextListeners.splice(index, 1);
+      }
+
       isSubscribed = false;
-
-      const index = nextListeners.indexOf(listener);
-      nextListeners.splice(index, 1);
     };
-  }
-
-  /**
-   * Remove a Route from all groups
-   */
-  function removeFromGroups(route: any) {
-    for(let groupName in groups) {
-      const group = groups[groupName];
-      groups[groupName] = group.filter(r => r !== route);
-    }
-  }
-
-  /**
-   * Add a Route to the given group
-   */
-  function addToGroup(route: any, groupName: string) {
-    if (!(groupName in groups)) {
-      groups[groupName] = [];
-    } 
-    groups[groupName].push(route);
-  }
-
-  /**
-   * Check if a group already matched once
-   */
-  function didGroupAlreadyMatch(groupName: string) {
-    if (!groupName) { return false; }
-    return matchedGroups[groupName] === true;
-  }
-
-  /**
-   * Set that a group has matched
-   */
-  function setGroupMatched(groupName: string) {
-    matchedGroups[groupName] = true;
   }
 
   return {
     set,
     get,
     subscribe,
-    addToGroup,
-    removeFromGroups,
-    didGroupAlreadyMatch,
-    setGroupMatched
+    createGroup,
   } as ActiveRouter;
 })();

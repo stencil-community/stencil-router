@@ -34,7 +34,7 @@ declare global {
   }
   namespace JSXElements {
     export interface TestAppAttributes extends HTMLAttributes {
-      
+
     }
   }
 }

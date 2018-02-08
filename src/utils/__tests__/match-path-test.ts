@@ -1,4 +1,4 @@
-import matchPath from '../match-path';
+import { matchPath } from '../match-path';
 
 describe('matchPath', () => {
   describe('with path="/"', () => {

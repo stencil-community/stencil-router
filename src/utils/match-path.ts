@@ -35,7 +35,7 @@ function compilePath(pattern: string | string[], options: CompileOptions): { re:
 /**
  * Public API for matching a URL pathname to a path pattern.
  */
-export default function matchPath(pathname: string, options: MatchOptions = {}): null | MatchResults {
+export function matchPath(pathname: string, options: MatchOptions = {}): null | MatchResults {
   if (typeof options === 'string') {
     options = { path: options };
   }

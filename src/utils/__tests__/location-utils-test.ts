@@ -374,16 +374,11 @@ describe('valueEqual', () => {
   });
 
   describe('objects with different constructors but the same properties', () => {
-    function A(a, b, c) {
-      this.a = a;
-      this.b = b;
-      this.c = c;
+    class A {
+      constructor(public a: number, public b: number, public c: number) {}
     }
-
-    function B(a, b, c) {
-      this.a = a;
-      this.b = b;
-      this.c = c;
+    class B {
+      constructor(public a: number, public b: number, public c: number) {}
     }
 
     it('returns true', () => {

@@ -22,7 +22,7 @@
     "url": "git+https://github.com/ionic-team/stencil-router.git"
   },
   "devDependencies": {
-    "@stencil/core": "^0.2.2",
+    "@stencil/core": "^0.4.0",
     "@stencil/dev-server": "latest",
     "@stencil/utils": "latest",
     "@types/jest": "^20.0.8",

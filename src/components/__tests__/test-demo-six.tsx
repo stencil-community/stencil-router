@@ -15,6 +15,7 @@ export class TestDemoSix {
       <span>Demo 6 Test Page<br/></span>,
       <stencil-route url="/demo6/" exact={true} group="main" routeRender={
         (props: { [key: string]: any}) => {
+          props;
           return [
             <h1>One</h1>,
             <stencil-route-link url="/demo6/asdf">Next</stencil-route-link>

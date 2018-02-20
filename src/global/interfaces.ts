@@ -1,11 +1,8 @@
 export interface ActiveRouter {
-  subscribe: (callback: Function) => () => void;
+  subscribe: (callback: Function, group?: string, groupIndex?: number) => () => void;
   set: (value: {[key: string]: any}) => void;
   get: (attrName?: string) => any;
-  addToGroup: (route: any, groupName: string) => void;
-  removeFromGroups: (route: any) => void;
-  didGroupAlreadyMatch: (groupName: string) => boolean;
-  setGroupMatched: (groupName: string) => void;
+  createGroup: (groupLength: number) => number;
 }
 
 export interface Route {
@@ -37,6 +34,12 @@ export interface RouterHistory {
   goForward: () => void;
   block: (prompt?: string) => () => void;
   listen: (listener: Function) => () => void;
+}
+
+export interface RouterGroup {
+  listenerList: ((switchMatched: boolean) => null | MatchResults)[];
+  groupedListener: () => void;
+  startLength: number;
 }
 
 export interface MatchOptions {

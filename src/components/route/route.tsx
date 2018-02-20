@@ -20,6 +20,7 @@ export class Route {
   @Prop() componentProps: { [key: string]: any } = {};
   @Prop() exact: boolean = false;
   @Prop() group: string = null;
+  @Prop() groupIndex: number = null;
   @Prop() routeRender: Function = null;
 
   @State() match: MatchResults | null = null;
@@ -32,43 +33,34 @@ export class Route {
       pathname = location.pathname;
     }
 
-    const newMatch = matchPath(pathname, {
+    return matchPath(pathname, {
       path: this.url,
       exact: this.exact,
       strict: true
     });
-
-    // If we have a match and we've already matched for the group, don't set the match
-    if (newMatch) {
-      if (this.group && this.activeRouter.didGroupAlreadyMatch(this.group)) {
-        return null;
-      }
-      this.group && this.activeRouter.setGroupMatched(this.group);
-    }
-
-    return newMatch;
   }
 
   componentWillLoad() {
     // subscribe the project's active router and listen
     // for changes. Recompute the match if any updates get
     // pushed
+    this.unsubscribe = this.activeRouter.subscribe((switchMatched: boolean) => {
+      if (switchMatched) {
+        this.match = null;
+      } else {
+        this.match = this.computeMatch();
+      }
+      return this.match;
+    }, this.group, this.groupIndex);
 
-    if (this.group) {
-      this.activeRouter.addToGroup(this, this.group);
-    }
-
-    this.unsubscribe = this.activeRouter.subscribe(() => {
+    if (!this.group) {
       this.match = this.computeMatch();
-    });
-    this.match = this.computeMatch();
+    }
   }
 
   componentDidUnload() {
     // be sure to unsubscribe to the router so that we don't
     // get any memory leaks
-
-    this.activeRouter.removeFromGroups(this);
 
     this.unsubscribe();
   }

@@ -46,12 +46,13 @@ Context.activeRouter = (function() {
 
   function createGroup() {
     activeGroupId += 1;
-    groups[activeGroupId] = [];
-    function groupedListener() {
-      groups[activeGroupId].listenerList.some(listener => listener() !== null)
-    }
+    groups[activeGroupId] = {} as RouterGroup;
+    groups[activeGroupId].listenerList = [];
+    groups[activeGroupId].groupedListener = () => {
+      groups[activeGroupId].listenerList.some(listener => listener() !== null);
+    };
 
-    nextListeners.push(groups[])
+    nextListeners.push(groups[activeGroupId].groupedListener);
     return activeGroupId;
   }
 
@@ -59,10 +60,13 @@ Context.activeRouter = (function() {
     groups[groupName].listenerList[groupIndex] = listener;
   }
 
-  function removeGroupListener(groupName: string, groupIndex: number) {
-    groups[groupName].listenerList.splice(groupIndex, 1);
-    if (groups[groupName].listenerList.length === 0) {
-      delete groups[groupName];
+  function removeGroupListener(groupId: string, groupIndex: number) {
+    groups[groupId].listenerList.splice(groupIndex, 1);
+
+    if (groups[groupId].listenerList.length === 0) {
+      const index = nextListeners.indexOf(groups[groupId].groupedListener);
+      nextListeners.splice(index, 1);
+      delete groups[groupId];
     }
   }
 

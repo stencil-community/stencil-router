@@ -1,7 +1,7 @@
 import { VNode } from "@stencil/core/dist/declarations";
 import { ActiveRouter } from '../../global/interfaces';
 
-export const Switch = ({ children }: { [key: string]: any}) => {
+export const RouterSwitch = ({ children }: { [key: string]: any}) => {
   const activeRouter: ActiveRouter = (window as any).stencilrouter.Context.activeRouter;
   const groupId = activeRouter.createGroup(children.length);
 

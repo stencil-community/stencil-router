@@ -1,5 +1,5 @@
 import { Component } from '@stencil/core';
-import { Switch } from '../switch/switch';
+import { RouterSwitch } from '../switch/switch';
 
 
 const PrivateRoute = ({ component, ...props}: { [key: string]: any}) => (
@@ -35,7 +35,7 @@ export class TestApp {
           <li><stencil-route-link url="/demo6/">Demo6 Link</stencil-route-link></li>
           <li><stencil-route-link url="/demo7/">Demo7 Link</stencil-route-link></li>
         </ul>
-        <Switch>
+        <RouterSwitch>
           <stencil-route url="/" exact={true} routeRender={
             (props: { [key: string]: any}) => {
               props;
@@ -43,14 +43,7 @@ export class TestApp {
             }
           }></stencil-route>
 
-          <stencil-route url="/" exact={true} routeRender={
-            (props: { [key: string]: any}) => {
-              props;
-              return <span>rendering /</span>;
-            }
-          }></stencil-route>
-
-          <stencil-route url={['/demo', '/demox']} exact={true} routeRender={
+          <stencil-route url={['/demo', '/demox']} routeRender={
             (props: { [key: string]: any}) => {
               props;
               return [
@@ -60,7 +53,7 @@ export class TestApp {
             }
           }></stencil-route>
 
-          <stencil-route url="/demo2" exact={true} routeRender={
+          <stencil-route url="/demo2" routeRender={
             (props: { [key: string]: any}) => {
               props;
               return [
@@ -70,7 +63,7 @@ export class TestApp {
             }
           }></stencil-route>
 
-          <stencil-route url="/demo3" exact={true} routeRender={
+          <stencil-route url="/demo3" routeRender={
             (props: { [key: string]: any}) => {
               props;
               return [
@@ -96,7 +89,7 @@ export class TestApp {
               return <span>The route is not found</span>;
             }
           }></stencil-route>
-        </Switch>
+        </RouterSwitch>
       </stencil-router>
     );
   }

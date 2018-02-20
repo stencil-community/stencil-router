@@ -1,4 +1,6 @@
+
 export * from './components';
+export * from './components/switch/switch';
 export {
   ActiveRouter,
   Listener,

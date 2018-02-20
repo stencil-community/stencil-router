@@ -3,10 +3,6 @@ export interface ActiveRouter {
   set: (value: {[key: string]: any}) => void;
   get: (attrName?: string) => any;
   createGroup: () => number;
-  addToGroup: (route: any, groupName: string) => void;
-  removeFromGroups: (route: any) => void;
-  didGroupAlreadyMatch: (groupName: string) => boolean;
-  setGroupMatched: (groupName: string) => void;
 }
 
 export interface Route {

@@ -1,10 +1,12 @@
 import { warning } from './log';
 import { LocationSegments } from '../global/interfaces';
 
-const createTransitionManager = () => {
-  let prompt: string = null;
+export type Prompt = (location: LocationSegments, action: string) => string;
 
-  const setPrompt = (nextPrompt?: string) => {
+const createTransitionManager = () => {
+  let prompt: Prompt | string;
+
+  const setPrompt = (nextPrompt?: Prompt | string) => {
     warning(
       prompt == null,
       'A history supports only one prompt at a time'

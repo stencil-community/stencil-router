@@ -15,6 +15,7 @@ export class TestDemoThree {
       <span>Demo 3 Test Page<br/></span>,
       <stencil-route url="/demo3/page1" exact={true} routeRender={
         (props: { [key: string]: any}) => {
+          props;
           return [
             <a href="#" onClick={(e) => {
               e.preventDefault();
@@ -40,6 +41,7 @@ export class TestDemoThree {
 
       <stencil-route url="/demo3/page2" exact={true} routeRender={
         (props: { [key: string]: any}) => {
+          props;
           return [
             <a href="#" onClick={(e) => {
               e.preventDefault();

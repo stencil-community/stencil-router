@@ -1,9 +1,10 @@
 import createBrowserHistory from '../createBrowserHistory';
 import createHashHistory from '../createHashHistory';
+import { RouterHistory } from '../../global/interfaces';
 
 describe('a browser history', () => {
   describe('with no basename', () => {
-    let history;
+    let history: RouterHistory;
     beforeEach(() => {
       history = createBrowserHistory();
     });
@@ -20,7 +21,7 @@ describe('a browser history', () => {
   });
 
   describe('with a basename', () => {
-    let history;
+    let history: RouterHistory;
     beforeEach(() => {
       history = createBrowserHistory({ basename: '/the/base' });
     });
@@ -37,7 +38,7 @@ describe('a browser history', () => {
   });
 
   describe('with a bad basename', () => {
-    let history;
+    let history: RouterHistory;
     beforeEach(() => {
       history = createBrowserHistory({ basename: '/the/bad/base/' });
     });
@@ -54,7 +55,7 @@ describe('a browser history', () => {
   });
 
   describe('with a slash basename', () => {
-    let history;
+    let history: RouterHistory;
     beforeEach(() => {
       history = createBrowserHistory({ basename: '/' });
     });
@@ -71,7 +72,7 @@ describe('a browser history', () => {
   });
 
   describe('encoding', () => {
-    let history;
+    let history: RouterHistory;
     beforeEach(() => {
       history = createBrowserHistory();
     });
@@ -94,7 +95,7 @@ describe('a browser history', () => {
 
 describe('a hash history', () => {
   describe('with default encoding', () => {
-    let history;
+    let history: RouterHistory;
     beforeEach(() => {
       history = createHashHistory();
     });
@@ -111,7 +112,7 @@ describe('a hash history', () => {
   });
 
   describe('with hashType="noslash"', () => {
-    let history;
+    let history: RouterHistory;
     beforeEach(() => {
       history = createHashHistory({ hashType: 'noslash' });
     });
@@ -128,7 +129,7 @@ describe('a hash history', () => {
   });
 
   describe('with hashType="hashbang"', () => {
-    let history;
+    let history: RouterHistory;
     beforeEach(() => {
       history = createHashHistory({ hashType: 'hashbang' });
     });
@@ -145,7 +146,7 @@ describe('a hash history', () => {
   });
 
   describe('with a basename', () => {
-    let history;
+    let history: RouterHistory;
     beforeEach(() => {
       history = createHashHistory({ basename: '/the/base' });
     });
@@ -161,7 +162,7 @@ describe('a hash history', () => {
   });
 
   describe('with a bad basename', () => {
-    let history;
+    let history: RouterHistory;
     beforeEach(() => {
       history = createHashHistory({ basename: '/the/bad/base/' });
     });
@@ -177,7 +178,7 @@ describe('a hash history', () => {
   });
 
   describe('with a slash basename', () => {
-    let history;
+    let history: RouterHistory;
     beforeEach(() => {
       history = createHashHistory({ basename: '/' });
     });
@@ -193,7 +194,7 @@ describe('a hash history', () => {
   });
 
   describe('encoding', () => {
-    let history;
+    let history: RouterHistory;
     beforeEach(() => {
       history = createHashHistory();
     });

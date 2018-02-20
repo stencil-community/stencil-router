@@ -44,12 +44,20 @@ Context.activeRouter = (function() {
   }
 
 
-  function createGroup() {
+  function createGroup(startLength: number) {
     activeGroupId += 1;
     groups[activeGroupId] = {} as RouterGroup;
+    groups[activeGroupId].startLength = startLength;
     groups[activeGroupId].listenerList = [];
     groups[activeGroupId].groupedListener = () => {
-      groups[activeGroupId].listenerList.some(listener => listener() !== null);
+      let switchMatched = false;
+      groups[activeGroupId].listenerList.forEach((listener) => {
+        if (switchMatched) {
+          listener(true);
+        } else {
+          switchMatched = listener(false) !== null;
+        }
+      });
     };
 
     nextListeners.push(groups[activeGroupId].groupedListener);
@@ -58,6 +66,9 @@ Context.activeRouter = (function() {
 
   function addGroupListener(listener: () => null | MatchResults, groupName?: string, groupIndex?: number) {
     groups[groupName].listenerList[groupIndex] = listener;
+    if (groups[groupName].listenerList.length === groups[activeGroupId].startLength) {
+      groups[groupName].groupedListener();
+    }
   }
 
   function removeGroupListener(groupId: string, groupIndex: number) {

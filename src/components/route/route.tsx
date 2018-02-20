@@ -44,12 +44,18 @@ export class Route {
     // subscribe the project's active router and listen
     // for changes. Recompute the match if any updates get
     // pushed
-    this.unsubscribe = this.activeRouter.subscribe(() => {
-      this.match = this.computeMatch();
+    this.unsubscribe = this.activeRouter.subscribe((switchMatched: boolean) => {
+      if (switchMatched) {
+        this.match = null;
+      } else {
+        this.match = this.computeMatch();
+      }
       return this.match;
     }, this.group, this.groupIndex);
 
-    this.match = this.computeMatch();
+    if (!this.group) {
+      this.match = this.computeMatch();
+    }
   }
 
   componentDidUnload() {

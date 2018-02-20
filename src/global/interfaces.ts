@@ -2,7 +2,7 @@ export interface ActiveRouter {
   subscribe: (callback: Function, group?: string, groupIndex?: number) => () => void;
   set: (value: {[key: string]: any}) => void;
   get: (attrName?: string) => any;
-  createGroup: () => number;
+  createGroup: (groupLength: number) => number;
 }
 
 export interface Route {
@@ -37,8 +37,9 @@ export interface RouterHistory {
 }
 
 export interface RouterGroup {
-  listenerList: (() => null | MatchResults)[];
+  listenerList: ((switchMatched: boolean) => null | MatchResults)[];
   groupedListener: () => void;
+  startLength: number;
 }
 
 export interface MatchOptions {

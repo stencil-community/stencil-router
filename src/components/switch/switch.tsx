@@ -3,11 +3,17 @@ import { ActiveRouter } from '../../global/interfaces';
 
 export const Switch = ({ children }: { [key: string]: any}) => {
   const activeRouter: ActiveRouter = (window as any).stencilrouter.Context.activeRouter;
-  const groupId = activeRouter.createGroup();
+  const groupId = activeRouter.createGroup(children.length);
 
-  return children.map((child: VNode, index: number) => {
+  const chil = children.map((child: VNode, index: number) => {
     child.vattrs.group = groupId;
     child.vattrs.groupIndex = index;
     return child;
   });
+
+  return (
+    <div>
+      { chil }
+    </div>
+  )
 };

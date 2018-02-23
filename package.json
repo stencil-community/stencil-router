@@ -1,10 +1,10 @@
 {
   "name": "@stencil/router",
-  "version": "0.0.17",
+  "version": "0.0.25",
   "description": "Stencil Router",
-  "main": "dist/collection/index.js",
+  "main": "dist/stencilrouter.js",
   "browser": "dist/stencilrouter.js",
-  "types": "dist/collection/index.d.ts",
+  "types": "dist/types/index.d.ts",
   "collection": "dist/collection/collection-manifest.json",
   "files": [
     "dist/"
@@ -12,7 +12,7 @@
   "scripts": {
     "build": "stencil build",
     "dev": "sd concurrent \"stencil build --dev --watch\" \"stencil-dev-server\" ",
-    "deploy": "np",
+    "deploy": "npm run build && np",
     "serve": "stencil-dev-server",
     "start": "npm run dev",
     "test": "jest"
@@ -21,17 +21,15 @@
     "type": "git",
     "url": "git+https://github.com/ionic-team/stencil-router.git"
   },
-  "dependencies": {
-    "path-to-regexp": "^1.7.0"
-  },
   "devDependencies": {
-    "@stencil/core": "0.0.6-19",
-    "@stencil/dev-server": "0.0.16",
+    "@stencil/core": "^0.3.0",
+    "@stencil/dev-server": "latest",
     "@stencil/utils": "latest",
     "@types/jest": "^20.0.8",
     "jest": "^20.0.4",
     "np": "^2.16.0",
-    "ts-jest": "^20.0.10"
+    "ts-jest": "^20.0.10",
+    "typescript": "^2.6.2"
   },
   "author": "Ionic Team",
   "license": "MIT",

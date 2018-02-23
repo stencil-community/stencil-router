@@ -1,4 +1,4 @@
-import { Component, Prop, PropDidChange, State } from '@stencil/core';
+import { Component, Prop, State, Watch } from '@stencil/core';
 
 @Component({
   tag: 'stencil-async-content'
@@ -11,7 +11,7 @@ export class AsyncContent {
     return this.fetchNewContent();
   }
 
-  @PropDidChange('doc')
+  @Watch('doc')
   fetchNewContent() {
     return fetch(this.documentLocation)
       .then(response => response.text())

@@ -1,6 +1,13 @@
-import { Component, Prop, PropDidChange, State } from '@stencil/core';
+import { Component, Prop, State, Watch } from '@stencil/core';
 import createHistory from '../../utils/createBrowserHistory';
-import { ActiveRouter, LocationSegments, MatchResults } from '../../global/interfaces';
+import createHashHistory from '../../utils/createHashHistory';
+import { ActiveRouter, LocationSegments, MatchResults, HistoryType} from '../../global/interfaces';
+
+
+const HISTORIES: { [key in HistoryType]: Function } = {
+  'browser': createHistory,
+  'hash': createHashHistory
+};
 
 /**
   * @name Router
@@ -13,10 +20,13 @@ import { ActiveRouter, LocationSegments, MatchResults } from '../../global/inter
 export class Router {
   @Prop() root: string = '/';
 
+  @Prop() historyType: HistoryType = 'browser';
+
   // A suffix to append to the page title whenever
   // it's updated through RouteTitle
   @Prop() titleSuffix: string = '';
-  @PropDidChange('titleSuffix')
+
+  @Watch('titleSuffix')
   titleSuffixChanged(newValue: string) {
     this.activeRouter.set({
       titleSuffix: newValue
@@ -38,15 +48,16 @@ export class Router {
   }
 
   componentWillLoad() {
-    const history = createHistory();
+    const history = HISTORIES[this.historyType]();
 
     history.listen((location: LocationSegments) => {
-      this.activeRouter.set({ location });
+      this.activeRouter.set({ location: this.getLocation(location) });
     });
 
     this.activeRouter.set({
-      location: history.location,
+      location: this.getLocation(history.location),
       titleSuffix: this.titleSuffix,
+      root: this.root,
       history
     });
 
@@ -57,6 +68,18 @@ export class Router {
       this.match = this.computeMatch();
     });
     this.match = this.computeMatch();
+  }
+
+  getLocation(location: LocationSegments): LocationSegments {
+    // Remove the root URL if found at beginning of string
+    const pathname = location.pathname.indexOf(this.root) == 0 ?
+                     '/' + location.pathname.slice(this.root.length) :
+                     location.pathname;
+
+    return {
+      ...location,
+      pathname
+    };
   }
 
   componentDidUnload() {

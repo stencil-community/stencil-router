@@ -1,4 +1,4 @@
-import matchPath from '../match-path';
+import { matchPath } from '../match-path';
 
 describe('matchPath', () => {
   describe('with path="/"', () => {
@@ -50,7 +50,7 @@ describe('matchPath', () => {
       // true/false and false/true will collide when adding booleans
       const trueFalse = matchPath(
         '/one/two',
-        { path: '/one/two/', exact : true, strict: false }
+        { path: '/one/two', exact : true, strict: false }
       );
       const falseTrue = matchPath(
         '/one/two',

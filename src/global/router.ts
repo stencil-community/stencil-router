@@ -82,6 +82,12 @@ Context.activeRouter = (function() {
   }
 
   function addListener(routeSubscription: RouteSubscription) {
+    const pathname = get('location').pathname;
+    const match = routeSubscription.isMatch(pathname);
+
+    routeSubscription.lastMatch = match;
+    routeSubscription.listener(match);
+
     nextListeners.push(routeSubscription);
 
     nextListeners.sort((a, b) => {

@@ -8,7 +8,9 @@ import { RouterHistory, ActiveRouter, Listener, LocationSegments, MatchResults }
   * @description
  */
 @Component({
-  tag: 'stencil-route'
+  tag: 'stencil-route',
+  styleUrl: './route.css',
+  scoped: true
 })
 export class Route {
   @Prop({ context: 'activeRouter' }) activeRouter: ActiveRouter;
@@ -25,7 +27,6 @@ export class Route {
 
   @State() match: MatchResults | null = null;
 
-  childReady: Function = () => {};
 
   // Identify if the current route is a match.
   computeMatch(pathname?: string) {
@@ -47,12 +48,6 @@ export class Route {
     // pushed
     const listener = (matchResults: MatchResults) => {
       this.match = matchResults;
-      return new Promise<void>((resolve: Function) => {
-        this.childReady = () => {
-          console.log('resolving');
-          resolve();
-        }
-      });
     }
     this.unsubscribe = this.activeRouter.subscribe({
       isMatch: this.computeMatch.bind(this),
@@ -65,15 +60,21 @@ export class Route {
   componentDidUnload() {
     // be sure to unsubscribe to the router so that we don't
     // get any memory leaks
-
     this.unsubscribe();
+  }
+
+  hostData() {
+    return {
+      class: {
+        'inactive': !this.activeRouter || !this.match
+      }
+    };
   }
 
   render() {
     // If there is no activeRouter then do not render
     // Check if this route is in the matching URL (for example, a parent route)
     if (!this.activeRouter || !this.match) {
-      this.childReady();
       return null;
     }
 
@@ -89,7 +90,6 @@ export class Route {
     // If there is a routerRender defined then use
     // that and pass the component and component props with it.
     if (this.routeRender) {
-      this.childReady();
       return this.routeRender({
         ...childProps,
         component: this.component
@@ -100,15 +100,7 @@ export class Route {
       const ChildComponent = this.component;
 
       return (
-        <ChildComponent ref={(child: Element) => {
-          (child as any).componentOnReady().then(() => {
-            const childReady = this.childReady;
-            setTimeout(function() {
-              console.log('about to call it');
-              childReady();
-            }, 2000);
-          });
-        }} { ...childProps} />
+        <ChildComponent {...childProps} />
       );
     }
   }

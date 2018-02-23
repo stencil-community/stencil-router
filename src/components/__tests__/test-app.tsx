@@ -34,6 +34,7 @@ export class TestApp {
           <li><stencil-route-link url="/demo4">Demo4 Link</stencil-route-link></li>
           <li><stencil-route-link url="/demo6/">Demo6 Link</stencil-route-link></li>
           <li><stencil-route-link url="/demo7/">Demo7 Link</stencil-route-link></li>
+          <stencil-route-link custom="li" url="/demo8/">Demo8 Link</stencil-route-link>
         </ul>
         <RouterSwitch>
           <stencil-route url="/" exact={true} routeRender={
@@ -83,6 +84,16 @@ export class TestApp {
           <stencil-route url="/demo6" component="test-demo-six"></stencil-route>
 
           <PrivateRoute url="/demo7" component="test-demo-six" componentProps={{ testing: true }}></PrivateRoute>
+
+          <stencil-route url="/demo8" routeRender={
+            (props: { [key: string]: any}) => {
+              props;
+              return [
+                <stencil-route-title title="Demo 8"></stencil-route-title>,
+                <span>rendering /demo 8</span>
+              ]
+            }
+          }></stencil-route>
 
           <stencil-route routeRender={
             () => {

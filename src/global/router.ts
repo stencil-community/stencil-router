@@ -1,12 +1,12 @@
-import { ActiveRouter, Listener, RouterGroup, MatchResults } from './interfaces';
+import { ActiveRouter, Listener, RouteSubscription, MatchResults } from './interfaces';
+import { shallowEqual } from '../utils/shallow-equal';
 
 declare var Context: any;
 
 Context.activeRouter = (function() {
   let state: { [key: string]: any } = {};
-  let groups: { [key: string]: RouterGroup } = {};
   let activeGroupId: number = 0;
-  const nextListeners: Function[] = [];
+  const nextListeners: RouteSubscription[] = [];
 
   function getDefaultState() {
     return {
@@ -37,61 +37,79 @@ Context.activeRouter = (function() {
 
   function dispatch() {
     const listeners = nextListeners;
+    const matchList: [ number, MatchResults ][] = [];
+    const groupMatches: string[] = [];
+    const pathname = get('location').pathname;
+
+    // Assume listeners are ordered by group and then groupIndex
     for (let i = 0; i < listeners.length; i++) {
-      const listener = listeners[i];
-      listener();
+      let match = null
+
+      // If listener has a groupId and group already has a match then don't check
+      if (listeners[i].groupId && groupMatches.indexOf(listeners[i].groupId) !== -1) {
+        match = null;
+
+      // If listener has a groupId, check for match and if it does keep track of groupName
+      } else if (listeners[i].groupId) {
+        match = listeners[i].isMatch(pathname);
+        if (match) {
+          groupMatches.push(listeners[i].groupId)
+        }
+
+      // If listener does not have a group then just check if it matches
+      } else {
+        match = listeners[i].isMatch(pathname);
+      }
+
+      if (!shallowEqual(listeners[i].lastMatch, match)) {
+        if (match !== null) {
+          matchList.unshift([i, match]);
+        } else {
+          matchList.push([i, match]);
+        }
+      }
+      listeners[i].lastMatch = match;
+    }
+
+    for (const [listenerIndex, matchResult] of matchList) {
+      listeners[listenerIndex].listener(matchResult);
     }
   }
 
-
-  function createGroup(startLength: number) {
+  function createGroup(): number {
     activeGroupId += 1;
-    groups[activeGroupId] = {} as RouterGroup;
-    groups[activeGroupId].startLength = startLength;
-    groups[activeGroupId].listenerList = [];
-    groups[activeGroupId].groupedListener = () => {
-      let switchMatched = false;
-      groups[activeGroupId].listenerList.forEach((listener) => {
-        if (switchMatched) {
-          listener(true);
-        } else {
-          switchMatched = listener(false) !== null;
-        }
-      });
-    };
-
-    nextListeners.push(groups[activeGroupId].groupedListener);
     return activeGroupId;
   }
 
-  function addGroupListener(listener: () => null | MatchResults, groupName?: string, groupIndex?: number) {
-    groups[groupName].listenerList[groupIndex] = listener;
-    if (groups[groupName].listenerList.length === groups[activeGroupId].startLength) {
-      groups[groupName].groupedListener();
-    }
+  function addListener(routeSubscription: RouteSubscription) {
+    nextListeners.push(routeSubscription);
+
+    nextListeners.sort((a, b) => {
+      if (a.groupId < b.groupId) {
+        return -1;
+      }
+      if (a.groupId > b.groupId) {
+        return 1;
+      }
+      if (a.groupIndex < b.groupIndex) {
+        return -1;
+      }
+      if (a.groupIndex > b.groupIndex) {
+        return 1;
+      }
+      return 0;
+    });
   }
 
-  function removeGroupListener(groupId: string, groupIndex: number) {
-    groups[groupId].listenerList.splice(groupIndex, 1);
-
-    if (groups[groupId].listenerList.length === 0) {
-      const index = nextListeners.indexOf(groups[groupId].groupedListener);
-      nextListeners.splice(index, 1);
-      delete groups[groupId];
-    }
+  function removeListener(routeSubscription: RouteSubscription) {
+    const index = nextListeners.indexOf(routeSubscription);
+    nextListeners.splice(index, 1);
   }
 
 
-  function subscribe(listener: () => null | MatchResults, groupName?: string, groupIndex?: number): Listener {
-    if (typeof listener !== 'function') {
-      throw new Error('Expected listener to be a function.');
-    }
+  function subscribe(routeSubscription: RouteSubscription): Listener {
 
-    if (groupName) {
-      addGroupListener(listener, groupName, groupIndex);
-    } else {
-      nextListeners.push(listener);
-    }
+    addListener(routeSubscription);
 
     let isSubscribed = true;
 
@@ -100,12 +118,7 @@ Context.activeRouter = (function() {
         return;
       }
 
-      if (groupName) {
-        removeGroupListener(groupName, groupIndex);
-      } else {
-        const index = nextListeners.indexOf(listener);
-        nextListeners.splice(index, 1);
-      }
+      removeListener(routeSubscription);
 
       isSubscribed = false;
     };

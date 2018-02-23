@@ -64,8 +64,11 @@ export class Router {
     // subscribe the project's active router and listen
     // for changes. Recompute the match if any updates get
     // pushed
-    this.unsubscribe = this.activeRouter.subscribe(() => {
-      this.match = this.computeMatch();
+    this.unsubscribe = this.activeRouter.subscribe({
+      isMatch: this.computeMatch.bind(this),
+      listener: (matchResult: MatchResults) => {
+        this.match = matchResult;
+      },
     });
     this.match = this.computeMatch();
   }

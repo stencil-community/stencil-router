@@ -82,6 +82,38 @@ declare global {
 
 
 import {
+  TestDemoSeven as TestDemoSeven
+} from './components/__tests__/test-demo-seven';
+
+declare global {
+  interface HTMLTestDemoSevenElement extends TestDemoSeven, HTMLStencilElement {
+  }
+  var HTMLTestDemoSevenElement: {
+    prototype: HTMLTestDemoSevenElement;
+    new (): HTMLTestDemoSevenElement;
+  };
+  interface HTMLElementTagNameMap {
+    "test-demo-seven": HTMLTestDemoSevenElement;
+  }
+  interface ElementTagNameMap {
+    "test-demo-seven": HTMLTestDemoSevenElement;
+  }
+  namespace JSX {
+    interface IntrinsicElements {
+      "test-demo-seven": JSXElements.TestDemoSevenAttributes;
+    }
+  }
+  namespace JSXElements {
+    export interface TestDemoSevenAttributes extends HTMLAttributes {
+      history?: RouterHistory;
+      match?: MatchResults;
+      pages?: string[];
+    }
+  }
+}
+
+
+import {
   TestDemoSix as TestDemoSix
 } from './components/__tests__/test-demo-six';
 

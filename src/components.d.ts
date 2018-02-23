@@ -10,12 +10,21 @@ import {
   RouterHistory,
 } from './global/interfaces';
 
+declare global {
+  interface HTMLStencilElement extends HTMLElement {
+    componentOnReady(): Promise<this>;
+    componentOnReady(done: (ele?: this) => void): void;
+  }
+}
+
+
+
 import {
   TestApp as TestApp
 } from './components/__tests__/test-app';
 
 declare global {
-  interface HTMLTestAppElement extends TestApp, HTMLElement {
+  interface HTMLTestAppElement extends TestApp, HTMLStencilElement {
   }
   var HTMLTestAppElement: {
     prototype: HTMLTestAppElement;
@@ -45,7 +54,7 @@ import {
 } from './components/__tests__/test-demo-four';
 
 declare global {
-  interface HTMLTestDemoFourElement extends TestDemoFour, HTMLElement {
+  interface HTMLTestDemoFourElement extends TestDemoFour, HTMLStencilElement {
   }
   var HTMLTestDemoFourElement: {
     prototype: HTMLTestDemoFourElement;
@@ -77,7 +86,7 @@ import {
 } from './components/__tests__/test-demo-six';
 
 declare global {
-  interface HTMLTestDemoSixElement extends TestDemoSix, HTMLElement {
+  interface HTMLTestDemoSixElement extends TestDemoSix, HTMLStencilElement {
   }
   var HTMLTestDemoSixElement: {
     prototype: HTMLTestDemoSixElement;
@@ -109,7 +118,7 @@ import {
 } from './components/__tests__/test-demo-three';
 
 declare global {
-  interface HTMLTestDemoThreeElement extends TestDemoThree, HTMLElement {
+  interface HTMLTestDemoThreeElement extends TestDemoThree, HTMLStencilElement {
   }
   var HTMLTestDemoThreeElement: {
     prototype: HTMLTestDemoThreeElement;
@@ -141,7 +150,7 @@ import {
 } from './components/async-content/async-content';
 
 declare global {
-  interface HTMLStencilAsyncContentElement extends StencilAsyncContent, HTMLElement {
+  interface HTMLStencilAsyncContentElement extends StencilAsyncContent, HTMLStencilElement {
   }
   var HTMLStencilAsyncContentElement: {
     prototype: HTMLStencilAsyncContentElement;
@@ -171,7 +180,7 @@ import {
 } from './components/redirect/redirect';
 
 declare global {
-  interface HTMLStencilRouterRedirectElement extends StencilRouterRedirect, HTMLElement {
+  interface HTMLStencilRouterRedirectElement extends StencilRouterRedirect, HTMLStencilElement {
   }
   var HTMLStencilRouterRedirectElement: {
     prototype: HTMLStencilRouterRedirectElement;
@@ -201,7 +210,7 @@ import {
 } from './components/route-link/route-link';
 
 declare global {
-  interface HTMLStencilRouteLinkElement extends StencilRouteLink, HTMLElement {
+  interface HTMLStencilRouteLinkElement extends StencilRouteLink, HTMLStencilElement {
   }
   var HTMLStencilRouteLinkElement: {
     prototype: HTMLStencilRouteLinkElement;
@@ -235,7 +244,7 @@ import {
 } from './components/route-title/route-title';
 
 declare global {
-  interface HTMLStencilRouteTitleElement extends StencilRouteTitle, HTMLElement {
+  interface HTMLStencilRouteTitleElement extends StencilRouteTitle, HTMLStencilElement {
   }
   var HTMLStencilRouteTitleElement: {
     prototype: HTMLStencilRouteTitleElement;
@@ -265,7 +274,7 @@ import {
 } from './components/route/route';
 
 declare global {
-  interface HTMLStencilRouteElement extends StencilRoute, HTMLElement {
+  interface HTMLStencilRouteElement extends StencilRoute, HTMLStencilElement {
   }
   var HTMLStencilRouteElement: {
     prototype: HTMLStencilRouteElement;
@@ -301,7 +310,7 @@ import {
 } from './components/router/router';
 
 declare global {
-  interface HTMLStencilRouterElement extends StencilRouter, HTMLElement {
+  interface HTMLStencilRouterElement extends StencilRouter, HTMLStencilElement {
   }
   var HTMLStencilRouterElement: {
     prototype: HTMLStencilRouterElement;

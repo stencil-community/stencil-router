@@ -235,6 +235,9 @@ declare global {
   namespace JSXElements {
     export interface StencilRouteLinkAttributes extends HTMLAttributes {
       activeClass?: string;
+      anchorRole?: string;
+      anchorTabIndex?: string;
+      anchorTitle?: string;
       custom?: string;
       exact?: boolean;
       url?: string;

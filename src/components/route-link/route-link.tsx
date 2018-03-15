@@ -2,6 +2,7 @@ import { Component, Prop, State } from '@stencil/core';
 import { matchPath } from '../../utils/match-path';
 import { RouterHistory, ActiveRouter, Listener, LocationSegments, MatchResults } from '../../global/interfaces';
 
+
 /**
   * @name Route
   * @module ionic
@@ -12,14 +13,22 @@ import { RouterHistory, ActiveRouter, Listener, LocationSegments, MatchResults }
 })
 export class RouteLink {
   @Prop({ context: 'activeRouter' }) activeRouter: ActiveRouter;
-  @Prop({ context: 'location' }) location: Location;
   unsubscribe: Listener = () => { return; };
 
   @Prop() url: string;
   @Prop() urlMatch: string | string[];
-  @Prop() exact: boolean = false;
-  @Prop() custom: string;
   @Prop() activeClass: string = 'link-active';
+  @Prop() exact: boolean = false;
+
+  /**
+   *  Custom tag to use instead of an anchor
+   */
+  @Prop() custom: string = 'a';
+
+  @Prop() anchorRole: string;
+  @Prop() anchorTitle: string;
+  @Prop() anchorTabIndex: string;
+
 
   @State() match: MatchResults | null = null;
 
@@ -82,22 +91,26 @@ export class RouteLink {
   }
 
   render() {
-    const classes = {
-      [this.activeClass]: this.match !== null
-    };
-
-    if (this.custom) {
-      return (
-        <this.custom class={classes} onClick={this.handleClick.bind(this)}>
-          <slot />
-        </this.custom>
-      );
-    } else {
-      return (
-        <a class={classes} href={this.url} onClick={this.handleClick.bind(this)}>
-          <slot />
-        </a>
-      );
+    let anchorAttributes: { [key: string]: any} = {
+      class: {
+        [this.activeClass]: this.match !== null
+      },
+      onClick: this.handleClick.bind(this)
     }
+
+    if (this.custom === 'a') {
+      anchorAttributes = {
+        ...anchorAttributes,
+        href: this.url,
+        title: this.anchorTitle,
+        role: this.anchorRole,
+        tabindex: this.anchorTabIndex
+      }
+    }
+    return (
+      <this.custom {...anchorAttributes}>
+        <slot />
+      </this.custom>
+    );
   }
 }

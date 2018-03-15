@@ -1,6 +1,6 @@
 {
   "name": "@stencil/router",
-  "version": "0.0.27",
+  "version": "0.0.28",
   "description": "Stencil Router",
   "main": "dist/stencilrouter.js",
   "browser": "dist/stencilrouter.js",

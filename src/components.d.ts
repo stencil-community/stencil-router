@@ -4,6 +4,25 @@
  * and imports for stencil collections that might be configured in your stencil.config.js file
  */
 
+import '@stencil/core';
+
+declare global {
+  namespace JSX {
+    interface Element {}
+    export interface IntrinsicElements {}
+  }
+  namespace JSXElements {}
+
+  interface HTMLStencilElement extends HTMLElement {
+    componentOnReady(): Promise<this>;
+    componentOnReady(done: (ele?: this) => void): void;
+
+    forceUpdate(): void;
+  }
+
+  interface HTMLAttributes {}
+}
+
 import {
   HistoryType,
   MatchResults,
@@ -11,359 +30,318 @@ import {
 } from './global/interfaces';
 
 declare global {
-  interface HTMLStencilElement extends HTMLElement {
-    componentOnReady(): Promise<this>;
-    componentOnReady(done: (ele?: this) => void): void;
-  }
-}
+  interface HTMLTestAppElement extends HTMLStencilElement {
 
-
-
-import {
-  TestApp as TestApp
-} from './components/__tests__/test-app';
-
-declare global {
-  interface HTMLTestAppElement extends TestApp, HTMLStencilElement {
   }
   var HTMLTestAppElement: {
     prototype: HTMLTestAppElement;
     new (): HTMLTestAppElement;
   };
   interface HTMLElementTagNameMap {
-    "test-app": HTMLTestAppElement;
+    'test-app': HTMLTestAppElement;
   }
   interface ElementTagNameMap {
-    "test-app": HTMLTestAppElement;
+    'test-app': HTMLTestAppElement;
   }
   namespace JSX {
     interface IntrinsicElements {
-      "test-app": JSXElements.TestAppAttributes;
+      'test-app': JSXElements.TestAppAttributes;
     }
   }
   namespace JSXElements {
     export interface TestAppAttributes extends HTMLAttributes {
-      
+
     }
   }
 }
 
 
-import {
-  TestDemoFour as TestDemoFour
-} from './components/__tests__/test-demo-four';
-
 declare global {
-  interface HTMLTestDemoFourElement extends TestDemoFour, HTMLStencilElement {
+  interface HTMLTestDemoFourElement extends HTMLStencilElement {
+    'history': RouterHistory;
+    'match': MatchResults;
+    'pages': string[];
   }
   var HTMLTestDemoFourElement: {
     prototype: HTMLTestDemoFourElement;
     new (): HTMLTestDemoFourElement;
   };
   interface HTMLElementTagNameMap {
-    "test-demo-four": HTMLTestDemoFourElement;
+    'test-demo-four': HTMLTestDemoFourElement;
   }
   interface ElementTagNameMap {
-    "test-demo-four": HTMLTestDemoFourElement;
+    'test-demo-four': HTMLTestDemoFourElement;
   }
   namespace JSX {
     interface IntrinsicElements {
-      "test-demo-four": JSXElements.TestDemoFourAttributes;
+      'test-demo-four': JSXElements.TestDemoFourAttributes;
     }
   }
   namespace JSXElements {
     export interface TestDemoFourAttributes extends HTMLAttributes {
-      history?: RouterHistory;
-      match?: MatchResults;
-      pages?: string[];
+      'history'?: RouterHistory;
+      'match'?: MatchResults;
+      'pages'?: string[];
     }
   }
 }
 
 
-import {
-  TestDemoSeven as TestDemoSeven
-} from './components/__tests__/test-demo-seven';
-
 declare global {
-  interface HTMLTestDemoSevenElement extends TestDemoSeven, HTMLStencilElement {
-  }
-  var HTMLTestDemoSevenElement: {
-    prototype: HTMLTestDemoSevenElement;
-    new (): HTMLTestDemoSevenElement;
-  };
-  interface HTMLElementTagNameMap {
-    "test-demo-seven": HTMLTestDemoSevenElement;
-  }
-  interface ElementTagNameMap {
-    "test-demo-seven": HTMLTestDemoSevenElement;
-  }
-  namespace JSX {
-    interface IntrinsicElements {
-      "test-demo-seven": JSXElements.TestDemoSevenAttributes;
-    }
-  }
-  namespace JSXElements {
-    export interface TestDemoSevenAttributes extends HTMLAttributes {
-      history?: RouterHistory;
-      match?: MatchResults;
-      pages?: string[];
-    }
-  }
-}
-
-
-import {
-  TestDemoSix as TestDemoSix
-} from './components/__tests__/test-demo-six';
-
-declare global {
-  interface HTMLTestDemoSixElement extends TestDemoSix, HTMLStencilElement {
+  interface HTMLTestDemoSixElement extends HTMLStencilElement {
+    'history': RouterHistory;
+    'match': MatchResults;
+    'pages': string[];
   }
   var HTMLTestDemoSixElement: {
     prototype: HTMLTestDemoSixElement;
     new (): HTMLTestDemoSixElement;
   };
   interface HTMLElementTagNameMap {
-    "test-demo-six": HTMLTestDemoSixElement;
+    'test-demo-six': HTMLTestDemoSixElement;
   }
   interface ElementTagNameMap {
-    "test-demo-six": HTMLTestDemoSixElement;
+    'test-demo-six': HTMLTestDemoSixElement;
   }
   namespace JSX {
     interface IntrinsicElements {
-      "test-demo-six": JSXElements.TestDemoSixAttributes;
+      'test-demo-six': JSXElements.TestDemoSixAttributes;
     }
   }
   namespace JSXElements {
     export interface TestDemoSixAttributes extends HTMLAttributes {
-      history?: RouterHistory;
-      match?: MatchResults;
-      pages?: string[];
+      'history'?: RouterHistory;
+      'match'?: MatchResults;
+      'pages'?: string[];
     }
   }
 }
 
 
-import {
-  TestDemoThree as TestDemoThree
-} from './components/__tests__/test-demo-three';
-
 declare global {
-  interface HTMLTestDemoThreeElement extends TestDemoThree, HTMLStencilElement {
+  interface HTMLTestDemoThreeElement extends HTMLStencilElement {
+    'history': RouterHistory;
+    'match': MatchResults;
+    'pages': string[];
   }
   var HTMLTestDemoThreeElement: {
     prototype: HTMLTestDemoThreeElement;
     new (): HTMLTestDemoThreeElement;
   };
   interface HTMLElementTagNameMap {
-    "test-demo-three": HTMLTestDemoThreeElement;
+    'test-demo-three': HTMLTestDemoThreeElement;
   }
   interface ElementTagNameMap {
-    "test-demo-three": HTMLTestDemoThreeElement;
+    'test-demo-three': HTMLTestDemoThreeElement;
   }
   namespace JSX {
     interface IntrinsicElements {
-      "test-demo-three": JSXElements.TestDemoThreeAttributes;
+      'test-demo-three': JSXElements.TestDemoThreeAttributes;
     }
   }
   namespace JSXElements {
     export interface TestDemoThreeAttributes extends HTMLAttributes {
-      history?: RouterHistory;
-      match?: MatchResults;
-      pages?: string[];
+      'history'?: RouterHistory;
+      'match'?: MatchResults;
+      'pages'?: string[];
     }
   }
 }
 
 
-import {
-  AsyncContent as StencilAsyncContent
-} from './components/async-content/async-content';
-
 declare global {
-  interface HTMLStencilAsyncContentElement extends StencilAsyncContent, HTMLStencilElement {
+  interface HTMLStencilAsyncContentElement extends HTMLStencilElement {
+    'documentLocation': string;
   }
   var HTMLStencilAsyncContentElement: {
     prototype: HTMLStencilAsyncContentElement;
     new (): HTMLStencilAsyncContentElement;
   };
   interface HTMLElementTagNameMap {
-    "stencil-async-content": HTMLStencilAsyncContentElement;
+    'stencil-async-content': HTMLStencilAsyncContentElement;
   }
   interface ElementTagNameMap {
-    "stencil-async-content": HTMLStencilAsyncContentElement;
+    'stencil-async-content': HTMLStencilAsyncContentElement;
   }
   namespace JSX {
     interface IntrinsicElements {
-      "stencil-async-content": JSXElements.StencilAsyncContentAttributes;
+      'stencil-async-content': JSXElements.StencilAsyncContentAttributes;
     }
   }
   namespace JSXElements {
     export interface StencilAsyncContentAttributes extends HTMLAttributes {
-      documentLocation?: string;
+      'documentLocation'?: string;
     }
   }
 }
 
 
-import {
-  Redirect as StencilRouterRedirect
-} from './components/redirect/redirect';
-
 declare global {
-  interface HTMLStencilRouterRedirectElement extends StencilRouterRedirect, HTMLStencilElement {
+  interface HTMLStencilRouterRedirectElement extends HTMLStencilElement {
+    'url': string;
   }
   var HTMLStencilRouterRedirectElement: {
     prototype: HTMLStencilRouterRedirectElement;
     new (): HTMLStencilRouterRedirectElement;
   };
   interface HTMLElementTagNameMap {
-    "stencil-router-redirect": HTMLStencilRouterRedirectElement;
+    'stencil-router-redirect': HTMLStencilRouterRedirectElement;
   }
   interface ElementTagNameMap {
-    "stencil-router-redirect": HTMLStencilRouterRedirectElement;
+    'stencil-router-redirect': HTMLStencilRouterRedirectElement;
   }
   namespace JSX {
     interface IntrinsicElements {
-      "stencil-router-redirect": JSXElements.StencilRouterRedirectAttributes;
+      'stencil-router-redirect': JSXElements.StencilRouterRedirectAttributes;
     }
   }
   namespace JSXElements {
     export interface StencilRouterRedirectAttributes extends HTMLAttributes {
-      url?: string;
+      'url'?: string;
     }
   }
 }
 
 
-import {
-  RouteLink as StencilRouteLink
-} from './components/route-link/route-link';
-
 declare global {
-  interface HTMLStencilRouteLinkElement extends StencilRouteLink, HTMLStencilElement {
+  interface HTMLStencilRouteLinkElement extends HTMLStencilElement {
+    'activeClass': string;
+    'anchorRole': string;
+    'anchorTabIndex': string;
+    'anchorTitle': string;
+    /**
+     * Custom tag to use instead of an anchor
+     */
+    'custom': string;
+    'exact': boolean;
+    'url': string;
+    'urlMatch': string | string[];
   }
   var HTMLStencilRouteLinkElement: {
     prototype: HTMLStencilRouteLinkElement;
     new (): HTMLStencilRouteLinkElement;
   };
   interface HTMLElementTagNameMap {
-    "stencil-route-link": HTMLStencilRouteLinkElement;
+    'stencil-route-link': HTMLStencilRouteLinkElement;
   }
   interface ElementTagNameMap {
-    "stencil-route-link": HTMLStencilRouteLinkElement;
+    'stencil-route-link': HTMLStencilRouteLinkElement;
   }
   namespace JSX {
     interface IntrinsicElements {
-      "stencil-route-link": JSXElements.StencilRouteLinkAttributes;
+      'stencil-route-link': JSXElements.StencilRouteLinkAttributes;
     }
   }
   namespace JSXElements {
     export interface StencilRouteLinkAttributes extends HTMLAttributes {
-      activeClass?: string;
-      custom?: boolean;
-      exact?: boolean;
-      url?: string;
-      urlMatch?: string | string[];
+      'activeClass'?: string;
+      'anchorRole'?: string;
+      'anchorTabIndex'?: string;
+      'anchorTitle'?: string;
+      /**
+       * Custom tag to use instead of an anchor
+       */
+      'custom'?: string;
+      'exact'?: boolean;
+      'url'?: string;
+      'urlMatch'?: string | string[];
     }
   }
 }
 
 
-import {
-  RouteTitle as StencilRouteTitle
-} from './components/route-title/route-title';
-
 declare global {
-  interface HTMLStencilRouteTitleElement extends StencilRouteTitle, HTMLStencilElement {
+  interface HTMLStencilRouteTitleElement extends HTMLStencilElement {
+    'title': string;
   }
   var HTMLStencilRouteTitleElement: {
     prototype: HTMLStencilRouteTitleElement;
     new (): HTMLStencilRouteTitleElement;
   };
   interface HTMLElementTagNameMap {
-    "stencil-route-title": HTMLStencilRouteTitleElement;
+    'stencil-route-title': HTMLStencilRouteTitleElement;
   }
   interface ElementTagNameMap {
-    "stencil-route-title": HTMLStencilRouteTitleElement;
+    'stencil-route-title': HTMLStencilRouteTitleElement;
   }
   namespace JSX {
     interface IntrinsicElements {
-      "stencil-route-title": JSXElements.StencilRouteTitleAttributes;
+      'stencil-route-title': JSXElements.StencilRouteTitleAttributes;
     }
   }
   namespace JSXElements {
     export interface StencilRouteTitleAttributes extends HTMLAttributes {
-      title?: string;
+      'title'?: string;
     }
   }
 }
 
 
-import {
-  Route as StencilRoute
-} from './components/route/route';
-
 declare global {
-  interface HTMLStencilRouteElement extends StencilRoute, HTMLStencilElement {
+  interface HTMLStencilRouteElement extends HTMLStencilElement {
+    'component': string;
+    'componentProps': { [key: string]: any };
+    'exact': boolean;
+    'group': string;
+    'groupIndex': number;
+    'routeRender': Function;
+    'url': string | string[];
   }
   var HTMLStencilRouteElement: {
     prototype: HTMLStencilRouteElement;
     new (): HTMLStencilRouteElement;
   };
   interface HTMLElementTagNameMap {
-    "stencil-route": HTMLStencilRouteElement;
+    'stencil-route': HTMLStencilRouteElement;
   }
   interface ElementTagNameMap {
-    "stencil-route": HTMLStencilRouteElement;
+    'stencil-route': HTMLStencilRouteElement;
   }
   namespace JSX {
     interface IntrinsicElements {
-      "stencil-route": JSXElements.StencilRouteAttributes;
+      'stencil-route': JSXElements.StencilRouteAttributes;
     }
   }
   namespace JSXElements {
     export interface StencilRouteAttributes extends HTMLAttributes {
-      component?: string;
-      componentProps?: { [key: string]: any };
-      exact?: boolean;
-      group?: string;
-      groupIndex?: number;
-      routeRender?: Function;
-      url?: string | string[];
+      'component'?: string;
+      'componentProps'?: { [key: string]: any };
+      'exact'?: boolean;
+      'group'?: string;
+      'groupIndex'?: number;
+      'routeRender'?: Function;
+      'url'?: string | string[];
     }
   }
 }
 
 
-import {
-  Router as StencilRouter
-} from './components/router/router';
-
 declare global {
-  interface HTMLStencilRouterElement extends StencilRouter, HTMLStencilElement {
+  interface HTMLStencilRouterElement extends HTMLStencilElement {
+    'historyType': HistoryType;
+    'root': string;
+    'titleSuffix': string;
   }
   var HTMLStencilRouterElement: {
     prototype: HTMLStencilRouterElement;
     new (): HTMLStencilRouterElement;
   };
   interface HTMLElementTagNameMap {
-    "stencil-router": HTMLStencilRouterElement;
+    'stencil-router': HTMLStencilRouterElement;
   }
   interface ElementTagNameMap {
-    "stencil-router": HTMLStencilRouterElement;
+    'stencil-router': HTMLStencilRouterElement;
   }
   namespace JSX {
     interface IntrinsicElements {
-      "stencil-router": JSXElements.StencilRouterAttributes;
+      'stencil-router': JSXElements.StencilRouterAttributes;
     }
   }
   namespace JSXElements {
     export interface StencilRouterAttributes extends HTMLAttributes {
-      historyType?: HistoryType;
-      root?: string;
-      titleSuffix?: string;
+      'historyType'?: HistoryType;
+      'root'?: string;
+      'titleSuffix'?: string;
     }
   }
 }

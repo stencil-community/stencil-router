@@ -1,8 +1,16 @@
 export interface ActiveRouter {
-  subscribe: (callback: Function, group?: string, groupIndex?: number) => () => void;
+  subscribe: (subscription: RouteSubscription) => () => void;
   set: (value: {[key: string]: any}) => void;
   get: (attrName?: string) => any;
   createGroup: (groupLength: number) => number;
+}
+
+export interface RouteSubscription {
+  isMatch: (pathname: string) => MatchResults;
+  listener: (results: MatchResults) => void | Promise<void>;
+  lastMatch?: MatchResults;
+  groupId?: string;
+  groupIndex?: number;
 }
 
 export interface Route {

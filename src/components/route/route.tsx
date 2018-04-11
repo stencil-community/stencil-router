@@ -8,7 +8,9 @@ import { RouterHistory, ActiveRouter, Listener, LocationSegments, MatchResults }
   * @description
  */
 @Component({
-  tag: 'stencil-route'
+  tag: 'stencil-route',
+  styleUrl: './route.css',
+  scoped: true
 })
 export class Route {
   @Prop({ context: 'activeRouter' }) activeRouter: ActiveRouter;
@@ -44,25 +46,29 @@ export class Route {
     // subscribe the project's active router and listen
     // for changes. Recompute the match if any updates get
     // pushed
-    this.unsubscribe = this.activeRouter.subscribe((switchMatched: boolean) => {
-      if (switchMatched) {
-        this.match = null;
-      } else {
-        this.match = this.computeMatch();
-      }
-      return this.match;
-    }, this.group, this.groupIndex);
-
-    if (!this.group) {
-      this.match = this.computeMatch();
+    const listener = (matchResults: MatchResults) => {
+      this.match = matchResults;
     }
+    this.unsubscribe = this.activeRouter.subscribe({
+      isMatch: this.computeMatch.bind(this),
+      listener,
+      groupId: this.group,
+      groupIndex: this.groupIndex
+    });
   }
 
   componentDidUnload() {
     // be sure to unsubscribe to the router so that we don't
     // get any memory leaks
-
     this.unsubscribe();
+  }
+
+  hostData() {
+    return {
+      class: {
+        'inactive': !this.activeRouter || !this.match
+      }
+    };
   }
 
   render() {
@@ -92,7 +98,10 @@ export class Route {
 
     if (this.component) {
       const ChildComponent = this.component;
-      return <ChildComponent {...childProps} />;
+
+      return (
+        <ChildComponent {...childProps} />
+      );
     }
   }
 }

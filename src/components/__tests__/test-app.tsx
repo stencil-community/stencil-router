@@ -7,7 +7,7 @@ const PrivateRoute = ({ component, ...props}: { [key: string]: any}) => (
     (props: { [key: string]: any}) => {
       if ((window as any).userAuthenticated) {
         const Component = component;
-        return <Component {...props.componentProps}></Component>;
+        return <Component {...props} {...props.componentProps}></Component>;
       }
       return <stencil-router-redirect url="/"></stencil-router-redirect>
     }

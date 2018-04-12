@@ -5,7 +5,6 @@ declare var Context: any;
 
 Context.activeRouter = (function() {
   let state: { [key: string]: any } = {};
-  let activeGroupId: number = 0;
   const nextListeners: RouteSubscription[] = [];
 
   function getDefaultState() {
@@ -76,11 +75,6 @@ Context.activeRouter = (function() {
     }
   }
 
-  function createGroup(): number {
-    activeGroupId += 1;
-    return activeGroupId;
-  }
-
   function addListener(routeSubscription: RouteSubscription) {
     const pathname = get('location').pathname;
     const match = routeSubscription.isMatch(pathname);
@@ -133,7 +127,6 @@ Context.activeRouter = (function() {
   return {
     set,
     get,
-    subscribe,
-    createGroup,
+    subscribe
   } as ActiveRouter;
 })();

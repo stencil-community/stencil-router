@@ -30,9 +30,15 @@ import {
 } from './global/interfaces';
 
 declare global {
-  interface HTMLTestAppElement extends HTMLStencilElement {
 
+  namespace StencilComponents {
+    interface TestApp {
+
+    }
   }
+
+  interface HTMLTestAppElement extends StencilComponents.TestApp, HTMLStencilElement {}
+
   var HTMLTestAppElement: {
     prototype: HTMLTestAppElement;
     new (): HTMLTestAppElement;
@@ -57,11 +63,17 @@ declare global {
 
 
 declare global {
-  interface HTMLTestDemoFourElement extends HTMLStencilElement {
-    'history': RouterHistory;
-    'match': MatchResults;
-    'pages': string[];
+
+  namespace StencilComponents {
+    interface TestDemoFour {
+      'history': RouterHistory;
+      'match': MatchResults;
+      'pages': string[];
+    }
   }
+
+  interface HTMLTestDemoFourElement extends StencilComponents.TestDemoFour, HTMLStencilElement {}
+
   var HTMLTestDemoFourElement: {
     prototype: HTMLTestDemoFourElement;
     new (): HTMLTestDemoFourElement;
@@ -88,11 +100,17 @@ declare global {
 
 
 declare global {
-  interface HTMLTestDemoSevenElement extends HTMLStencilElement {
-    'history': RouterHistory;
-    'match': MatchResults;
-    'pages': string[];
+
+  namespace StencilComponents {
+    interface TestDemoSeven {
+      'history': RouterHistory;
+      'match': MatchResults;
+      'pages': string[];
+    }
   }
+
+  interface HTMLTestDemoSevenElement extends StencilComponents.TestDemoSeven, HTMLStencilElement {}
+
   var HTMLTestDemoSevenElement: {
     prototype: HTMLTestDemoSevenElement;
     new (): HTMLTestDemoSevenElement;
@@ -119,11 +137,17 @@ declare global {
 
 
 declare global {
-  interface HTMLTestDemoSixElement extends HTMLStencilElement {
-    'history': RouterHistory;
-    'match': MatchResults;
-    'pages': string[];
+
+  namespace StencilComponents {
+    interface TestDemoSix {
+      'history': RouterHistory;
+      'match': MatchResults;
+      'pages': string[];
+    }
   }
+
+  interface HTMLTestDemoSixElement extends StencilComponents.TestDemoSix, HTMLStencilElement {}
+
   var HTMLTestDemoSixElement: {
     prototype: HTMLTestDemoSixElement;
     new (): HTMLTestDemoSixElement;
@@ -150,11 +174,17 @@ declare global {
 
 
 declare global {
-  interface HTMLTestDemoThreeElement extends HTMLStencilElement {
-    'history': RouterHistory;
-    'match': MatchResults;
-    'pages': string[];
+
+  namespace StencilComponents {
+    interface TestDemoThree {
+      'history': RouterHistory;
+      'match': MatchResults;
+      'pages': string[];
+    }
   }
+
+  interface HTMLTestDemoThreeElement extends StencilComponents.TestDemoThree, HTMLStencilElement {}
+
   var HTMLTestDemoThreeElement: {
     prototype: HTMLTestDemoThreeElement;
     new (): HTMLTestDemoThreeElement;
@@ -181,9 +211,15 @@ declare global {
 
 
 declare global {
-  interface HTMLStencilAsyncContentElement extends HTMLStencilElement {
-    'documentLocation': string;
+
+  namespace StencilComponents {
+    interface StencilAsyncContent {
+      'documentLocation': string;
+    }
   }
+
+  interface HTMLStencilAsyncContentElement extends StencilComponents.StencilAsyncContent, HTMLStencilElement {}
+
   var HTMLStencilAsyncContentElement: {
     prototype: HTMLStencilAsyncContentElement;
     new (): HTMLStencilAsyncContentElement;
@@ -208,9 +244,15 @@ declare global {
 
 
 declare global {
-  interface HTMLStencilRouterRedirectElement extends HTMLStencilElement {
-    'url': string;
+
+  namespace StencilComponents {
+    interface StencilRouterRedirect {
+      'url': string;
+    }
   }
+
+  interface HTMLStencilRouterRedirectElement extends StencilComponents.StencilRouterRedirect, HTMLStencilElement {}
+
   var HTMLStencilRouterRedirectElement: {
     prototype: HTMLStencilRouterRedirectElement;
     new (): HTMLStencilRouterRedirectElement;
@@ -235,19 +277,25 @@ declare global {
 
 
 declare global {
-  interface HTMLStencilRouteLinkElement extends HTMLStencilElement {
-    'activeClass': string;
-    'anchorRole': string;
-    'anchorTabIndex': string;
-    'anchorTitle': string;
-    /**
-     * Custom tag to use instead of an anchor
-     */
-    'custom': string;
-    'exact': boolean;
-    'url': string;
-    'urlMatch': string | string[];
+
+  namespace StencilComponents {
+    interface StencilRouteLink {
+      'activeClass': string;
+      'anchorRole': string;
+      'anchorTabIndex': string;
+      'anchorTitle': string;
+      /**
+       * Custom tag to use instead of an anchor
+       */
+      'custom': string;
+      'exact': boolean;
+      'url': string;
+      'urlMatch': string | string[];
+    }
   }
+
+  interface HTMLStencilRouteLinkElement extends StencilComponents.StencilRouteLink, HTMLStencilElement {}
+
   var HTMLStencilRouteLinkElement: {
     prototype: HTMLStencilRouteLinkElement;
     new (): HTMLStencilRouteLinkElement;
@@ -282,9 +330,15 @@ declare global {
 
 
 declare global {
-  interface HTMLStencilRouteTitleElement extends HTMLStencilElement {
-    'title': string;
+
+  namespace StencilComponents {
+    interface StencilRouteTitle {
+      'title': string;
+    }
   }
+
+  interface HTMLStencilRouteTitleElement extends StencilComponents.StencilRouteTitle, HTMLStencilElement {}
+
   var HTMLStencilRouteTitleElement: {
     prototype: HTMLStencilRouteTitleElement;
     new (): HTMLStencilRouteTitleElement;
@@ -309,15 +363,21 @@ declare global {
 
 
 declare global {
-  interface HTMLStencilRouteElement extends HTMLStencilElement {
-    'component': string;
-    'componentProps': { [key: string]: any };
-    'exact': boolean;
-    'group': string;
-    'groupIndex': number;
-    'routeRender': Function;
-    'url': string | string[];
+
+  namespace StencilComponents {
+    interface StencilRoute {
+      'component': string;
+      'componentProps': { [key: string]: any };
+      'exact': boolean;
+      'group': string;
+      'groupIndex': number;
+      'routeRender': Function;
+      'url': string | string[];
+    }
   }
+
+  interface HTMLStencilRouteElement extends StencilComponents.StencilRoute, HTMLStencilElement {}
+
   var HTMLStencilRouteElement: {
     prototype: HTMLStencilRouteElement;
     new (): HTMLStencilRouteElement;
@@ -348,11 +408,17 @@ declare global {
 
 
 declare global {
-  interface HTMLStencilRouterElement extends HTMLStencilElement {
-    'historyType': HistoryType;
-    'root': string;
-    'titleSuffix': string;
+
+  namespace StencilComponents {
+    interface StencilRouter {
+      'historyType': HistoryType;
+      'root': string;
+      'titleSuffix': string;
+    }
   }
+
+  interface HTMLStencilRouterElement extends StencilComponents.StencilRouter, HTMLStencilElement {}
+
   var HTMLStencilRouterElement: {
     prototype: HTMLStencilRouterElement;
     new (): HTMLStencilRouterElement;

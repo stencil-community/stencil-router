@@ -35,6 +35,7 @@ Context.activeRouter = (function() {
   }
 
   function dispatch() {
+    console.log('dispatch');
     const listeners = nextListeners;
     const matchList: [ number, MatchResults ][] = [];
     const groupMatches: string[] = [];
@@ -76,6 +77,7 @@ Context.activeRouter = (function() {
   }
 
   function addListener(routeSubscription: RouteSubscription) {
+    console.log('addlistener');
     const pathname = get('location').pathname;
     const match = routeSubscription.isMatch(pathname);
 
@@ -106,7 +108,10 @@ Context.activeRouter = (function() {
     nextListeners.splice(index, 1);
   }
 
-
+  /**
+   * Subscribe to the router for changes
+   * The callback that is returned should be used to unsubscribe.
+   */
   function subscribe(routeSubscription: RouteSubscription): Listener {
 
     addListener(routeSubscription);
@@ -127,6 +132,7 @@ Context.activeRouter = (function() {
   return {
     set,
     get,
-    subscribe
+    subscribe,
+    dispatch
   } as ActiveRouter;
 })();

@@ -2,7 +2,7 @@ export interface ActiveRouter {
   subscribe: (subscription: RouteSubscription) => () => void;
   set: (value: {[key: string]: any}) => void;
   get: (attrName?: string) => any;
-  createGroup: () => number;
+  dispatch: () => void;
 }
 
 export interface RouteSubscription {

@@ -73,6 +73,10 @@ export class Router {
     this.match = this.computeMatch();
   }
 
+  componentDidLoad() {
+    this.activeRouter.dispatch();
+  }
+
   getLocation(location: LocationSegments): LocationSegments {
     // Remove the root URL if found at beginning of string
     const pathname = location.pathname.indexOf(this.root) == 0 ?

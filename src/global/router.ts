@@ -35,7 +35,6 @@ Context.activeRouter = (function() {
   }
 
   function dispatch() {
-    console.log('dispatch');
     const listeners = nextListeners;
     const matchList: [ number, MatchResults ][] = [];
     const groupMatches: string[] = [];
@@ -77,7 +76,6 @@ Context.activeRouter = (function() {
   }
 
   function addListener(routeSubscription: RouteSubscription) {
-    console.log('addlistener');
     const pathname = get('location').pathname;
     const match = routeSubscription.isMatch(pathname);
 

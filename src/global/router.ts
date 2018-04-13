@@ -71,6 +71,7 @@ Context.activeRouter = (function() {
     }
 
     for (const [listenerIndex, matchResult] of matchList) {
+      console.timeStamp(`${listenerIndex}`);
       listeners[listenerIndex].listener(matchResult);
     }
   }
@@ -82,23 +83,24 @@ Context.activeRouter = (function() {
     routeSubscription.lastMatch = match;
     routeSubscription.listener(match);
 
-    nextListeners.push(routeSubscription);
+    // If the new route does not have a group then add to the end of the list
+    // If this is the first item push it on the list.
+    if (routeSubscription.groupId == null || routeSubscription.groupIndex == null || nextListeners.length === 0) {
+      nextListeners.push(routeSubscription);
+    } else {
+      for (let i = 0; i < nextListeners.length; i++) {
+        const { groupId, groupIndex } = nextListeners[i];
 
-    nextListeners.sort((a, b) => {
-      if (a.groupId < b.groupId) {
-        return -1;
+        if (groupId == null) {
+          nextListeners.splice(i, 0, routeSubscription);
+          break;
+        }
+        if (groupId === routeSubscription.groupId && groupIndex > routeSubscription.groupIndex) {
+          nextListeners.splice(i, 0, routeSubscription);
+          break;
+        }
       }
-      if (a.groupId > b.groupId) {
-        return 1;
-      }
-      if (a.groupIndex < b.groupIndex) {
-        return -1;
-      }
-      if (a.groupIndex > b.groupIndex) {
-        return 1;
-      }
-      return 0;
-    });
+    }
   }
 
   function removeListener(routeSubscription: RouteSubscription) {

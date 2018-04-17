@@ -71,7 +71,6 @@ Context.activeRouter = (function() {
     }
 
     for (const [listenerIndex, matchResult] of matchList) {
-      console.timeStamp(`${listenerIndex}`);
       listeners[listenerIndex].listener(matchResult);
     }
   }

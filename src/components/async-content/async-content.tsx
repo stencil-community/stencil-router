@@ -11,7 +11,7 @@ export class AsyncContent {
     return this.fetchNewContent();
   }
 
-  @Watch('doc')
+  @Watch('documentLocation')
   fetchNewContent() {
     return fetch(this.documentLocation)
       .then(response => response.text())

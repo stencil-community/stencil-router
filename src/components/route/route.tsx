@@ -73,10 +73,10 @@ export class Route {
 
   componentDidUpdate() {
     const childElement = this.el.firstElementChild as HTMLStencilElement;
-    if (this.component && childElement) {
+    if (childElement && childElement.componentOnReady) {
       childElement.componentOnReady().then(() => {
         this.componentDidRerender();
-      })
+      });
     } else {
       this.componentDidRerender();
     }

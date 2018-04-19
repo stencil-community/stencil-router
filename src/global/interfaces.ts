@@ -7,7 +7,7 @@ export interface ActiveRouter {
 
 export interface RouteSubscription {
   isMatch: (pathname: string) => MatchResults;
-  listener: (results: MatchResults) => void | Promise<void>;
+  listener: (results: MatchResults) => void | Promise<any>;
   lastMatch?: MatchResults;
   groupId?: string;
   groupIndex?: number;

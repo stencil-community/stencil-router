@@ -34,44 +34,42 @@ Context.activeRouter = (function() {
     return state[attrName];
   }
 
-  function dispatch() {
+  async function dispatch() {
     const listeners = nextListeners;
-    const matchList: [ number, MatchResults ][] = [];
-    const groupMatches: string[] = [];
+    const matchList: [ number, MatchResults, string ][] = [];
     const pathname = get('location').pathname;
 
     // Assume listeners are ordered by group and then groupIndex
     for (let i = 0; i < listeners.length; i++) {
-      let match = null
+      let match = null;
+      const isGroupMatch = matchList.some(me => {
+        return me[1] != null && me[2] != null && me[2] === listeners[i].groupId;
+      });
 
       // If listener has a groupId and group already has a match then don't check
-      if (listeners[i].groupId && groupMatches.indexOf(listeners[i].groupId) !== -1) {
-        match = null;
-
-      // If listener has a groupId, check for match and if it does keep track of groupName
-      } else if (listeners[i].groupId) {
+      if (!isGroupMatch) {
         match = listeners[i].isMatch(pathname);
-        if (match) {
-          groupMatches.push(listeners[i].groupId)
-        }
 
       // If listener does not have a group then just check if it matches
       } else {
-        match = listeners[i].isMatch(pathname);
+        match = null;
       }
 
       if (!shallowEqual(listeners[i].lastMatch, match)) {
-        if (match !== null) {
-          matchList.unshift([i, match]);
+        if (!isGroupMatch && listeners[i].groupId) {
+          matchList.unshift([i, match, listeners[i].groupId]);
         } else {
-          matchList.push([i, match]);
+          matchList.push([i, match, listeners[i].groupId]);
         }
       }
       listeners[i].lastMatch = match;
     }
-
-    for (const [listenerIndex, matchResult] of matchList) {
-      listeners[listenerIndex].listener(matchResult);
+    for (const [listenerIndex, matchResult, groupId] of matchList) {
+      if (groupId && matchResult != null) {
+        await listeners[listenerIndex].listener(matchResult);
+      } else {
+        listeners[listenerIndex].listener(matchResult);
+      }
     }
   }
 

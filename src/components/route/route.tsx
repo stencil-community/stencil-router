@@ -1,4 +1,4 @@
-import { Component, Prop, State } from '@stencil/core';
+import { Component, Prop, State, Element } from '@stencil/core';
 import { matchPath } from '../../utils/match-path';
 import { RouterHistory, ActiveRouter, Listener, LocationSegments, MatchResults } from '../../global/interfaces';
 
@@ -27,6 +27,10 @@ export class Route {
 
   @State() match: MatchResults | null = null;
 
+  @Element() el: HTMLStencilElement;
+
+  componentDidRerender: Function = () => {};
+
 
   // Identify if the current route is a match.
   computeMatch(pathname?: string) {
@@ -43,11 +47,15 @@ export class Route {
   }
 
   componentWillLoad() {
+    const thisRoute = this;
     // subscribe the project's active router and listen
     // for changes. Recompute the match if any updates get
     // pushed
     const listener = (matchResults: MatchResults) => {
       this.match = matchResults;
+      return new Promise((resolve) => {
+        thisRoute.componentDidRerender = resolve;
+      });
     }
     this.unsubscribe = this.activeRouter.subscribe({
       isMatch: this.computeMatch.bind(this),
@@ -61,6 +69,17 @@ export class Route {
     // be sure to unsubscribe to the router so that we don't
     // get any memory leaks
     this.unsubscribe();
+  }
+
+  componentDidUpdate() {
+    const childElement = this.el.firstElementChild as HTMLStencilElement;
+    if (this.component && childElement) {
+      childElement.componentOnReady().then(() => {
+        this.componentDidRerender();
+      })
+    } else {
+      this.componentDidRerender();
+    }
   }
 
   hostData() {

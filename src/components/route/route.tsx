@@ -8,9 +8,7 @@ import { RouterHistory, ActiveRouter, Listener, LocationSegments, MatchResults }
   * @description
  */
 @Component({
-  tag: 'stencil-route',
-  styleUrl: './route.css',
-  scoped: true
+  tag: 'stencil-route'
 })
 export class Route {
   @Prop({ context: 'activeRouter' }) activeRouter: ActiveRouter;
@@ -26,6 +24,7 @@ export class Route {
   @Prop() routeRender: Function = null;
 
   @State() match: MatchResults | null = null;
+  @State() activeInGroup: boolean = false;
 
   @Element() el: HTMLStencilElement;
 
@@ -76,18 +75,22 @@ export class Route {
     if (childElement && childElement.componentOnReady) {
       childElement.componentOnReady().then(() => {
         this.componentDidRerender();
+        this.activeInGroup = !!this.match;
       });
     } else {
       this.componentDidRerender();
+      this.activeInGroup = !!this.match;
     }
   }
 
   hostData() {
-    return {
-      class: {
-        'inactive': !this.activeRouter || !this.match
-      }
-    };
+    if (!this.activeRouter || !this.match || (this.group && !this.activeInGroup)) {
+      return {
+        style: {
+          display: 'none'
+        }
+      };
+    }
   }
 
   render() {

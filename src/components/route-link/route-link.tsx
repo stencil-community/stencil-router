@@ -25,6 +25,7 @@ export class RouteLink {
    */
   @Prop() custom: string = 'a';
 
+  @Prop() anchorClass: string;
   @Prop() anchorRole: string;
   @Prop() anchorTitle: string;
   @Prop() anchorTabIndex: string;
@@ -96,9 +97,13 @@ export class RouteLink {
   render() {
     let anchorAttributes: { [key: string]: any} = {
       class: {
-        [this.activeClass]: this.match !== null
+        [this.activeClass]: this.match !== null,
       },
       onClick: this.handleClick.bind(this)
+    }
+
+    if (this.anchorClass) {
+      anchorAttributes.class[this.anchorClass] = true;
     }
 
     if (this.custom === 'a') {

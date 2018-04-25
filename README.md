@@ -3,11 +3,14 @@
 
 A simple router, inspired by React Router v4, for Stencil apps and vanilla Web Component apps.
 
-```html
+```jsx
 <stencil-router>
-  <stencil-route url="/" component="landing-page" exact={true}></stencil-route>
-  <stencil-route url="/docs" component="docs-page"></stencil-route>
-  <stencil-route url="/demos" component="demos-page"></stencil-route>
+    <RouterSwitch>
+        <stencil-route url="/" component="landing-page" exact={true} />
+        <stencil-route url="/demos" component="demos-page" />
+        <stencil-route url="/other" component="other-page" />
+        <stencil-route component="page-not-found" />
+    </RouterSwitch>
 </stencil-router>
 ```
 

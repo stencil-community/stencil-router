@@ -7,7 +7,7 @@ export class AsyncContent {
   @Prop() documentLocation: string;
   @State() content: string;
 
-  ionViewWillLoad() {
+  componentWillLoad() {
     return this.fetchNewContent();
   }
 

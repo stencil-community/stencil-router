@@ -36,6 +36,7 @@ export class TestApp {
           <li><stencil-route-link anchorTabIndex="1" url="/demo7/">Demo7 Link</stencil-route-link></li>
           <stencil-route-link custom="li" url="/demo8/">Demo8 Link</stencil-route-link>
         </ul>
+        <stencil-router-scroll-top>
         <RouterSwitch>
           <stencil-route url="/" exact={true} routeRender={
             (props: { [key: string]: any}) => {
@@ -47,10 +48,13 @@ export class TestApp {
           <stencil-route url={['/demo', '/demox']} routeRender={
             (props: { [key: string]: any}) => {
               props;
-              return [
-                <stencil-route-title title="DEMO"></stencil-route-title>,
-                <span>rendering /demo</span>
-              ]
+              return (
+                <div style={ { 'padding-top': '1000px' } }>
+                  <stencil-route-title title="DEMO"></stencil-route-title>
+                  <span>rendering /demo</span>
+                  <li><stencil-route-link url="/demo3">Demo3 Link</stencil-route-link></li>
+                </div>
+              );
             }
           }></stencil-route>
 
@@ -67,10 +71,13 @@ export class TestApp {
           <stencil-route url="/demo3" routeRender={
             (props: { [key: string]: any}) => {
               props;
-              return [
-                <stencil-route-title title="Demo 3"></stencil-route-title>,
-                <span>rendering /demo 3</span>
-              ]
+              return (
+                <div style={ { 'padding-top': '1000px' } }>
+                  <stencil-router-scroll-top/>
+                  <stencil-route-title title="Demo 3"></stencil-route-title>,
+                  <span>rendering /demo 3</span>
+                </div>
+              );
             }
           }></stencil-route>
 
@@ -101,6 +108,7 @@ export class TestApp {
             }
           }></stencil-route>
         </RouterSwitch>
+        </stencil-router-scroll-top>
       </stencil-router>
     );
   }

@@ -22,6 +22,7 @@ export class Route {
   @Prop() group: string = null;
   @Prop() groupIndex: number = null;
   @Prop() routeRender: Function = null;
+  @Prop() scrollTopOffset: number = null;
 
   @State() match: MatchResults | null = null;
   @State() activeInGroup: boolean = false;
@@ -71,8 +72,16 @@ export class Route {
   }
 
   componentDidUpdate() {
+
+    // If this is the new active route in a group and it is now active then scroll
+    if (this.group && this.match && this.activeInGroup) {
+      this.scrollTo();
+    }
+
+    // After route component has rendered then check if its child has.
     const childElement = this.el.firstElementChild as HTMLStencilElement;
     if (childElement && childElement.componentOnReady) {
+
       childElement.componentOnReady().then(() => {
         this.componentDidRerender();
         this.activeInGroup = !!this.match;
@@ -81,6 +90,17 @@ export class Route {
       this.componentDidRerender();
       this.activeInGroup = !!this.match;
     }
+  }
+
+  scrollTo() {
+    const history: RouterHistory = this.activeRouter.get('history');
+    if (this.scrollTopOffset == null || !history) {
+      return;
+    }
+    if (history.action === 'POP' && history.location.scrollPosition != null) {
+      return window.scrollTo(history.location.scrollPosition[0], history.location.scrollPosition[1]);
+    }
+    window.scrollTo(0, this.scrollTopOffset);
   }
 
   hostData() {

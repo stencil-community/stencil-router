@@ -374,6 +374,7 @@ declare global {
       'group': string;
       'groupIndex': number;
       'routeRender': Function;
+      'scrollTopOffset': number;
       'url': string | string[];
     }
   }
@@ -403,6 +404,7 @@ declare global {
       'group'?: string;
       'groupIndex'?: number;
       'routeRender'?: Function;
+      'scrollTopOffset'?: number;
       'url'?: string | string[];
     }
   }
@@ -441,39 +443,6 @@ declare global {
       'historyType'?: HistoryType;
       'root'?: string;
       'titleSuffix'?: string;
-    }
-  }
-}
-
-
-declare global {
-
-  namespace StencilComponents {
-    interface StencilRouterScrollTop {
-      'topOffset': number;
-    }
-  }
-
-  interface HTMLStencilRouterScrollTopElement extends StencilComponents.StencilRouterScrollTop, HTMLStencilElement {}
-
-  var HTMLStencilRouterScrollTopElement: {
-    prototype: HTMLStencilRouterScrollTopElement;
-    new (): HTMLStencilRouterScrollTopElement;
-  };
-  interface HTMLElementTagNameMap {
-    'stencil-router-scroll-top': HTMLStencilRouterScrollTopElement;
-  }
-  interface ElementTagNameMap {
-    'stencil-router-scroll-top': HTMLStencilRouterScrollTopElement;
-  }
-  namespace JSX {
-    interface IntrinsicElements {
-      'stencil-router-scroll-top': JSXElements.StencilRouterScrollTopAttributes;
-    }
-  }
-  namespace JSXElements {
-    export interface StencilRouterScrollTopAttributes extends HTMLAttributes {
-      'topOffset'?: number;
     }
   }
 }

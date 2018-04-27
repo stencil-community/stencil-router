@@ -26,8 +26,16 @@ export interface CreateBrowserHistoryOptions {
   basename?: string;
 }
 
+interface NextState {
+  action: string;
+  location: LocationSegments;
+}
+
 const PopStateEvent = 'popstate';
 const HashChangeEvent = 'hashchange';
+const scrollPositions: { [key: string]: [number, number] } = window.sessionStorage.getItem('scrollPositions') ?
+  JSON.parse(window.sessionStorage.getItem('scrollPositions')) :
+  {};
 
 const getHistoryState = () => {
   try {
@@ -50,6 +58,7 @@ const createBrowserHistory = (props: CreateBrowserHistoryOptions = {}): RouterHi
   );
 
   const globalHistory = window.history;
+  globalHistory.scrollRestoration = 'manual';
   const canUseHistory = supportsHistory();
   const needsHashChangeListener = !supportsPopStateOnHashChange();
 
@@ -86,9 +95,13 @@ const createBrowserHistory = (props: CreateBrowserHistoryOptions = {}): RouterHi
 
   const transitionManager = createTransitionManager();
 
-  const setState = (nextState?: any) => {
-    Object.assign(history, nextState);
+  const setState = (nextState?: NextState) => {
 
+    scrollPositions[history.location.key] = [window.scrollX, window.scrollY];
+    window.sessionStorage.setItem('scrollPositions', JSON.stringify(scrollPositions));
+
+    Object.assign(history, nextState);
+    history.location.scrollPosition = scrollPositions[history.location.key];
     history.length = globalHistory.length;
 
     transitionManager.notifyListeners(

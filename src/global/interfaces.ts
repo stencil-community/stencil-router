@@ -28,6 +28,7 @@ export interface LocationSegments {
   state?: any;
   key?: string;
   query?: { [key: string]: any };
+  scrollPosition?: [number, number];
 }
 
 export interface RouterHistory {

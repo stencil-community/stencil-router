@@ -80,7 +80,7 @@ export class RouteLink {
     }
 
     const history: RouterHistory = this.activeRouter.get('history');
-    return history.push(this.getUrl(this.url), {});
+    return history.push(this.getUrl(this.url));
   }
 
   // Get the URL for this route link without the root from the router

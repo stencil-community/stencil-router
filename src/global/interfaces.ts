@@ -36,8 +36,8 @@ export interface RouterHistory {
   action: string;
   location: LocationSegments;
   createHref: (location: LocationSegments) => string;
-  push: (path: string | LocationSegments, state: any) => void;
-  replace: (path: string | LocationSegments, state: any) => void;
+  push: (path: string | LocationSegments, state?: any) => void;
+  replace: (path: string | LocationSegments, state?: any) => void;
   go: (n: number) => void;
   goBack: () => void;
   goForward: () => void;

@@ -13,7 +13,7 @@ export class Redirect {
     if (!history) {
       return;
     }
-    return history.replace(this.getUrl(this.url), {});
+    return history.replace(this.getUrl(this.url));
   }
 
   // Get the URL for this route link without the root from the router

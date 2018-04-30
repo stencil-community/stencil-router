@@ -1,6 +1,7 @@
 import { Component, Prop, State, Element } from '@stencil/core';
 import { matchPath } from '../../utils/match-path';
 import { RouterHistory, ActiveRouter, Listener, LocationSegments, MatchResults } from '../../global/interfaces';
+import { QueueApi } from '@stencil/core/dist/declarations';
 
 /**
   * @name Route
@@ -13,6 +14,7 @@ import { RouterHistory, ActiveRouter, Listener, LocationSegments, MatchResults }
 export class Route {
   @Prop({ context: 'activeRouter' }) activeRouter: ActiveRouter;
   @Prop({ context: 'location' }) location: Location;
+  @Prop({ context: 'queue'}) queue: QueueApi;
   unsubscribe: Listener = () => { return; };
 
   @Prop() url: string | string[];
@@ -98,7 +100,9 @@ export class Route {
       return;
     }
     if (history.action === 'POP' && history.location.scrollPosition != null) {
-      return window.scrollTo(history.location.scrollPosition[0], history.location.scrollPosition[1]);
+      return this.queue.write(function() {
+        window.scrollTo(history.location.scrollPosition[0], history.location.scrollPosition[1]);
+      });
     }
     window.scrollTo(0, this.scrollTopOffset);
   }

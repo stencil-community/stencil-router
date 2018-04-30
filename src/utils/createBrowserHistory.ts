@@ -9,6 +9,7 @@ import {
   createPath
 } from './path-utils';
 import createTransitionManager from './createTransitionManager';
+import createScrollHistory from './createScrollHistory';
 import {
   canUseDOM,
   addEventListener,
@@ -33,9 +34,6 @@ interface NextState {
 
 const PopStateEvent = 'popstate';
 const HashChangeEvent = 'hashchange';
-const scrollPositions: { [key: string]: [number, number] } = window.sessionStorage.getItem('scrollPositions') ?
-  JSON.parse(window.sessionStorage.getItem('scrollPositions')) :
-  {};
 
 const getHistoryState = () => {
   try {
@@ -58,9 +56,9 @@ const createBrowserHistory = (props: CreateBrowserHistoryOptions = {}): RouterHi
   );
 
   const globalHistory = window.history;
-  globalHistory.scrollRestoration = 'manual';
   const canUseHistory = supportsHistory();
   const needsHashChangeListener = !supportsPopStateOnHashChange();
+  const scrollHistory = createScrollHistory();
 
   const {
     forceRefresh = false,
@@ -97,11 +95,13 @@ const createBrowserHistory = (props: CreateBrowserHistoryOptions = {}): RouterHi
 
   const setState = (nextState?: NextState) => {
 
-    scrollPositions[history.location.key] = [window.scrollX, window.scrollY];
-    window.sessionStorage.setItem('scrollPositions', JSON.stringify(scrollPositions));
+    // Capture location for the view before changing history.
+    scrollHistory.capture(history.location.key);
 
     Object.assign(history, nextState);
-    history.location.scrollPosition = scrollPositions[history.location.key];
+
+    // Set scroll position based on its previous storage value
+    history.location.scrollPosition = scrollHistory.get(history.location.key);
     history.length = globalHistory.length;
 
     transitionManager.notifyListeners(

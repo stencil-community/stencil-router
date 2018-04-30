@@ -1,10 +1,15 @@
+import { storageAvailable } from './dom-utils';
+
 const createScrollHistory = (applicationScrollKey: string = 'scrollPositions') => {
 
   let scrollPositions = new Map<string, [number, number]>();
 
-  scrollPositions = window.sessionStorage.getItem(applicationScrollKey) ?
-    new Map(JSON.parse(window.sessionStorage.getItem(applicationScrollKey))) :
-    scrollPositions;
+  if (storageAvailable('sessionStorage')) {
+    scrollPositions = window.sessionStorage.getItem(applicationScrollKey) ?
+      new Map(JSON.parse(window.sessionStorage.getItem(applicationScrollKey))) :
+      scrollPositions;
+  }
+
 
   if ('scrollRestoration' in history) {
     history.scrollRestoration = 'manual';
@@ -13,7 +18,9 @@ const createScrollHistory = (applicationScrollKey: string = 'scrollPositions') =
 
   function set(key: string, value: [number, number]) {
     scrollPositions.set(key, value);
-    window.sessionStorage.setItem('scrollPositions', JSON.stringify(Array.from(scrollPositions.entries())));
+    if (storageAvailable('sessionStorage')) {
+      window.sessionStorage.setItem('scrollPositions', JSON.stringify(Array.from(scrollPositions.entries())));
+    }
   }
 
   function get(key: string) {
@@ -35,6 +42,7 @@ const createScrollHistory = (applicationScrollKey: string = 'scrollPositions') =
     capture
   }
 }
+
 
 
 export default createScrollHistory;

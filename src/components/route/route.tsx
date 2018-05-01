@@ -84,13 +84,13 @@ export class Route {
           this.componentDidRerender();
           this.componentDidRerender = undefined;
           this.activeInGroup = !!this.match;
-          this.scrollOnNextRender = true;
+          this.scrollOnNextRender = this.activeInGroup;
         });
       } else {
         this.componentDidRerender();
         this.componentDidRerender = undefined;
         this.activeInGroup = !!this.match;
-        this.scrollOnNextRender = true;
+        this.scrollOnNextRender = this.activeInGroup;
       }
 
     } else if (this.scrollOnNextRender) {

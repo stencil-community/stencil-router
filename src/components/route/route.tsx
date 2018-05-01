@@ -89,6 +89,7 @@ export class Route {
           this.scrollOnNextRender = this.activeInGroup;
         });
       } else {
+        // If there is no child then resolve the Promise immediately
         this.componentDidRerender();
         this.componentDidRerender = undefined;
         this.activeInGroup = !!this.match;

@@ -31,7 +31,8 @@ export class Route {
 
   @Element() el: HTMLStencilElement;
 
-  componentDidRerender: Function = () => {};
+  componentDidRerender: Function | undefined;
+  scrollOnNextRender: boolean = false;
 
 
   // Identify if the current route is a match.
@@ -74,23 +75,28 @@ export class Route {
   }
 
   componentDidUpdate() {
+    if (this.componentDidRerender) {
+      // After route component has rendered then check if its child has.
+      const childElement = this.el.firstElementChild as HTMLStencilElement;
+      if (childElement && childElement.componentOnReady) {
 
-    // If this is the new active route in a group and it is now active then scroll
-    if (this.group && this.match && this.activeInGroup) {
-      this.scrollTo();
-    }
-
-    // After route component has rendered then check if its child has.
-    const childElement = this.el.firstElementChild as HTMLStencilElement;
-    if (childElement && childElement.componentOnReady) {
-
-      childElement.componentOnReady().then(() => {
+        childElement.componentOnReady().then(() => {
+          this.componentDidRerender();
+          this.componentDidRerender = undefined;
+          this.activeInGroup = !!this.match;
+          this.scrollOnNextRender = true;
+        });
+      } else {
         this.componentDidRerender();
+        this.componentDidRerender = undefined;
         this.activeInGroup = !!this.match;
-      });
-    } else {
-      this.componentDidRerender();
-      this.activeInGroup = !!this.match;
+        this.scrollOnNextRender = true;
+      }
+
+    } else if (this.scrollOnNextRender) {
+      // If this is the new active route in a group and it is now active then scroll
+      this.scrollTo();
+      this.scrollOnNextRender = false;
     }
   }
 

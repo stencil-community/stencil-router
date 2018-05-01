@@ -81,7 +81,9 @@ export class Route {
       if (childElement && childElement.componentOnReady) {
 
         childElement.componentOnReady().then(() => {
-          this.componentDidRerender();
+          if (this.componentDidRerender) {
+            this.componentDidRerender();
+          }
           this.componentDidRerender = undefined;
           this.activeInGroup = !!this.match;
           this.scrollOnNextRender = this.activeInGroup;

@@ -290,6 +290,7 @@ declare global {
        */
       'custom': string;
       'exact': boolean;
+      'strict': boolean;
       'url': string;
       'urlMatch': string | string[];
     }
@@ -324,6 +325,7 @@ declare global {
        */
       'custom'?: string;
       'exact'?: boolean;
+      'strict'?: boolean;
       'url'?: string;
       'urlMatch'?: string | string[];
     }

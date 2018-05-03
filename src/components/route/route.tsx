@@ -105,7 +105,7 @@ export class Route {
 
   scrollTo() {
     const history: RouterHistory = this.activeRouter.get('history');
-    if (this.scrollTopOffset == null || !history) {
+    if (this.scrollTopOffset == null || !history || !window.scrollTo) {
       return;
     }
     if (history.action === 'POP' && history.location.scrollPosition != null) {

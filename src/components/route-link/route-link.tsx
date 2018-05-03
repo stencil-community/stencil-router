@@ -19,6 +19,7 @@ export class RouteLink {
   @Prop() urlMatch: string | string[];
   @Prop() activeClass: string = 'link-active';
   @Prop() exact: boolean = false;
+  @Prop() strict: boolean = true;
 
   /**
    *  Custom tag to use instead of an anchor
@@ -43,7 +44,7 @@ export class RouteLink {
     const match = matchPath(pathname, {
       path: this.urlMatch || this.url,
       exact: this.exact,
-      strict: true
+      strict: this.strict
     });
 
     return match;

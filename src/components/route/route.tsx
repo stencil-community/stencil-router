@@ -15,6 +15,8 @@ export class Route {
   @Prop({ context: 'activeRouter' }) activeRouter: ActiveRouter;
   @Prop({ context: 'location' }) location: Location;
   @Prop({ context: 'queue'}) queue: QueueApi;
+  @Prop({ context: 'isServer' }) private isServer: boolean;
+
   unsubscribe: Listener = () => { return; };
 
   @Prop() url: string | string[];
@@ -105,7 +107,7 @@ export class Route {
 
   scrollTo() {
     const history: RouterHistory = this.activeRouter.get('history');
-    if (this.scrollTopOffset == null || !history || !window.scrollTo) {
+    if (this.scrollTopOffset == null || !history || this.isServer) {
       return;
     }
     if (history.action === 'POP' && history.location.scrollPosition != null) {

@@ -26,7 +26,7 @@ export class Route {
   @Prop() group: string = null;
   @Prop() groupIndex: number = null;
   @Prop() routeRender: Function = null;
-  @Prop() scrollTopOffset: number = null;
+  @Prop() scrollTopOffset: number = 0;
 
   @State() match: MatchResults | null = null;
   @State() activeInGroup: boolean = false;

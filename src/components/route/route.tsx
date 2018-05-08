@@ -115,7 +115,13 @@ export class Route {
         window.scrollTo(history.location.scrollPosition[0], history.location.scrollPosition[1]);
       });
     }
-    window.scrollTo(0, this.scrollTopOffset);
+    // read a frame to let things measure correctly
+    return this.queue.read(() => {
+      // okay, the frame has passed. Go ahead and render now
+      return this.queue.write(() => {
+        window.scrollTo(0, this.scrollTopOffset);
+      });
+    });
   }
 
   hostData() {

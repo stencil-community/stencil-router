@@ -19,7 +19,12 @@ const createScrollHistory = (applicationScrollKey: string = 'scrollPositions') =
   function set(key: string, value: [number, number]) {
     scrollPositions.set(key, value);
     if (storageAvailable('sessionStorage')) {
-      window.sessionStorage.setItem('scrollPositions', JSON.stringify(Array.from(scrollPositions.entries())));
+      const arrayData: [string, [number, number]][] = [];
+
+      scrollPositions.forEach((value, key) => {
+        arrayData.push([key, value]);
+      });
+      window.sessionStorage.setItem('scrollPositions', JSON.stringify(arrayData));
     }
   }
 

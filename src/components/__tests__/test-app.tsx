@@ -1,6 +1,6 @@
 import { Component } from '@stencil/core';
 import { RouterSwitch } from '../switch/switch';
-
+import { HocTestImp } from '../hoc-test/hoc-test';
 
 const PrivateRoute = ({ component, ...props}: { [key: string]: any}) => (
   <stencil-route {...props} routeRender={
@@ -14,7 +14,6 @@ const PrivateRoute = ({ component, ...props}: { [key: string]: any}) => (
   }/>
 )
 
-
 @Component({
   tag: 'test-app'
 })
@@ -23,6 +22,8 @@ export class TestApp {
   render() {
     return (
       <stencil-router title-suffix=" - Stencil Router Demos">
+        <HocTestImp>
+        </HocTestImp>
         <ul>
           <li><stencil-route-link url="/" exact={true}>Exact Base Link</stencil-route-link></li>
           <li><stencil-route-link url="/">Base Link</stencil-route-link></li>

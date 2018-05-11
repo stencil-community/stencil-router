@@ -13,11 +13,11 @@ import { ActiveRouter } from '../../global/interfaces';
 })
 export class RouteTitle {
   @Prop({ context: 'activeRouter' }) activeRouter: ActiveRouter;
-  @Prop() title: string;
+  @Prop() pageTitle: string = '';
 
   componentWillLoad() {
     const suffix = this.activeRouter && this.activeRouter.get('titleSuffix') || '';
-    document.title = `${this.title}${suffix}`;
+    document.title = `${this.pageTitle}${suffix}`;
   }
 
   render(): null {

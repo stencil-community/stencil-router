@@ -246,6 +246,74 @@ declare global {
 declare global {
 
   namespace StencilComponents {
+    interface HocTest {
+      'routerData': any;
+    }
+  }
+
+  interface HTMLHocTestElement extends StencilComponents.HocTest, HTMLStencilElement {}
+
+  var HTMLHocTestElement: {
+    prototype: HTMLHocTestElement;
+    new (): HTMLHocTestElement;
+  };
+  interface HTMLElementTagNameMap {
+    'hoc-test': HTMLHocTestElement;
+  }
+  interface ElementTagNameMap {
+    'hoc-test': HTMLHocTestElement;
+  }
+  namespace JSX {
+    interface IntrinsicElements {
+      'hoc-test': JSXElements.HocTestAttributes;
+    }
+  }
+  namespace JSXElements {
+    export interface HocTestAttributes extends HTMLAttributes {
+      'routerData'?: any;
+    }
+  }
+}
+
+
+declare global {
+
+  namespace StencilComponents {
+    interface WithSubscription {
+      'stores': { [key: string]: any };
+      'tagname': string;
+    }
+  }
+
+  interface HTMLWithSubscriptionElement extends StencilComponents.WithSubscription, HTMLStencilElement {}
+
+  var HTMLWithSubscriptionElement: {
+    prototype: HTMLWithSubscriptionElement;
+    new (): HTMLWithSubscriptionElement;
+  };
+  interface HTMLElementTagNameMap {
+    'with-subscription': HTMLWithSubscriptionElement;
+  }
+  interface ElementTagNameMap {
+    'with-subscription': HTMLWithSubscriptionElement;
+  }
+  namespace JSX {
+    interface IntrinsicElements {
+      'with-subscription': JSXElements.WithSubscriptionAttributes;
+    }
+  }
+  namespace JSXElements {
+    export interface WithSubscriptionAttributes extends HTMLAttributes {
+      'stores'?: { [key: string]: any };
+      'tagname'?: string;
+    }
+  }
+}
+
+
+declare global {
+
+  namespace StencilComponents {
     interface StencilRouterRedirect {
       'url': string;
     }
@@ -337,7 +405,7 @@ declare global {
 
   namespace StencilComponents {
     interface StencilRouteTitle {
-      'title': string;
+      'pageTitle': string;
     }
   }
 
@@ -360,7 +428,7 @@ declare global {
   }
   namespace JSXElements {
     export interface StencilRouteTitleAttributes extends HTMLAttributes {
-      'title'?: string;
+      'pageTitle'?: string;
     }
   }
 }

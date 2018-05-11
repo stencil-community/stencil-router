@@ -15,4 +15,5 @@ export const router = createStore({
   }
 });
 
+// This is just for testing purposes
 (<any>window).router = router;

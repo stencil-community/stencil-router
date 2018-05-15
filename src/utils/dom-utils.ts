@@ -18,6 +18,10 @@ export const getConfirmation = (message: string, callback: (confirmed: boolean) 
   callback(window.confirm(message))
 );
 
+export const isModifiedEvent = (event: MouseEvent) => (
+  event.metaKey || event.altKey || event.ctrlKey || event.shiftKey
+);
+
 /**
  * Returns true if the HTML5 history API is supported. Taken from Modernizr.
  *

@@ -1,5 +1,6 @@
 import { Component, Prop, State } from '@stencil/core';
 import { matchPath } from '../../utils/match-path';
+import { isModifiedEvent } from '../../utils/dom-utils';
 import { RouterHistory, ActiveRouter, Listener, LocationSegments, MatchResults } from '../../global/interfaces';
 
 
@@ -72,6 +73,10 @@ export class RouteLink {
   }
 
   handleClick(e: MouseEvent) {
+    if (isModifiedEvent(e)) {
+      return;
+    }
+
     e.preventDefault();
     if (!this.activeRouter) {
       console.warn(

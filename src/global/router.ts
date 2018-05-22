@@ -49,8 +49,7 @@ export function subscribeGroupMember(location: LocationSegments, listeners: Rout
 export async function dispatchToGroupMembers(location: LocationSegments, listeners: RouteSubscription[]) {
   const matchList: [ number, MatchResults, string ][] = [];
   const pathname = location.pathname;
-console.log(`---- location.pathname ----`)
-console.log(pathname);
+
   // Assume listeners are ordered by group and then groupIndex
   for (let i = 0; i < listeners.length; i++) {
     let match = null;
@@ -62,8 +61,6 @@ console.log(pathname);
     // If listener has a groupId and group already has a match then don't check
     if (!isGroupMatch) {
       match = listeners[i].isMatch(pathname);
-console.log(`---- match ----`)
-console.log(match)
 
     // If listener does not have a group then just check if it matches
     } else {
@@ -79,8 +76,7 @@ console.log(match)
     }
     listeners[i].lastMatch = match;
   }
-console.log(`---- matchList ----`)
-console.log(matchList);
+
   for (const [listenerIndex, matchResult] of matchList) {
     if (matchResult != null) {
       await listeners[listenerIndex].listener(matchResult);

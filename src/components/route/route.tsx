@@ -11,11 +11,7 @@ import ActiveRouter from '../../global/active-router'
  */
 @Component({
   tag: 'stencil-route',
-  styles: `
-    stencil-route.inactive {
-      display: none;
-    }
-  `
+  styleUrl: 'route.css'
 })
 export class Route {
   @Prop({ context: 'queue'}) queue: QueueApi;
@@ -125,17 +121,15 @@ export class Route {
     if (this.scrollTopOffset == null || !this.history || this.isServer) {
       return;
     }
+    console.log(this.history.location.scrollPosition);
     if (this.history.action === 'POP' && this.history.location.scrollPosition != null) {
-      return this.queue.write(function() {
+      return this.queue.write(() => {
         window.scrollTo(this.history.location.scrollPosition[0], this.history.location.scrollPosition[1]);
       });
     }
-    // read a frame to let things measure correctly
-    return this.queue.read(() => {
-      // okay, the frame has passed. Go ahead and render now
-      return this.queue.write(() => {
-        window.scrollTo(0, this.scrollTopOffset);
-      });
+    // okay, the frame has passed. Go ahead and render now
+    return this.queue.write(() => {
+      window.scrollTo(0, this.scrollTopOffset);
     });
   }
 

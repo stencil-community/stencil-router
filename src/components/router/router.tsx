@@ -39,7 +39,6 @@ export class Router {
 
     this.history.listen(async (location: LocationSegments) => {
       location = this.getLocation(location);
-      console.log(location);
       await dispatchToGroupMembers(location, this.asyncListeners);
       this.location = location;
     });
@@ -68,7 +67,7 @@ export class Router {
         return subscribeGroupMember(this.location, this.asyncListeners, routeSubscription);
       }
     };
-console.log(state);
+
     return (
       <ActiveRouter.Provider state={state}>
         <slot />

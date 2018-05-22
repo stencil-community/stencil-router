@@ -3,9 +3,8 @@
   "version": "0.1.7",
   "description": "Stencil Router",
   "module": "dist/collection/index.js",
-  "main": "dist/stencilrouter.js",
+  "main": "dist/index.js",
   "unpkg": "dist/stencilrouter.js",
-  "browser": "dist/stencilrouter.js",
   "types": "dist/types/index.d.ts",
   "collection": "dist/collection/collection-manifest.json",
   "files": [

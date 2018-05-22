@@ -121,7 +121,6 @@ export class Route {
     if (this.scrollTopOffset == null || !this.history || this.isServer) {
       return;
     }
-    console.log(this.history.location.scrollPosition);
     if (this.history.action === 'POP' && this.history.location.scrollPosition != null) {
       return this.queue.write(() => {
         window.scrollTo(this.history.location.scrollPosition[0], this.history.location.scrollPosition[1]);

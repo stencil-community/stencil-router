@@ -1,6 +1,5 @@
 exports.config = {
   enableCache: false,
-  serviceWorker: false,
   namespace: 'stencilrouter',
   outputTargets:[
     {

@@ -1,6 +1,5 @@
-import { Component, Prop } from '@stencil/core';
-
-import { ActiveRouter } from '../../global/interfaces';
+import { Component, Prop, Element } from '@stencil/core';
+import ActiveRouter from '../../global/active-router';
 
 /**
   * Updates the document title when found.
@@ -12,15 +11,15 @@ import { ActiveRouter } from '../../global/interfaces';
   tag: 'stencil-route-title'
 })
 export class RouteTitle {
-  @Prop({ context: 'activeRouter' }) activeRouter: ActiveRouter;
-  @Prop() title: string;
+  @Element() el: HTMLStencilElement;
+  @Prop() titleSuffix: string = '';
+  @Prop() title: string = '';
 
   componentWillLoad() {
-    const suffix = this.activeRouter && this.activeRouter.get('titleSuffix') || '';
-    document.title = `${this.title}${suffix}`;
-  }
-
-  render(): null {
-    return null;
+    document.title = `${this.title}${this.titleSuffix || ''}`;
   }
 }
+
+ActiveRouter.injectProps(RouteTitle, [
+  'titleSuffix',
+]);

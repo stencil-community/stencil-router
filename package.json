@@ -24,7 +24,7 @@
     "url": "git+https://github.com/ionic-team/stencil-router.git"
   },
   "devDependencies": {
-    "@stencil/core": "^0.8.1",
+    "@stencil/core": "^0.9.2",
     "@stencil/dev-server": "latest",
     "@stencil/utils": "latest",
     "@types/jest": "^20.0.8",
@@ -48,5 +48,8 @@
     },
     "testRegex": "/__tests__/.*(test|spec)\\.(ts|tsx)$"
   },
-  "homepage": "https://github.com/ionic-team/stencil-router"
+  "homepage": "https://github.com/ionic-team/stencil-router",
+  "dependencies": {
+    "@stencil/state-tunnel": "0.0.4"
+  }
 }

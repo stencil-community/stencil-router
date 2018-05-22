@@ -49,7 +49,7 @@ export class TestApp {
             (props: { [key: string]: any}) => {
               props;
               return (
-                <div style={ { 'padding-top': '1000px' } }>
+                <div>
                   <stencil-route-title title="DEMO"></stencil-route-title>
                   <span>rendering /demo</span>
                   <li><stencil-route-link url="/demo3">Demo3 Link</stencil-route-link></li>
@@ -72,9 +72,9 @@ export class TestApp {
             (props: { [key: string]: any}) => {
               props;
               return (
-                <div style={ { 'padding-top': '1000px' } }>
+                <div>
                   <stencil-router-scroll-top/>
-                  <stencil-route-title title="Demo 3"></stencil-route-title>,
+                  <stencil-route-title title="Demo 3"></stencil-route-title>
                   <span>rendering /demo 3</span>
                 </div>
               );

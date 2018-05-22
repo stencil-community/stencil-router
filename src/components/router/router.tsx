@@ -1,7 +1,10 @@
-import { Component, Prop, State, Watch } from '@stencil/core';
+import { Component, Prop, State } from '@stencil/core';
 import createHistory from '../../utils/createBrowserHistory';
 import createHashHistory from '../../utils/createHashHistory';
-import { ActiveRouter, LocationSegments, MatchResults, HistoryType} from '../../global/interfaces';
+import { LocationSegments, HistoryType, RouterHistory, RouteSubscription } from '../../global/interfaces';
+import ActiveRouter from '../../global/active-router';
+
+import { subscribeGroupMember, dispatchToGroupMembers } from '../../global/router';
 
 
 const HISTORIES: { [key in HistoryType]: Function } = {
@@ -26,55 +29,21 @@ export class Router {
   // it's updated through RouteTitle
   @Prop() titleSuffix: string = '';
 
-  @Watch('titleSuffix')
-  titleSuffixChanged(newValue: string) {
-    this.activeRouter.set({
-      titleSuffix: newValue
-    });
-  }
+  @State() location: LocationSegments;
+  @State() history: RouterHistory;
 
-  @Prop({ context: 'activeRouter' }) activeRouter: ActiveRouter;
-  unsubscribe: Function = () => {};
-
-  @State() match: MatchResults | null = null;
-
-  computeMatch(pathname?: string) {
-    return {
-      path: this.root,
-      url: this.root,
-      isExact: pathname === this.root,
-      params: {}
-    } as MatchResults;
-  }
+  asyncListeners: RouteSubscription[] = [];
 
   componentWillLoad() {
-    const history = HISTORIES[this.historyType]();
+    this.history = HISTORIES[this.historyType]();
 
-    history.listen((location: LocationSegments) => {
-      this.activeRouter.set({ location: this.getLocation(location) });
+    this.history.listen(async (location: LocationSegments) => {
+      location = this.getLocation(location);
+      console.log(location);
+      await dispatchToGroupMembers(location, this.asyncListeners);
+      this.location = location;
     });
-
-    this.activeRouter.set({
-      location: this.getLocation(history.location),
-      titleSuffix: this.titleSuffix,
-      root: this.root,
-      history
-    });
-
-    // subscribe the project's active router and listen
-    // for changes. Recompute the match if any updates get
-    // pushed
-    this.unsubscribe = this.activeRouter.subscribe({
-      isMatch: this.computeMatch.bind(this),
-      listener: (matchResult: MatchResults) => {
-        this.match = matchResult;
-      },
-    });
-    this.match = this.computeMatch();
-  }
-
-  componentDidLoad() {
-    this.activeRouter.dispatch();
+    this.location = this.getLocation(this.history.location);
   }
 
   getLocation(location: LocationSegments): LocationSegments {
@@ -89,13 +58,21 @@ export class Router {
     };
   }
 
-  componentDidUnload() {
-    // be sure to unsubscribe to the router so that we don't
-    // get any memory leaks
-    this.unsubscribe();
-  }
-
   render() {
-    return <slot />;
+    const state = {
+      location: this.location,
+      titleSuffix: this.titleSuffix,
+      root: this.root,
+      history: this.history,
+      subscribeGroupMember: (routeSubscription: RouteSubscription) => {
+        return subscribeGroupMember(this.location, this.asyncListeners, routeSubscription);
+      }
+    };
+console.log(state);
+    return (
+      <ActiveRouter.Provider state={state}>
+        <slot />
+      </ActiveRouter.Provider>
+    );
   }
 }

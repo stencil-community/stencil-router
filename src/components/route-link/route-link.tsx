@@ -1,8 +1,8 @@
-import { Component, Prop, State } from '@stencil/core';
+import { Component, Prop, State, Watch, Element } from '@stencil/core';
 import { matchPath } from '../../utils/match-path';
 import { isModifiedEvent } from '../../utils/dom-utils';
-import { RouterHistory, ActiveRouter, Listener, LocationSegments, MatchResults } from '../../global/interfaces';
-
+import { RouterHistory, Listener, LocationSegments, MatchResults } from '../../global/interfaces';
+import ActiveRouter from '../../global/active-router';
 
 /**
   * @name Route
@@ -13,7 +13,8 @@ import { RouterHistory, ActiveRouter, Listener, LocationSegments, MatchResults }
   tag: 'stencil-route-link'
 })
 export class RouteLink {
-  @Prop({ context: 'activeRouter' }) activeRouter: ActiveRouter;
+  @Element() el: HTMLStencilElement;
+
   unsubscribe: Listener = () => { return; };
 
   @Prop() url: string;
@@ -32,44 +33,26 @@ export class RouteLink {
   @Prop() anchorTitle: string;
   @Prop() anchorTabIndex: string;
 
+  @Prop() history: RouterHistory;
+  @Prop() location: LocationSegments;
+  @Prop() root: string;
 
   @State() match: MatchResults | null = null;
 
+  componentWillLoad() {
+    if (this.location) {
+      this.computeMatch();
+    }
+  }
 
   // Identify if the current route is a match.
-  computeMatch(pathname?: string) {
-    if (!pathname) {
-      const location: LocationSegments = this.activeRouter.get('location');
-      pathname = location.pathname;
-    }
-    const match = matchPath(pathname, {
+  @Watch('location')
+  computeMatch() {
+    this.match = matchPath(this.location.pathname, {
       path: this.urlMatch || this.url,
       exact: this.exact,
       strict: this.strict
     });
-
-    return match;
-  }
-
-  componentWillLoad() {
-    // subscribe the project's active router and listen
-    // for changes. Recompute the match if any updates get
-    // pushed
-    this.unsubscribe = this.activeRouter.subscribe({
-      isMatch: this.computeMatch.bind(this),
-      listener: (matchResult: MatchResults) => {
-        this.match = matchResult;
-      },
-    });
-
-    // Likely that this route link could receive a location prop
-    this.match = this.computeMatch();
-  }
-
-  componentDidUnload() {
-    // be sure to unsubscribe to the router so that we don't
-    // get any memory leaks
-    this.unsubscribe();
   }
 
   handleClick(e: MouseEvent) {
@@ -78,26 +61,17 @@ export class RouteLink {
     }
 
     e.preventDefault();
-    if (!this.activeRouter) {
-      console.warn(
-        '<stencil-route-link> wasn\'t passed an instance of the router as the "router" prop!'
-      );
-      return;
-    }
-
-    const history: RouterHistory = this.activeRouter.get('history');
-    return history.push(this.getUrl(this.url));
+    return this.history.push(this.getUrl(this.url));
   }
 
   // Get the URL for this route link without the root from the router
   getUrl(url: string) {
-    const root: string = this.activeRouter.get('root') || '/';
 
     // Don't allow double slashes
-    if(url.charAt(0) == '/' && root.charAt(root.length - 1) == '/') {
-      return root.slice(0, root.length-1) + url;
+    if(url.charAt(0) == '/' && this.root.charAt(this.root.length - 1) == '/') {
+      return this.root.slice(0, this.root.length-1) + url;
     }
-    return root + url;
+    return this.root + url;
   }
 
   render() {
@@ -128,3 +102,9 @@ export class RouteLink {
     );
   }
 }
+
+ActiveRouter.injectProps(RouteLink, [
+  'history',
+  'location',
+  'root'
+]);

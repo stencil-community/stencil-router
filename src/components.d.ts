@@ -23,10 +23,14 @@ declare global {
   interface HTMLAttributes {}
 }
 
+import '@stencil/state-tunnel';
+
 import {
   HistoryType,
+  LocationSegments,
   MatchResults,
   RouterHistory,
+  RouteSubscription,
 } from './global/interfaces';
 
 declare global {
@@ -247,6 +251,8 @@ declare global {
 
   namespace StencilComponents {
     interface StencilRouterRedirect {
+      'history': RouterHistory;
+      'root': string;
       'url': string;
     }
   }
@@ -270,6 +276,8 @@ declare global {
   }
   namespace JSXElements {
     export interface StencilRouterRedirectAttributes extends HTMLAttributes {
+      'history'?: RouterHistory;
+      'root'?: string;
       'url'?: string;
     }
   }
@@ -290,6 +298,9 @@ declare global {
        */
       'custom': string;
       'exact': boolean;
+      'history': RouterHistory;
+      'location': LocationSegments;
+      'root': string;
       'strict': boolean;
       'url': string;
       'urlMatch': string | string[];
@@ -325,6 +336,9 @@ declare global {
        */
       'custom'?: string;
       'exact'?: boolean;
+      'history'?: RouterHistory;
+      'location'?: LocationSegments;
+      'root'?: string;
       'strict'?: boolean;
       'url'?: string;
       'urlMatch'?: string | string[];
@@ -338,6 +352,7 @@ declare global {
   namespace StencilComponents {
     interface StencilRouteTitle {
       'title': string;
+      'titleSuffix': string;
     }
   }
 
@@ -361,6 +376,7 @@ declare global {
   namespace JSXElements {
     export interface StencilRouteTitleAttributes extends HTMLAttributes {
       'title'?: string;
+      'titleSuffix'?: string;
     }
   }
 }
@@ -375,8 +391,11 @@ declare global {
       'exact': boolean;
       'group': string;
       'groupIndex': number;
+      'history': RouterHistory;
+      'location': LocationSegments;
       'routeRender': Function;
       'scrollTopOffset': number;
+      'subscribeGroupMember': (routeSubscription: RouteSubscription) => () => void;
       'url': string | string[];
     }
   }
@@ -405,8 +424,11 @@ declare global {
       'exact'?: boolean;
       'group'?: string;
       'groupIndex'?: number;
+      'history'?: RouterHistory;
+      'location'?: LocationSegments;
       'routeRender'?: Function;
       'scrollTopOffset'?: number;
+      'subscribeGroupMember'?: (routeSubscription: RouteSubscription) => () => void;
       'url'?: string | string[];
     }
   }
@@ -450,3 +472,5 @@ declare global {
 }
 
 declare global { namespace JSX { interface StencilJSX {} } }
+
+export declare function defineCustomElements(window: any): void;

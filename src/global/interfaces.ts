@@ -1,8 +1,6 @@
 export interface ActiveRouter {
-  subscribe: (subscription: RouteSubscription) => () => void;
-  set: (value: {[key: string]: any}) => void;
-  get: (attrName?: string) => any;
-  dispatch: () => void;
+  subscribe: (location: LocationSegments, nextListeners: RouteSubscription[], routeSubscription: RouteSubscription) => Listener
+  dispatch: (location: LocationSegments, nextListeners: RouteSubscription[]) => void;
 }
 
 export interface RouteSubscription {

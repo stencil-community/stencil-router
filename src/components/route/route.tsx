@@ -1,7 +1,8 @@
-import { Component, Prop, State, Element } from '@stencil/core';
+import { Component, Prop, State, Element, Watch } from '@stencil/core';
 import { matchPath } from '../../utils/match-path';
-import { RouterHistory, ActiveRouter, Listener, LocationSegments, MatchResults } from '../../global/interfaces';
+import { RouterHistory, Listener, LocationSegments, MatchResults, RouteSubscription } from '../../global/interfaces';
 import { QueueApi } from '@stencil/core/dist/declarations';
+import ActiveRouter from '../../global/active-router'
 
 /**
   * @name Route
@@ -9,11 +10,14 @@ import { QueueApi } from '@stencil/core/dist/declarations';
   * @description
  */
 @Component({
-  tag: 'stencil-route'
+  tag: 'stencil-route',
+  styles: `
+    stencil-route.inactive {
+      display: none;
+    }
+  `
 })
 export class Route {
-  @Prop({ context: 'activeRouter' }) activeRouter: ActiveRouter;
-  @Prop({ context: 'location' }) location: Location;
   @Prop({ context: 'queue'}) queue: QueueApi;
   @Prop({ context: 'isServer' }) private isServer: boolean;
 
@@ -28,6 +32,10 @@ export class Route {
   @Prop() routeRender: Function = null;
   @Prop() scrollTopOffset: number = null;
 
+  @Prop() location: LocationSegments;
+  @Prop() history: RouterHistory;
+  @Prop() subscribeGroupMember: (routeSubscription: RouteSubscription) => () => void
+
   @State() match: MatchResults | null = null;
   @State() activeInGroup: boolean = false;
 
@@ -38,12 +46,14 @@ export class Route {
 
 
   // Identify if the current route is a match.
-  computeMatch(pathname?: string) {
-    if (!pathname) {
-      const location: LocationSegments = this.activeRouter.get('location');
-      pathname = location.pathname;
+  @Watch('location')
+  computeMatch() {
+    if (!this.group) {
+      this.match = this.getMatch(this.location.pathname);
     }
+  }
 
+  getMatch(pathname: string) {
     return matchPath(pathname, {
       path: this.url,
       exact: this.exact,
@@ -56,24 +66,30 @@ export class Route {
     // subscribe the project's active router and listen
     // for changes. Recompute the match if any updates get
     // pushed
-    const listener = (matchResults: MatchResults) => {
-      this.match = matchResults;
-      return new Promise((resolve) => {
-        thisRoute.componentDidRerender = resolve;
+
+    if (this.group) {
+      const listener = (matchResults: MatchResults) => {
+        this.match = matchResults;
+        return new Promise((resolve) => {
+          thisRoute.componentDidRerender = resolve;
+        });
+      }
+
+      this.unsubscribe = this.subscribeGroupMember({
+        isMatch: this.getMatch.bind(this),
+        listener,
+        groupId: this.group,
+        groupIndex: this.groupIndex
       });
     }
-    this.unsubscribe = this.activeRouter.subscribe({
-      isMatch: this.computeMatch.bind(this),
-      listener,
-      groupId: this.group,
-      groupIndex: this.groupIndex
-    });
   }
 
   componentDidUnload() {
-    // be sure to unsubscribe to the router so that we don't
-    // get any memory leaks
-    this.unsubscribe();
+    if (this.group) {
+      // be sure to unsubscribe to the router so that we don't
+      // get any memory leaks
+      this.unsubscribe();
+    }
   }
 
   componentDidUpdate() {
@@ -106,13 +122,12 @@ export class Route {
   }
 
   scrollTo() {
-    const history: RouterHistory = this.activeRouter.get('history');
-    if (this.scrollTopOffset == null || !history || this.isServer) {
+    if (this.scrollTopOffset == null || !this.history || this.isServer) {
       return;
     }
-    if (history.action === 'POP' && history.location.scrollPosition != null) {
+    if (this.history.action === 'POP' && this.history.location.scrollPosition != null) {
       return this.queue.write(function() {
-        window.scrollTo(history.location.scrollPosition[0], history.location.scrollPosition[1]);
+        window.scrollTo(this.history.location.scrollPosition[0], this.history.location.scrollPosition[1]);
       });
     }
     // read a frame to let things measure correctly
@@ -125,7 +140,7 @@ export class Route {
   }
 
   hostData() {
-    if (!this.activeRouter || !this.match || (this.group && !this.activeInGroup)) {
+    if (!this.match || (this.group && !this.activeInGroup)) {
       return {
         style: {
           display: 'none'
@@ -137,7 +152,7 @@ export class Route {
   render() {
     // If there is no activeRouter then do not render
     // Check if this route is in the matching URL (for example, a parent route)
-    if (!this.activeRouter || !this.match) {
+    if (!this.match) {
       return null;
     }
 
@@ -146,7 +161,7 @@ export class Route {
     // current match data including params
     const childProps = {
       ...this.componentProps,
-      history: this.activeRouter.get('history') as RouterHistory,
+      history: this.history,
       match: this.match
     };
 
@@ -168,3 +183,9 @@ export class Route {
     }
   }
 }
+
+ActiveRouter.injectProps(Route, [
+  'location',
+  'history',
+  'subscribeGroupMember'
+]);

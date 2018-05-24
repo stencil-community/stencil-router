@@ -478,6 +478,7 @@ declare global {
     interface StencilRouteSwitch {
       'createSubscriptionGroup': (groupId: string, groupSize: number) => void;
       'group': string;
+      'scrollTopOffset': number;
     }
   }
 
@@ -502,6 +503,7 @@ declare global {
     export interface StencilRouteSwitchAttributes extends HTMLAttributes {
       'createSubscriptionGroup'?: (groupId: string, groupSize: number) => void;
       'group'?: string;
+      'scrollTopOffset'?: number;
     }
   }
 }

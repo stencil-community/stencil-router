@@ -15,20 +15,20 @@ function getUniqueId() {
 export class RouteSwitch {
   @Element() el: HTMLStencilElement;
   @Prop() group: string = getUniqueId();
+  @Prop() scrollTopOffset: number = null;
   @Prop() createSubscriptionGroup: (groupId: string, groupSize: number) => void;
 
   componentWillLoad() {
+    this.el.setAttribute('group', this.group);
+
     const childArray = Array.from(this.el.children);
     this.createSubscriptionGroup(this.group, childArray.length);
 
     childArray.forEach((childElement: HTMLStencilRouteElement, index: number) => {
       childElement.group = this.group;
       childElement.groupIndex = index;
+      childElement.scrollTopOffset = this.scrollTopOffset;
     });
-  }
-
-  hostData() {
-    this.el.setAttribute('group', this.group);
   }
 
   render() {

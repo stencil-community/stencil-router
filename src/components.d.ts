@@ -471,6 +471,41 @@ declare global {
   }
 }
 
+
+declare global {
+
+  namespace StencilComponents {
+    interface StencilRouteSwitch {
+      'createSubscriptionGroup': (groupId: string, groupSize: number) => void;
+      'group': string;
+    }
+  }
+
+  interface HTMLStencilRouteSwitchElement extends StencilComponents.StencilRouteSwitch, HTMLStencilElement {}
+
+  var HTMLStencilRouteSwitchElement: {
+    prototype: HTMLStencilRouteSwitchElement;
+    new (): HTMLStencilRouteSwitchElement;
+  };
+  interface HTMLElementTagNameMap {
+    'stencil-route-switch': HTMLStencilRouteSwitchElement;
+  }
+  interface ElementTagNameMap {
+    'stencil-route-switch': HTMLStencilRouteSwitchElement;
+  }
+  namespace JSX {
+    interface IntrinsicElements {
+      'stencil-route-switch': JSXElements.StencilRouteSwitchAttributes;
+    }
+  }
+  namespace JSXElements {
+    export interface StencilRouteSwitchAttributes extends HTMLAttributes {
+      'createSubscriptionGroup'?: (groupId: string, groupSize: number) => void;
+      'group'?: string;
+    }
+  }
+}
+
 declare global { namespace JSX { interface StencilJSX {} } }
 
 export declare function defineCustomElements(window: any): void;

@@ -1,10 +1,10 @@
 import { Listener, RouteSubscription, MatchResults, LocationSegments } from './interfaces';
 import { shallowEqual } from '../utils/shallow-equal';
 
+
 function addListener(location: LocationSegments, listeners: RouteSubscription[], routeSubscription: RouteSubscription) {
   const match = routeSubscription.isMatch(location.pathname);
   routeSubscription.lastMatch = match;
-  routeSubscription.listener(match);
 
   listeners.push(routeSubscription);
   listeners.sort((a: RouteSubscription, b: RouteSubscription) => {

@@ -1,56 +1,43 @@
 import uuidv4 from '../../utils/uuid';
+import { Component, Prop, Element } from '@stencil/core';
+import ActiveRouter from '../../global/active-router';
 
-export interface VNode {
-  vtag?: string | number | Function;
-  vkey?: string | number;
-  vtext?: string;
-  vchildren?: VNode[];
-  vattrs?: any;
-  vname?: string;
-  ishost?: boolean;
-  isSlotFallback?: boolean;
-  isSlotReference?: boolean;
-}
-export interface ComponentProps {
-  children?: any[];
-  key?: string | number | any;
-}
-export interface FunctionalUtilities {
-  getAttributes: (vnode: VNode) => any;
-  replaceAttributes: (vnode: VNode, attributes: any) => void;
-}
-export interface FunctionalComponent<PropsType> {
-  (props?: PropsType & ComponentProps, utils?: FunctionalUtilities): VNode;
-}
-
-export interface ComponentProps {
-  scrollTopOffset?: number;
-}
-
-export const RouterSwitch: FunctionalComponent<ComponentProps> = ({ children, scrollTopOffset }, util) => {
-
-  let group: string;
+function getUniqueId() {
   if (window.crypto) {
-    group = uuidv4();
-  } else {
-    group = (Math.random() * 10e16).toString();
+    return uuidv4();
+  }
+  return (Math.random() * 10e16).toString();
+}
+
+@Component({
+  tag: 'stencil-route-switch'
+})
+export class RouteSwitch {
+  @Element() el: HTMLStencilElement;
+  @Prop() group: string = getUniqueId();
+  @Prop() createSubscriptionGroup: (groupId: string, groupSize: number) => void;
+
+  componentWillLoad() {
+    const childArray = Array.from(this.el.children);
+    this.createSubscriptionGroup(this.group, childArray.length);
+
+    childArray.forEach((childElement: HTMLStencilRouteElement, index: number) => {
+      childElement.group = this.group;
+      childElement.groupIndex = index;
+    });
   }
 
-  const chil = children
-    .map((child: VNode, groupIndex: number) => {
-      const currentAttributes = util.getAttributes(child);
-      util.replaceAttributes(child, {
-        ...currentAttributes,
-        scrollTopOffset,
-        group,
-        groupIndex
-      });
-      return child;
-    });
+  hostData() {
+    this.el.setAttribute('group', this.group);
+  }
 
-  return (
-    <div>
-      { chil }
-    </div>
-  )
-};
+  render() {
+    return (
+      <slot/>
+    );
+  }
+}
+
+ActiveRouter.injectProps(RouteSwitch, [
+  'createSubscriptionGroup'
+]);

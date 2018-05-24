@@ -2,7 +2,7 @@ import { Component, Prop, State, Element, Watch } from '@stencil/core';
 import { matchPath } from '../../utils/match-path';
 import { RouterHistory, Listener, LocationSegments, MatchResults, RouteSubscription } from '../../global/interfaces';
 import { QueueApi } from '@stencil/core/dist/declarations';
-import ActiveRouter from '../../global/active-router'
+import ActiveRouter from '../../global/active-router';
 
 /**
   * @name Route
@@ -40,6 +40,9 @@ export class Route {
   componentDidRerender: Function | undefined;
   scrollOnNextRender: boolean = false;
 
+  componentWillLoad() {
+    this.joinGroup();
+  }
 
   // Identify if the current route is a match.
   @Watch('location')
@@ -57,7 +60,8 @@ export class Route {
     });
   }
 
-  componentWillLoad() {
+  @Watch('group')
+  joinGroup() {
     const thisRoute = this;
     // subscribe the project's active router and listen
     // for changes. Recompute the match if any updates get
@@ -81,7 +85,7 @@ export class Route {
   }
 
   componentDidUnload() {
-    if (this.group) {
+    if (this.unsubscribe) {
       // be sure to unsubscribe to the router so that we don't
       // get any memory leaks
       this.unsubscribe();
@@ -89,7 +93,7 @@ export class Route {
   }
 
   componentDidUpdate() {
-    if (this.componentDidRerender) {
+    if (this.match && this.componentDidRerender) {
       // After route component has rendered then check if its child has.
       const childElement = this.el.firstElementChild as HTMLStencilElement;
       if (childElement && childElement.componentOnReady) {
@@ -110,7 +114,7 @@ export class Route {
         this.scrollOnNextRender = this.activeInGroup;
       }
 
-    } else if (this.scrollOnNextRender) {
+    } else if (this.match && this.scrollOnNextRender) {
       // If this is the new active route in a group and it is now active then scroll
       this.scrollTo();
       this.scrollOnNextRender = false;

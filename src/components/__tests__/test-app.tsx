@@ -1,5 +1,4 @@
 import { Component } from '@stencil/core';
-import { RouterSwitch } from '../switch/switch';
 
 
 const PrivateRoute = ({ component, ...props}: { [key: string]: any}) => (
@@ -36,8 +35,7 @@ export class TestApp {
           <li><stencil-route-link anchorTabIndex="1" url="/demo7/">Demo7 Link</stencil-route-link></li>
           <stencil-route-link custom="li" url="/demo8/">Demo8 Link</stencil-route-link>
         </ul>
-        <stencil-router-scroll-top>
-        <RouterSwitch>
+        <stencil-route-switch>
           <stencil-route url="/" exact={true} routeRender={
             (props: { [key: string]: any}) => {
               props;
@@ -107,8 +105,7 @@ export class TestApp {
               return <span>The route is not found</span>;
             }
           }></stencil-route>
-        </RouterSwitch>
-        </stencil-router-scroll-top>
+        </stencil-route-switch>
       </stencil-router>
     );
   }

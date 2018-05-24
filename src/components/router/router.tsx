@@ -33,6 +33,7 @@ export class Router {
   @State() history: RouterHistory;
 
   asyncListeners: RouteSubscription[] = [];
+  asyncGroups: { [groupId: string]: number } = {};
 
   componentWillLoad() {
     this.history = HISTORIES[this.historyType]();
@@ -64,7 +65,17 @@ export class Router {
       root: this.root,
       history: this.history,
       subscribeGroupMember: (routeSubscription: RouteSubscription) => {
-        return subscribeGroupMember(this.location, this.asyncListeners, routeSubscription);
+        subscribeGroupMember(this.location, this.asyncListeners, routeSubscription);
+        const currentGroupLength = this.asyncListeners
+          .filter(l => l.groupId === routeSubscription.groupId)
+          .length;
+
+        if (currentGroupLength === this.asyncGroups[routeSubscription.groupId]) {
+          dispatchToGroupMembers(location, this.asyncListeners);
+        }
+      },
+      createSubscriptionGroup: (groupId: string, groupSize: number) => {
+        this.asyncGroups[groupId] = groupSize;
       }
     };
 

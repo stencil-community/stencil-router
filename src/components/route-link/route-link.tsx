@@ -40,19 +40,19 @@ export class RouteLink {
   @State() match: MatchResults | null = null;
 
   componentWillLoad() {
-    if (this.location) {
-      this.computeMatch();
-    }
+    this.computeMatch();
   }
 
   // Identify if the current route is a match.
   @Watch('location')
   computeMatch() {
-    this.match = matchPath(this.location.pathname, {
-      path: this.urlMatch || this.url,
-      exact: this.exact,
-      strict: this.strict
-    });
+    if (this.location) {
+      this.match = matchPath(this.location.pathname, {
+        path: this.urlMatch || this.url,
+        exact: this.exact,
+        strict: this.strict
+      });
+    }
   }
 
   handleClick(e: MouseEvent) {

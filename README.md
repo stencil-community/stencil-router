@@ -5,12 +5,12 @@ A simple router, inspired by React Router v4, for Stencil apps and vanilla Web C
 
 ```jsx
 <stencil-router>
-    <RouterSwitch>
-        <stencil-route url="/" component="landing-page" exact={true} />
-        <stencil-route url="/demos" component="demos-page" />
-        <stencil-route url="/other" component="other-page" />
-        <stencil-route component="page-not-found" />
-    </RouterSwitch>
+  <stencil-route-switch scrollTopOffset={0}>
+    <stencil-route url="/" component="landing-page" exact={true} />
+    <stencil-route url="/demos" component="demos-page" />
+    <stencil-route url="/other" component="other-page" />
+    <stencil-route component="page-not-found" />
+  </stencil-route-switch>
 </stencil-router>
 ```
 
@@ -19,6 +19,13 @@ A simple router, inspired by React Router v4, for Stencil apps and vanilla Web C
 - **stencil-router**
 
   You should have one single stencil-router component in your project.  This component controls all interactions with the browser history and it aggregates updates through an event system.
+
+- **stencil-route-switch**
+
+  Use the `stencil-route-switch` anytime you have multiple routes that you would like to group together. This is useful for top level navigation of an app where you will only ever want one route to match. This is also required when you are defining default not found pages. An example of its usage can be seen above.
+
+  *properties**:
+  - **scrollTopOffset** (*number*): if you would like the pages to scroll to a specific location on route change then set this property.  By default it does not scroll, but in most cases you will likely want to set it to `0` so that it scrolls back to the top of the content on page transition.
 
 - **stencil-route**
   

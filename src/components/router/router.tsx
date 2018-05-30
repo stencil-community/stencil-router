@@ -33,7 +33,7 @@ export class Router {
   @State() history: RouterHistory;
 
   asyncListeners: RouteSubscription[] = [];
-  asyncGroups: { [groupId: string]: number } = {};
+  asyncGroups: { [groupId: string]: any } = {};
 
   componentWillLoad() {
     this.history = HISTORIES[this.historyType]();
@@ -70,12 +70,18 @@ export class Router {
           .filter(l => l.groupId === routeSubscription.groupId)
           .length;
 
-        if (currentGroupLength === this.asyncGroups[routeSubscription.groupId]) {
+        this.asyncGroups[routeSubscription.groupId] = this.asyncGroups[routeSubscription.groupId] || {};
+        this.asyncGroups[routeSubscription.groupId].currentSize = currentGroupLength;
+        if (this.asyncGroups[routeSubscription.groupId].currentSize === this.asyncGroups[routeSubscription.groupId].size) {
           dispatchToGroupMembers(location, this.asyncListeners);
         }
       },
       createSubscriptionGroup: (groupId: string, groupSize: number) => {
-        this.asyncGroups[groupId] = groupSize;
+        this.asyncGroups[groupId] = this.asyncGroups[groupId] || {};
+        this.asyncGroups[groupId].size = groupSize;
+        if (this.asyncGroups[groupId].currentSize === this.asyncGroups[groupId].size) {
+          dispatchToGroupMembers(location, this.asyncListeners);
+        }
       }
     };
 

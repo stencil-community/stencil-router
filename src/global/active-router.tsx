@@ -1,7 +1,7 @@
 import { createProviderConsumer } from '@stencil/state-tunnel';
 import { LocationSegments, RouterHistory } from './interfaces';
 
-export interface State {
+export interface ActiveRouterState {
   location: LocationSegments;
   titleSuffix: string;
   root: string;
@@ -10,7 +10,7 @@ export interface State {
   createSubscriptionGroup: (groupId: string, groupSize: number) => void;
 }
 
-export default createProviderConsumer<State>({
+export default createProviderConsumer<ActiveRouterState>({
   location: null,
   titleSuffix: '',
   root: '/',

@@ -6,7 +6,7 @@ function getUniqueId() {
   if (window.crypto) {
     return uuidv4();
   }
-  return (Math.random() * 10e16).toString();
+  return (Math.random() * 10e16).toString().match(/.{4}/g).join('-');
 }
 
 @Component({

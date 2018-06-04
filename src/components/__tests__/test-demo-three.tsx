@@ -34,7 +34,11 @@ export class TestDemoThree {
             <pre>
               <b>props.history.location</b>:<br/>
               {JSON.stringify(this.history.location, null, 2)}
-            </pre>
+            </pre>,
+            <pre>
+              <b>props.history.location.state</b>:<br/>
+              {JSON.stringify(this.history.location.state, null, 2)}
+            </pre>,
           ];
         }
       }></stencil-route>,

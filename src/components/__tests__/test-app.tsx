@@ -66,18 +66,10 @@ export class TestApp {
             }
           }></stencil-route>
 
-          <stencil-route url="/demo3" routeRender={
-            (props: { [key: string]: any}) => {
-              props;
-              return (
-                <div>
-                  <stencil-router-scroll-top/>
-                  <stencil-route-title title="Demo 3"></stencil-route-title>
-                  <span>rendering /demo 3</span>
-                </div>
-              );
-            }
-          }></stencil-route>
+          <stencil-route
+            url="/demo3"
+            component="test-demo-three"
+          ></stencil-route>
 
           <stencil-route
             url="/demo4"

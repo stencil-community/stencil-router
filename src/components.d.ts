@@ -74,6 +74,7 @@ declare global {
   namespace StencilComponents {
     interface TestDeepComponent {
       'history': RouterHistory;
+      'location': LocationSegments;
     }
   }
 
@@ -97,6 +98,7 @@ declare global {
   namespace JSXElements {
     export interface TestDeepComponentAttributes extends HTMLAttributes {
       'history'?: RouterHistory;
+      'location'?: LocationSegments;
     }
   }
 }

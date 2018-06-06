@@ -7,7 +7,7 @@ import { RouterHistory } from '../../global/interfaces';
 })
 export class TestDeepComponent {
 
-  @Element() el: HTMLStencilElement;
+  @Element() blue: HTMLStencilElement;
   @Prop() history: RouterHistory;
 
   render() {

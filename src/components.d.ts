@@ -72,6 +72,39 @@ declare global {
 declare global {
 
   namespace StencilComponents {
+    interface TestDeepComponent {
+      'history': RouterHistory;
+    }
+  }
+
+  interface HTMLTestDeepComponentElement extends StencilComponents.TestDeepComponent, HTMLStencilElement {}
+
+  var HTMLTestDeepComponentElement: {
+    prototype: HTMLTestDeepComponentElement;
+    new (): HTMLTestDeepComponentElement;
+  };
+  interface HTMLElementTagNameMap {
+    'test-deep-component': HTMLTestDeepComponentElement;
+  }
+  interface ElementTagNameMap {
+    'test-deep-component': HTMLTestDeepComponentElement;
+  }
+  namespace JSX {
+    interface IntrinsicElements {
+      'test-deep-component': JSXElements.TestDeepComponentAttributes;
+    }
+  }
+  namespace JSXElements {
+    export interface TestDeepComponentAttributes extends HTMLAttributes {
+      'history'?: RouterHistory;
+    }
+  }
+}
+
+
+declare global {
+
+  namespace StencilComponents {
     interface TestDemoFour {
       'history': RouterHistory;
       'match': MatchResults;

@@ -31,10 +31,7 @@ export class TestDemoFour {
           <b>this.match</b>:<br/>
           {JSON.stringify(this.match, null, 2)}
         </pre>
-        <pre>
-          <b>this.history.location</b>:<br/>
-          {JSON.stringify(this.history.location, null, 2)}
-        </pre>
+        <test-deep-component/>
       </div>
     );
   }

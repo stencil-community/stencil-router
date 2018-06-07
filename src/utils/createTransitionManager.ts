@@ -1,3 +1,5 @@
+// Adapted from the https://github.com/ReactTraining/history and converted to TypeScript
+
 import { warning } from './log';
 import { LocationSegments } from '../global/interfaces';
 

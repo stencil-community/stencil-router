@@ -1,3 +1,5 @@
+// Adapted from the https://github.com/ReactTraining/history and converted to TypeScript
+
 import { createLocation, locationsAreEqual } from './location-utils';
 import { RouterHistory, LocationSegments } from '../global/interfaces';
 import { invariant, warning } from './log';

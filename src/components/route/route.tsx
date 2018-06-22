@@ -19,7 +19,7 @@ export class Route {
 
   @Prop() group: string | null = null;
   @Prop() groupMatch: MatchResults | null = null;
-  @Prop() componentUpdated: (callback: () => void) => void;
+  @Prop() componentUpdated: (callback: () => void) => void = null;
   @State() match: MatchResults | null = null;
 
   unsubscribe: Listener = () => { return; };
@@ -66,7 +66,7 @@ export class Route {
   }
 
   async componentDidUpdate() {
-    if (this.componentUpdated) {
+    if (typeof this.componentUpdated === 'function') {
 
       // Wait for all children to complete rendering before calling componentUpdated
       await Promise.all(
@@ -76,11 +76,13 @@ export class Route {
           }
           return Promise.resolve(element);
         })
-      )
+      );
 
       // After all children have completed then tell switch
       // the provided callback will get executed after this route is in view
-      this.componentUpdated(this.scrollTo.bind(this));
+      if (typeof this.componentUpdated === 'function') {
+        this.componentUpdated(this.scrollTo.bind(this));
+      }
     }
   }
 

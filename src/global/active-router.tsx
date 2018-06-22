@@ -6,15 +6,11 @@ export interface ActiveRouterState {
   titleSuffix: string;
   root: string;
   history: RouterHistory;
-  subscribeGroupMember: any;
-  createSubscriptionGroup: (groupId: string, groupSize: number) => void;
 }
 
 export default createProviderConsumer<ActiveRouterState>({
   location: null,
   titleSuffix: '',
   root: '/',
-  history: null,
-  subscribeGroupMember: () => {},
-  createSubscriptionGroup: () => {}
+  history: null
 });

@@ -4,15 +4,9 @@ export interface ActiveRouter {
 }
 
 export interface RouteSubscription {
-  isMatch: (pathname: string) => MatchResults;
-  listener: (results: MatchResults) => void | Promise<any>;
-  lastMatch?: MatchResults;
+  isMatch: boolean;
   groupId?: string;
   groupIndex?: number;
-}
-
-export interface Route {
-
 }
 
 export type HistoryType = 'browser' | 'hash';

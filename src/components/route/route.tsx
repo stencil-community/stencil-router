@@ -1,6 +1,6 @@
 import { Component, Prop, State, Element, Watch } from '@stencil/core';
 import { matchPath } from '../../utils/match-path';
-import { RouterHistory, Listener, LocationSegments, MatchResults, RouteSubscription } from '../../global/interfaces';
+import { RouterHistory, Listener, LocationSegments, MatchResults } from '../../global/interfaces';
 import { QueueApi } from '@stencil/core/dist/declarations';
 import ActiveRouter from '../../global/active-router';
 
@@ -17,107 +17,70 @@ export class Route {
   @Prop({ context: 'queue'}) queue: QueueApi;
   @Prop({ context: 'isServer' }) private isServer: boolean;
 
+  @Prop() group: string | null = null;
+  @Prop() groupMatch: MatchResults | null = null;
+  @Prop() componentUpdated: (callback: () => void) => void;
+  @State() match: MatchResults | null = null;
+
   unsubscribe: Listener = () => { return; };
 
   @Prop() url: string | string[];
   @Prop() component: string;
   @Prop() componentProps: { [key: string]: any } = {};
   @Prop() exact: boolean = false;
-  @Prop() group: string = null;
-  @Prop() groupIndex: number = null;
   @Prop() routeRender: Function = null;
   @Prop() scrollTopOffset: number = null;
 
   @Prop() location: LocationSegments;
   @Prop() history: RouterHistory;
-  @Prop() subscribeGroupMember: (routeSubscription: RouteSubscription) => () => void
 
-  @State() match: MatchResults | null = null;
-  @State() activeInGroup: boolean = false;
 
-  @Element() el: HTMLStencilElement;
+  @Element() el: HTMLStencilRouteElement;
 
   componentDidRerender: Function | undefined;
   scrollOnNextRender: boolean = false;
 
-  componentWillLoad() {
-    this.joinGroup();
+  async componentWillLoad() {
+    if (this.groupMatch) {
+      this.groupMatchChanged(this.groupMatch);
+    }
+  }
+
+  @Watch('groupMatch')
+  groupMatchChanged(groupMatchValue: MatchResults) {
+    this.match = groupMatchValue;
   }
 
   // Identify if the current route is a match.
   @Watch('location')
   computeMatch() {
-    if (!this.group) {
-      this.match = this.getMatch(this.location.pathname);
+    // If you are in a group then your switch handles this.
+    if (this.group) {
+      return;
     }
-  }
-
-  getMatch(pathname: string) {
-    return matchPath(pathname, {
+    this.match = matchPath(this.location.pathname, {
       path: this.url,
       exact: this.exact,
       strict: true
     });
   }
 
-  @Watch('group')
-  joinGroup() {
-    const thisRoute = this;
-    // subscribe the project's active router and listen
-    // for changes. Recompute the match if any updates get
-    // pushed
+  async componentDidUpdate() {
+    if (this.componentUpdated) {
 
-    if (this.group) {
-      const listener = (matchResults: MatchResults) => {
-        this.match = matchResults;
-        return new Promise((resolve) => {
-          thisRoute.componentDidRerender = resolve;
-        });
-      }
-
-      this.unsubscribe = this.subscribeGroupMember({
-        isMatch: this.getMatch.bind(this),
-        listener,
-        groupId: this.group,
-        groupIndex: this.groupIndex
-      });
-    }
-  }
-
-  componentDidUnload() {
-    if (this.unsubscribe) {
-      // be sure to unsubscribe to the router so that we don't
-      // get any memory leaks
-      this.unsubscribe();
-    }
-  }
-
-  componentDidUpdate() {
-    if (this.match && this.componentDidRerender) {
-      // After route component has rendered then check if its child has.
-      const childElement = this.el.firstElementChild as HTMLStencilElement;
-      if (childElement && childElement.componentOnReady) {
-
-        childElement.componentOnReady().then(() => {
-          if (this.componentDidRerender) {
-            this.componentDidRerender();
+      // Wait for all children to complete rendering before calling componentUpdated
+      await Promise.all(
+        Array.from(this.el.children).map((element:HTMLStencilElement) => {
+          if (element.componentOnReady) {
+            return element.componentOnReady();
           }
-          this.componentDidRerender = undefined;
-          this.activeInGroup = !!this.match;
-          this.scrollOnNextRender = this.activeInGroup;
-        });
-      } else {
-        // If there is no child then resolve the Promise immediately
-        this.componentDidRerender();
-        this.componentDidRerender = undefined;
-        this.activeInGroup = !!this.match;
-        this.scrollOnNextRender = this.activeInGroup;
-      }
+          return Promise.resolve(element);
+        })
+      )
 
-    } else if (this.match && this.scrollOnNextRender) {
-      // If this is the new active route in a group and it is now active then scroll
-      this.scrollTo();
-      this.scrollOnNextRender = false;
+      // After all children have completed then tell switch
+      // the provided callback will get executed after this route is in view
+      this.componentUpdated(this.scrollTo.bind(this));
     }
   }
 
@@ -125,6 +88,7 @@ export class Route {
     if (this.scrollTopOffset == null || !this.history || this.isServer) {
       return;
     }
+
     if (this.history.action === 'POP' && this.history.location.scrollPosition != null) {
       return this.queue.write(() => {
         window.scrollTo(this.history.location.scrollPosition[0], this.history.location.scrollPosition[1]);
@@ -134,16 +98,6 @@ export class Route {
     return this.queue.write(() => {
       window.scrollTo(0, this.scrollTopOffset);
     });
-  }
-
-  hostData() {
-    if (!this.match || (this.group && !this.activeInGroup)) {
-      return {
-        style: {
-          display: 'none'
-        }
-      };
-    }
   }
 
   render() {
@@ -183,6 +137,5 @@ export class Route {
 
 ActiveRouter.injectProps(Route, [
   'location',
-  'history',
-  'subscribeGroupMember'
+  'history'
 ]);

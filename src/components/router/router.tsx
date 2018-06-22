@@ -4,8 +4,6 @@ import createHashHistory from '../../utils/createHashHistory';
 import { LocationSegments, HistoryType, RouterHistory, RouteSubscription } from '../../global/interfaces';
 import ActiveRouter from '../../global/active-router';
 
-import { subscribeGroupMember, dispatchToGroupMembers } from '../../global/router';
-
 
 const HISTORIES: { [key in HistoryType]: Function } = {
   'browser': createHistory,
@@ -40,7 +38,6 @@ export class Router {
 
     this.history.listen(async (location: LocationSegments) => {
       location = this.getLocation(location);
-      await dispatchToGroupMembers(location, this.asyncListeners);
       this.location = location;
     });
     this.location = this.getLocation(this.history.location);
@@ -63,26 +60,7 @@ export class Router {
       location: this.location,
       titleSuffix: this.titleSuffix,
       root: this.root,
-      history: this.history,
-      subscribeGroupMember: (routeSubscription: RouteSubscription) => {
-        subscribeGroupMember(this.location, this.asyncListeners, routeSubscription);
-        const currentGroupLength = this.asyncListeners
-          .filter(l => l.groupId === routeSubscription.groupId)
-          .length;
-
-        this.asyncGroups[routeSubscription.groupId] = this.asyncGroups[routeSubscription.groupId] || {};
-        this.asyncGroups[routeSubscription.groupId].currentSize = currentGroupLength;
-        if (this.asyncGroups[routeSubscription.groupId].currentSize === this.asyncGroups[routeSubscription.groupId].size) {
-          dispatchToGroupMembers(location, this.asyncListeners);
-        }
-      },
-      createSubscriptionGroup: (groupId: string, groupSize: number) => {
-        this.asyncGroups[groupId] = this.asyncGroups[groupId] || {};
-        this.asyncGroups[groupId].size = groupSize;
-        if (this.asyncGroups[groupId].currentSize === this.asyncGroups[groupId].size) {
-          dispatchToGroupMembers(location, this.asyncListeners);
-        }
-      }
+      history: this.history
     };
 
     return (

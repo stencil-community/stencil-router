@@ -15,6 +15,10 @@ export class TestDemoFour {
     this.history.push(linkLocation, { 'blue': 'blue'});
   }
 
+  componentDidLoad() {
+    console.log('demoFour DidLoad');
+  }
+
   render() {
     const linkLocation = '/demo3/page1';
 

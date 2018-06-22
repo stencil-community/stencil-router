@@ -11,6 +11,10 @@ export class TestDeepComponent {
   @Prop() history: RouterHistory;
   @Prop() location: LocationSegments;
 
+  componentDidUpdate() {
+    console.log('deepchild DidUpdate');
+  }
+
   render() {
     return (
       <div>

@@ -1,6 +1,6 @@
 import { Component, Prop, State, Element, Watch } from '@stencil/core';
-import { matchPath } from '../../utils/match-path';
-import { RouterHistory, Listener, LocationSegments, MatchResults, RouteViewOptions } from '../../global/interfaces';
+import { matchPath, matchesAreEqual } from '../../utils/match-path';
+import { RouterHistory, Listener, LocationSegments, MatchResults, RouteViewOptions, HistoryType } from '../../global/interfaces';
 import ActiveRouter from '../../global/active-router';
 
 /**
@@ -30,16 +30,20 @@ export class Route {
 
   @Prop() location: LocationSegments;
   @Prop() history: RouterHistory;
+  @Prop() historyType: HistoryType;
 
 
   @Element() el: HTMLStencilRouteElement;
 
   componentDidRerender: Function | undefined;
   scrollOnNextRender: boolean = false;
+  previousMatch: MatchResults = null;
 
   // Identify if the current route is a match.
   @Watch('location')
   computeMatch() {
+    this.previousMatch = this.match;
+
     if (!this.group) {
       return this.match = matchPath(this.location.pathname, {
         path: this.url,
@@ -48,7 +52,8 @@ export class Route {
       });
     }
 
-    // If you are in a group then your switch handles this.
+    // If this already matched then lets check if it still matches the
+    // updated location.
     if (this.groupMatch) {
       return this.match = matchPath(this.location.pathname, {
         path: this.url,
@@ -57,6 +62,7 @@ export class Route {
       });
     }
   }
+
 
   componentDidUpdate() {
     // Wait for all children to complete rendering before calling componentUpdated
@@ -76,8 +82,9 @@ export class Route {
           scrollTopOffset: this.scrollTopOffset
         });
 
-        // If this is an independent route and it matches then routes have updated.
-      } else if (this.match) {
+      // If this is an independent route and it matches then routes have updated.
+      // If the only change to location is a hash change then do not scroll.
+      } else if (this.match && !matchesAreEqual(this.match, this.previousMatch)) {
         this.routeViewsUpdated({
           scrollTopOffset: this.scrollTopOffset
         });
@@ -123,5 +130,6 @@ export class Route {
 ActiveRouter.injectProps(Route, [
   'location',
   'history',
+  'historyType',
   'routeViewsUpdated'
 ]);

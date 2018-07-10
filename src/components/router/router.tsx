@@ -79,6 +79,7 @@ export class Router {
 
   render() {
     const state: ActiveRouterState = {
+      historyType: this.historyType,
       location: this.location,
       titleSuffix: this.titleSuffix,
       root: this.root,

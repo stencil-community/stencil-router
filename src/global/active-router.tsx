@@ -1,8 +1,9 @@
 import { createProviderConsumer } from '@stencil/state-tunnel';
-import { LocationSegments, RouterHistory, RouteViewOptions } from './interfaces';
+import { LocationSegments, RouterHistory, RouteViewOptions, HistoryType } from './interfaces';
 
 
 export interface ActiveRouterState {
+  historyType: HistoryType;
   location: LocationSegments;
   titleSuffix: string;
   root: string;
@@ -11,6 +12,7 @@ export interface ActiveRouterState {
 }
 
 export default createProviderConsumer<ActiveRouterState>({
+  historyType: 'browser',
   location: null,
   titleSuffix: '',
   root: '/',

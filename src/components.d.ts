@@ -430,6 +430,7 @@ declare global {
       'group': string | null;
       'groupMatch': MatchResults | null;
       'history': RouterHistory;
+      'historyType': HistoryType;
       'location': LocationSegments;
       'routeRender': Function;
       'routeViewsUpdated': (options: RouteViewOptions) => void;
@@ -464,6 +465,7 @@ declare global {
       'group'?: string | null;
       'groupMatch'?: MatchResults | null;
       'history'?: RouterHistory;
+      'historyType'?: HistoryType;
       'location'?: LocationSegments;
       'routeRender'?: Function;
       'routeViewsUpdated'?: (options: RouteViewOptions) => void;

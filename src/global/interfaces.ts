@@ -28,6 +28,8 @@ export interface LocationSegments {
   scrollPosition?: [number, number];
 }
 
+export type LocationSegmentPart = 'pathname' | 'search' | 'hash' | 'state' | 'key';
+
 export interface RouterHistory {
   length: number;
   action: string;

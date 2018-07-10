@@ -3,6 +3,11 @@ export interface ActiveRouter {
   dispatch: (location: LocationSegments, nextListeners: RouteSubscription[]) => void;
 }
 
+
+export interface RouteViewOptions {
+  scrollTopOffset?: number
+}
+
 export interface RouteSubscription {
   isMatch: boolean;
   groupId?: string;

@@ -32,6 +32,7 @@ import {
   LocationSegments,
   MatchResults,
   RouterHistory,
+  RouteViewOptions,
 } from './global/interfaces';
 
 declare global {
@@ -424,13 +425,14 @@ declare global {
     interface StencilRoute {
       'component': string;
       'componentProps': { [key: string]: any };
-      'componentUpdated': (callback: () => void) => void;
+      'componentUpdated': (options: RouteViewOptions) => void;
       'exact': boolean;
       'group': string | null;
       'groupMatch': MatchResults | null;
       'history': RouterHistory;
       'location': LocationSegments;
       'routeRender': Function;
+      'routeViewsUpdated': (options: RouteViewOptions) => void;
       'scrollTopOffset': number;
       'url': string | string[];
     }
@@ -457,13 +459,14 @@ declare global {
     export interface StencilRouteAttributes extends HTMLAttributes {
       'component'?: string;
       'componentProps'?: { [key: string]: any };
-      'componentUpdated'?: (callback: () => void) => void;
+      'componentUpdated'?: (options: RouteViewOptions) => void;
       'exact'?: boolean;
       'group'?: string | null;
       'groupMatch'?: MatchResults | null;
       'history'?: RouterHistory;
       'location'?: LocationSegments;
       'routeRender'?: Function;
+      'routeViewsUpdated'?: (options: RouteViewOptions) => void;
       'scrollTopOffset'?: number;
       'url'?: string | string[];
     }
@@ -477,6 +480,7 @@ declare global {
     interface StencilRouter {
       'historyType': HistoryType;
       'root': string;
+      'scrollTopOffset': number;
       'titleSuffix': string;
     }
   }
@@ -502,6 +506,7 @@ declare global {
     export interface StencilRouterAttributes extends HTMLAttributes {
       'historyType'?: HistoryType;
       'root'?: string;
+      'scrollTopOffset'?: number;
       'titleSuffix'?: string;
     }
   }
@@ -514,6 +519,7 @@ declare global {
     interface StencilRouteSwitch {
       'group': string;
       'location': LocationSegments;
+      'routeViewsUpdated': (options: RouteViewOptions) => void;
       'scrollTopOffset': number;
     }
   }
@@ -539,6 +545,7 @@ declare global {
     export interface StencilRouteSwitchAttributes extends HTMLAttributes {
       'group'?: string;
       'location'?: LocationSegments;
+      'routeViewsUpdated'?: (options: RouteViewOptions) => void;
       'scrollTopOffset'?: number;
     }
   }

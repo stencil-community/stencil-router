@@ -1,7 +1,7 @@
 import uuidv4 from '../../utils/uuid';
 import { Component, Prop, Element, Watch } from '@stencil/core';
 import { QueueApi } from '@stencil/core/dist/declarations';
-import { LocationSegments, MatchResults } from '../../global/interfaces';
+import { LocationSegments, MatchResults, RouteViewOptions } from '../../global/interfaces';
 import ActiveRouter from '../../global/active-router';
 import { matchPath } from '../../utils/match-path';
 
@@ -9,7 +9,7 @@ interface Child {
   el: HTMLStencilRouteElement,
   match: MatchResults
 }
-type ComponentUpdatedResolve = (callback: () => void) => void;
+type ComponentUpdatedResolve = (options: RouteViewOptions) => void;
 
 function getUniqueId() {
   if (window.crypto) {
@@ -35,6 +35,7 @@ export class RouteSwitch {
   @Prop({reflectToAttr: true}) group: string = getUniqueId();
   @Prop() scrollTopOffset: number = null;
   @Prop() location: LocationSegments;
+  @Prop() routeViewsUpdated: (options: RouteViewOptions) => void;
 
   activeIndex: number = null;
   subscribers: Child[];
@@ -69,31 +70,35 @@ export class RouteSwitch {
 
     // Set all props on the new active route then wait until it says that it
     // is completed
-
-    const afterViewUpdates = await new Promise((resolve: ComponentUpdatedResolve) => {
+    new Promise((resolve: ComponentUpdatedResolve) => {
       const activeChild = this.subscribers[this.activeIndex];
       activeChild.el.scrollTopOffset = this.scrollTopOffset;
       activeChild.el.group = this.group;
       activeChild.el.groupMatch = activeChild.match;
       activeChild.el.componentUpdated = resolve;
-    });
+    })
+    .then((routeViewUpdatedOptions: RouteViewOptions) => {
+      // After the new active route has completed then update visibility of routes
+      this.queue.write(() => {
+        this.subscribers.forEach((child, index) => {
+          child.el.componentUpdated = null;
 
-    // After the new active route has completed then update visibility of routes
-    this.queue.write(() => {
-      this.subscribers.forEach((child, index) => {
-        child.el.componentUpdated = null;
+          if (index === this.activeIndex) {
+            return child.el.style.display = null;
+          }
 
-        if (index === this.activeIndex) {
-          return child.el.style.display = null;
-        }
+          child.el.scrollTopOffset = this.scrollTopOffset;
+          child.el.group = this.group;
+          child.el.groupMatch = null;
+          child.el.style.display = 'none';
+        });
+      });
 
-        child.el.scrollTopOffset = this.scrollTopOffset;
-        child.el.group = this.group;
-        child.el.groupMatch = null;
-        child.el.style.display = 'none';
+      this.routeViewsUpdated({
+        scrollTopOffset: this.scrollTopOffset,
+        ...routeViewUpdatedOptions
       });
     });
-    afterViewUpdates();
   }
 
   render() {
@@ -104,5 +109,6 @@ export class RouteSwitch {
 }
 
 ActiveRouter.injectProps(RouteSwitch, [
-  'location'
+  'location',
+  'routeViewsUpdated'
 ]);

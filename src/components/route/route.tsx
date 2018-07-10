@@ -1,7 +1,6 @@
 import { Component, Prop, State, Element, Watch } from '@stencil/core';
 import { matchPath } from '../../utils/match-path';
-import { RouterHistory, Listener, LocationSegments, MatchResults } from '../../global/interfaces';
-import { QueueApi } from '@stencil/core/dist/declarations';
+import { RouterHistory, Listener, LocationSegments, MatchResults, RouteViewOptions } from '../../global/interfaces';
 import ActiveRouter from '../../global/active-router';
 
 /**
@@ -14,12 +13,9 @@ import ActiveRouter from '../../global/active-router';
   styleUrl: 'route.css'
 })
 export class Route {
-  @Prop({ context: 'queue'}) queue: QueueApi;
-  @Prop({ context: 'isServer' }) private isServer: boolean;
-
   @Prop() group: string | null = null;
   @Prop() groupMatch: MatchResults | null = null;
-  @Prop() componentUpdated: (callback: () => void) => void = null;
+  @Prop() componentUpdated: (options: RouteViewOptions) => void = null;
   @State() match: MatchResults | null = null;
 
   unsubscribe: Listener = () => { return; };
@@ -30,6 +26,7 @@ export class Route {
   @Prop() exact: boolean = false;
   @Prop() routeRender: Function = null;
   @Prop() scrollTopOffset: number = null;
+  @Prop() routeViewsUpdated: (options: RouteViewOptions) => void;
 
   @Prop() location: LocationSegments;
   @Prop() history: RouterHistory;
@@ -40,65 +37,51 @@ export class Route {
   componentDidRerender: Function | undefined;
   scrollOnNextRender: boolean = false;
 
-  async componentWillLoad() {
-    if (this.groupMatch) {
-      this.groupMatchChanged(this.groupMatch);
-    }
-  }
-
-  @Watch('groupMatch')
-  groupMatchChanged(groupMatchValue: MatchResults) {
-    this.match = groupMatchValue;
-  }
-
   // Identify if the current route is a match.
   @Watch('location')
   computeMatch() {
-    // If you are in a group then your switch handles this.
-    if (this.group) {
-      return;
+    if (!this.group) {
+      return this.match = matchPath(this.location.pathname, {
+        path: this.url,
+        exact: this.exact,
+        strict: true
+      });
     }
-    this.match = matchPath(this.location.pathname, {
-      path: this.url,
-      exact: this.exact,
-      strict: true
-    });
+
+    // If you are in a group then your switch handles this.
+    if (this.groupMatch) {
+      return this.match = matchPath(this.location.pathname, {
+        path: this.url,
+        exact: this.exact,
+        strict: true
+      });
+    }
   }
 
-  async componentDidUpdate() {
-    if (typeof this.componentUpdated === 'function') {
-
-      // Wait for all children to complete rendering before calling componentUpdated
-      await Promise.all(
-        Array.from(this.el.children).map((element:HTMLStencilElement) => {
-          if (element.componentOnReady) {
-            return element.componentOnReady();
-          }
-          return Promise.resolve(element);
-        })
-      );
-
+  componentDidUpdate() {
+    // Wait for all children to complete rendering before calling componentUpdated
+    Promise.all(
+      Array.from(this.el.children).map((element:HTMLStencilElement) => {
+        if (element.componentOnReady) {
+          return element.componentOnReady();
+        }
+        return Promise.resolve(element);
+      })
+    )
+    .then(() => {
       // After all children have completed then tell switch
       // the provided callback will get executed after this route is in view
       if (typeof this.componentUpdated === 'function') {
-        this.componentUpdated(this.scrollTo.bind(this));
+        this.componentUpdated({
+          scrollTopOffset: this.scrollTopOffset
+        });
+
+        // If this is an independent route and it matches then routes have updated.
+      } else if (this.match) {
+        this.routeViewsUpdated({
+          scrollTopOffset: this.scrollTopOffset
+        });
       }
-    }
-  }
-
-  scrollTo() {
-    if (this.scrollTopOffset == null || !this.history || this.isServer) {
-      return;
-    }
-
-    if (this.history.action === 'POP' && this.history.location.scrollPosition != null) {
-      return this.queue.write(() => {
-        window.scrollTo(this.history.location.scrollPosition[0], this.history.location.scrollPosition[1]);
-      });
-    }
-    // okay, the frame has passed. Go ahead and render now
-    return this.queue.write(() => {
-      window.scrollTo(0, this.scrollTopOffset);
     });
   }
 
@@ -139,5 +122,6 @@ export class Route {
 
 ActiveRouter.injectProps(Route, [
   'location',
-  'history'
+  'history',
+  'routeViewsUpdated'
 ]);

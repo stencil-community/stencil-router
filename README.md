@@ -14,9 +14,9 @@ A simple router, inspired by React Router v4, for Stencil apps and vanilla Web C
 </stencil-router>
 ```
 
-Included components and all other information can be found in our [wiki](wiki-link).
+Included components and all other information can be found in our [wiki].
 
-[wiki-link]: https://github.com/ionic-team/stencil-router/wiki
+[wiki]: https://github.com/ionic-team/stencil-router/wiki
 
 [npm-badge]: https://img.shields.io/npm/v/@stencil/router.svg
 [npm-badge-url]: https://www.npmjs.com/package/@stencil/router

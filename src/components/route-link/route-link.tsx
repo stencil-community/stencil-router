@@ -23,7 +23,7 @@ export class RouteLink {
   @Prop() exact: boolean = false;
   @Prop() strict: boolean = true;
 
-  /**
+ /**
    *  Custom tag to use instead of an anchor
    */
   @Prop() custom: string = 'a';
@@ -36,8 +36,15 @@ export class RouteLink {
   @Prop() history: RouterHistory;
   @Prop() location: LocationSegments;
   @Prop() root: string;
+  
+  @Prop() ariaHasPopup: string;
+  @Prop() id: string;
+  @Prop() ariaPosInset: string;
+  @Prop() ariaSetSize: number;
+  @Prop() ariaLabel: string;
 
   @State() match: MatchResults | null = null;
+  
 
   componentWillLoad() {
     this.computeMatch();
@@ -92,8 +99,13 @@ export class RouteLink {
         href: this.url,
         title: this.anchorTitle,
         role: this.anchorRole,
-        tabindex: this.anchorTabIndex
-      }
+        tabindex: this.anchorTabIndex,
+        'aria-haspopup': this.ariaHasPopup,
+        id: this.id,
+        'aria-posinset': this.ariaPosInset,
+        'aria-setsize': this.ariaSetSize,
+        'aria-label': this.ariaLabel
+       }
     }
     return (
       <this.custom {...anchorAttributes}>

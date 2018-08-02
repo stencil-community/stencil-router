@@ -37,10 +37,10 @@ export class RouteLink {
   @Prop() location: LocationSegments;
   @Prop() root: string;
   
-  @Prop() ariaHasPopup: string;
+  @Prop() ariaHaspopup: string;
   @Prop() id: string;
-  @Prop() ariaPosInset: string;
-  @Prop() ariaSetSize: number;
+  @Prop() ariaPosinset: string;
+  @Prop() ariaSetsize: number;
   @Prop() ariaLabel: string;
 
   @State() match: MatchResults | null = null;
@@ -100,10 +100,10 @@ export class RouteLink {
         title: this.anchorTitle,
         role: this.anchorRole,
         tabindex: this.anchorTabIndex,
-        'aria-haspopup': this.ariaHasPopup,
+        'aria-haspopup': this.ariaHaspopup,
         id: this.id,
-        'aria-posinset': this.ariaPosInset,
-        'aria-setsize': this.ariaSetSize,
+        'aria-posinset': this.ariaPosinset,
+        'aria-setsize': this.ariaSetsize,
         'aria-label': this.ariaLabel
        }
     }

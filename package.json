@@ -1,54 +1,7 @@
 {
-  "name": "@stencil/router",
-  "version": "0.2.5",
-  "description": "Stencil Router",
-  "module": "dist/collection/index.js",
-  "main": "dist/index.js",
-  "unpkg": "dist/stencilrouter.js",
-  "types": "dist/types/index.d.ts",
-  "collection": "dist/collection/collection-manifest.json",
-  "files": [
-    "dist/"
-  ],
-  "scripts": {
-    "build": "stencil build",
-    "dev": "sd concurrent \"stencil build --dev --watch\" \"stencil-dev-server\" ",
-    "deploy": "npm run build && np",
-    "serve": "stencil-dev-server",
-    "start": "npm run dev",
-    "test": "jest"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/ionic-team/stencil-router.git"
-  },
-  "dependencies": {
-    "@stencil/state-tunnel": "0.0.7"
-  },
+  "name": "root",
+  "private": true,
   "devDependencies": {
-    "@stencil/core": "^0.10.0",
-    "@stencil/dev-server": "latest",
-    "@stencil/utils": "latest",
-    "@types/jest": "^20.0.8",
-    "jest": "^22.4.3",
-    "np": "^2.16.0",
-    "ts-jest": "^22.4.2"
-  },
-  "author": "Ionic Team",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/ionic-team/stencil-router"
-  },
-  "jest": {
-    "moduleFileExtensions": [
-      "ts",
-      "tsx",
-      "js"
-    ],
-    "transform": {
-      ".(ts|tsx)": "<rootDir>/node_modules/ts-jest/preprocessor.js"
-    },
-    "testRegex": "/__tests__/.*(test|spec)\\.(ts|tsx)$"
-  },
-  "homepage": "https://github.com/ionic-team/stencil-router"
+    "lerna": "^3.0.3"
+  }
 }

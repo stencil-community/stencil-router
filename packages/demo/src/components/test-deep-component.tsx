@@ -1,6 +1,5 @@
 import { Component, Element, Prop } from '@stencil/core';
-import injectHistory from '../../global/injectHistory';
-import { RouterHistory, LocationSegments } from '../../global/interfaces';
+import { RouterHistory, LocationSegments, injectHistory } from '@stencil/router';
 
 @Component({
   tag: 'test-deep-component'

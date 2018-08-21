@@ -1,6 +1,4 @@
 import { Component } from '@stencil/core';
-import '@stencil/router';
-
 
 const PrivateRoute = ({ component, ...props}: { [key: string]: any}) => (
   <stencil-route {...props} routeRender={

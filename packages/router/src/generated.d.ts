@@ -230,10 +230,12 @@ import { DefaultIntrinsicElements } from '@stencil/core';
 
 declare global {
   export namespace JSX {
+    export interface Element {}
     export interface IntrinsicElements extends LocalIntrinsicElements, DefaultIntrinsicElements {
       [tagName: string]: any;
     }
   }
+  export interface HTMLAttributes extends JSXElements.HTMLAttributes {}
 }
 
 export declare function defineCustomElements(window: any): void;

@@ -7,6 +7,7 @@
 import { JSXElements } from '@stencil/core';
 
 import { LocalIntrinsicElements as DependentIntrinsicElements1 } from '@stencil/router';
+import '@stencil/state-tunnel'
 import {
   LocationSegments,
   MatchResults,

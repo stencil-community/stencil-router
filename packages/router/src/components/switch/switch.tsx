@@ -9,7 +9,6 @@ interface Child {
   el: HTMLStencilRouteElement,
   match: MatchResults
 }
-type ComponentUpdatedResolve = (options: RouteViewOptions) => void;
 
 function getUniqueId() {
   if (window.crypto) {
@@ -70,14 +69,11 @@ export class RouteSwitch {
 
     // Set all props on the new active route then wait until it says that it
     // is completed
-    new Promise((resolve: ComponentUpdatedResolve) => {
-      const activeChild = this.subscribers[this.activeIndex];
-      activeChild.el.scrollTopOffset = this.scrollTopOffset;
-      activeChild.el.group = this.group;
-      activeChild.el.groupMatch = activeChild.match;
-      activeChild.el.componentUpdated = resolve;
-    })
-    .then((routeViewUpdatedOptions: RouteViewOptions) => {
+    const activeChild = this.subscribers[this.activeIndex];
+    activeChild.el.scrollTopOffset = this.scrollTopOffset;
+    activeChild.el.group = this.group;
+    activeChild.el.groupMatch = activeChild.match;
+    activeChild.el.componentUpdated = (routeViewUpdatedOptions: RouteViewOptions) => {
       // After the new active route has completed then update visibility of routes
       this.queue.write(() => {
         this.subscribers.forEach((child, index) => {
@@ -98,7 +94,7 @@ export class RouteSwitch {
         scrollTopOffset: this.scrollTopOffset,
         ...routeViewUpdatedOptions
       });
-    });
+    };
   }
 
   render() {

@@ -51,51 +51,40 @@ export class Route {
         strict: true
       });
     }
-
-    // If this already matched then lets check if it still matches the
-    // updated location.
-    if (this.groupMatch) {
-      return this.match = matchPath(this.location.pathname, {
-        path: this.url,
-        exact: this.exact,
-        strict: true
-      });
-    }
   }
 
 
-  componentDidUpdate() {
+  async componentDidUpdate() {
     // Wait for all children to complete rendering before calling componentUpdated
-    Promise.all(
+    await Promise.all(
       Array.from(this.el.children).map((element:HTMLStencilElement) => {
         if (element.componentOnReady) {
           return element.componentOnReady();
         }
         return Promise.resolve(element);
       })
-    )
-    .then(() => {
-      // After all children have completed then tell switch
-      // the provided callback will get executed after this route is in view
-      if (typeof this.componentUpdated === 'function') {
-        this.componentUpdated({
-          scrollTopOffset: this.scrollTopOffset
-        });
+    );
 
-      // If this is an independent route and it matches then routes have updated.
-      // If the only change to location is a hash change then do not scroll.
-      } else if (this.match && !matchesAreEqual(this.match, this.previousMatch)) {
-        this.routeViewsUpdated({
-          scrollTopOffset: this.scrollTopOffset
-        });
-      }
-    });
+    // After all children have completed then tell switch
+    // the provided callback will get executed after this route is in view
+    if (typeof this.componentUpdated === 'function') {
+      this.componentUpdated({
+        scrollTopOffset: this.scrollTopOffset
+      });
+
+    // If this is an independent route and it matches then routes have updated.
+    // If the only change to location is a hash change then do not scroll.
+    } else if (this.match && !matchesAreEqual(this.match, this.previousMatch)) {
+      this.routeViewsUpdated({
+        scrollTopOffset: this.scrollTopOffset
+      });
+    }
   }
 
   render() {
     // If there is no activeRouter then do not render
     // Check if this route is in the matching URL (for example, a parent route)
-    if (!this.match) {
+    if (!this.match && !this.groupMatch) {
       return null;
     }
 
@@ -105,7 +94,7 @@ export class Route {
     const childProps = {
       ...this.componentProps,
       history: this.history,
-      match: this.match
+      match: this.match || this.groupMatch
     };
 
     // If there is a routerRender defined then use

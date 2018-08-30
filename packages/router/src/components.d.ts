@@ -4,9 +4,9 @@
 */
 /* tslint:disable */
 
-import { JSXElements } from '@stencil/core';
+import '@stencil/core';
 
-import '@stencil/state-tunnel'
+import '@stencil/state-tunnel';
 import {
   HistoryType,
   LocationSegments,
@@ -16,12 +16,12 @@ import {
 } from './global/interfaces';
 
 
-declare namespace StencilComponents {
+export namespace Components {
 
   interface StencilAsyncContent {
     'documentLocation': string;
   }
-  interface StencilAsyncContentAttributes extends JSXElements.HTMLAttributes {
+  interface StencilAsyncContentAttributes extends StencilHTMLAttributes {
     'documentLocation'?: string;
   }
 
@@ -30,7 +30,7 @@ declare namespace StencilComponents {
     'root': string;
     'url': string;
   }
-  interface StencilRouterRedirectAttributes extends JSXElements.HTMLAttributes {
+  interface StencilRouterRedirectAttributes extends StencilHTMLAttributes {
     'history'?: RouterHistory;
     'root'?: string;
     'url'?: string;
@@ -59,7 +59,7 @@ declare namespace StencilComponents {
     'url': string;
     'urlMatch': string | string[];
   }
-  interface StencilRouteLinkAttributes extends JSXElements.HTMLAttributes {
+  interface StencilRouteLinkAttributes extends StencilHTMLAttributes {
     'activeClass'?: string;
     'anchorClass'?: string;
     'anchorRole'?: string;
@@ -87,7 +87,7 @@ declare namespace StencilComponents {
     'title': string;
     'titleSuffix': string;
   }
-  interface StencilRouteTitleAttributes extends JSXElements.HTMLAttributes {
+  interface StencilRouteTitleAttributes extends StencilHTMLAttributes {
     'title'?: string;
     'titleSuffix'?: string;
   }
@@ -107,7 +107,7 @@ declare namespace StencilComponents {
     'scrollTopOffset': number;
     'url': string | string[];
   }
-  interface StencilRouteAttributes extends JSXElements.HTMLAttributes {
+  interface StencilRouteAttributes extends StencilHTMLAttributes {
     'component'?: string;
     'componentProps'?: { [key: string]: any };
     'componentUpdated'?: (options: RouteViewOptions) => void;
@@ -129,7 +129,7 @@ declare namespace StencilComponents {
     'scrollTopOffset': number;
     'titleSuffix': string;
   }
-  interface StencilRouterAttributes extends JSXElements.HTMLAttributes {
+  interface StencilRouterAttributes extends StencilHTMLAttributes {
     'historyType'?: HistoryType;
     'root'?: string;
     'scrollTopOffset'?: number;
@@ -142,7 +142,7 @@ declare namespace StencilComponents {
     'routeViewsUpdated': (options: RouteViewOptions) => void;
     'scrollTopOffset': number;
   }
-  interface StencilRouteSwitchAttributes extends JSXElements.HTMLAttributes {
+  interface StencilRouteSwitchAttributes extends StencilHTMLAttributes {
     'group'?: string;
     'location'?: LocationSegments;
     'routeViewsUpdated'?: (options: RouteViewOptions) => void;
@@ -150,55 +150,65 @@ declare namespace StencilComponents {
   }
 }
 
-export interface LocalIntrinsicElements {
-  'stencil-async-content': StencilComponents.StencilAsyncContentAttributes;
-  'stencil-router-redirect': StencilComponents.StencilRouterRedirectAttributes;
-  'stencil-route-link': StencilComponents.StencilRouteLinkAttributes;
-  'stencil-route-title': StencilComponents.StencilRouteTitleAttributes;
-  'stencil-route': StencilComponents.StencilRouteAttributes;
-  'stencil-router': StencilComponents.StencilRouterAttributes;
-  'stencil-route-switch': StencilComponents.StencilRouteSwitchAttributes;
-}
-
 declare global {
+  interface StencilElementInterfaces {
+    'StencilAsyncContent': Components.StencilAsyncContent;
+    'StencilRouterRedirect': Components.StencilRouterRedirect;
+    'StencilRouteLink': Components.StencilRouteLink;
+    'StencilRouteTitle': Components.StencilRouteTitle;
+    'StencilRoute': Components.StencilRoute;
+    'StencilRouter': Components.StencilRouter;
+    'StencilRouteSwitch': Components.StencilRouteSwitch;
+  }
 
-  interface HTMLStencilAsyncContentElement extends StencilComponents.StencilAsyncContent, HTMLStencilElement {}
+  interface StencilIntrinsicElements {
+    'stencil-async-content': Components.StencilAsyncContentAttributes;
+    'stencil-router-redirect': Components.StencilRouterRedirectAttributes;
+    'stencil-route-link': Components.StencilRouteLinkAttributes;
+    'stencil-route-title': Components.StencilRouteTitleAttributes;
+    'stencil-route': Components.StencilRouteAttributes;
+    'stencil-router': Components.StencilRouterAttributes;
+    'stencil-route-switch': Components.StencilRouteSwitchAttributes;
+  }
+
+
+  interface HTMLStencilAsyncContentElement extends Components.StencilAsyncContent, HTMLStencilElement {}
   var HTMLStencilAsyncContentElement: {
     prototype: HTMLStencilAsyncContentElement;
     new (): HTMLStencilAsyncContentElement;
   };
 
-  interface HTMLStencilRouterRedirectElement extends StencilComponents.StencilRouterRedirect, HTMLStencilElement {}
+  interface HTMLStencilRouterRedirectElement extends Components.StencilRouterRedirect, HTMLStencilElement {}
   var HTMLStencilRouterRedirectElement: {
     prototype: HTMLStencilRouterRedirectElement;
     new (): HTMLStencilRouterRedirectElement;
   };
 
-  interface HTMLStencilRouteLinkElement extends StencilComponents.StencilRouteLink, HTMLStencilElement {}
+  interface HTMLStencilRouteLinkElement extends Components.StencilRouteLink, HTMLStencilElement {}
   var HTMLStencilRouteLinkElement: {
     prototype: HTMLStencilRouteLinkElement;
     new (): HTMLStencilRouteLinkElement;
   };
 
-  interface HTMLStencilRouteTitleElement extends StencilComponents.StencilRouteTitle, HTMLStencilElement {}
+  interface HTMLStencilRouteTitleElement extends Components.StencilRouteTitle, HTMLStencilElement {}
   var HTMLStencilRouteTitleElement: {
     prototype: HTMLStencilRouteTitleElement;
     new (): HTMLStencilRouteTitleElement;
   };
 
-  interface HTMLStencilRouteElement extends StencilComponents.StencilRoute, HTMLStencilElement {}
+  interface HTMLStencilRouteElement extends Components.StencilRoute, HTMLStencilElement {}
   var HTMLStencilRouteElement: {
     prototype: HTMLStencilRouteElement;
     new (): HTMLStencilRouteElement;
   };
 
-  interface HTMLStencilRouterElement extends StencilComponents.StencilRouter, HTMLStencilElement {}
+  interface HTMLStencilRouterElement extends Components.StencilRouter, HTMLStencilElement {}
   var HTMLStencilRouterElement: {
     prototype: HTMLStencilRouterElement;
     new (): HTMLStencilRouterElement;
   };
 
-  interface HTMLStencilRouteSwitchElement extends StencilComponents.StencilRouteSwitch, HTMLStencilElement {}
+  interface HTMLStencilRouteSwitchElement extends Components.StencilRouteSwitch, HTMLStencilElement {}
   var HTMLStencilRouteSwitchElement: {
     prototype: HTMLStencilRouteSwitchElement;
     new (): HTMLStencilRouteSwitchElement;
@@ -223,19 +233,14 @@ declare global {
     'stencil-router': HTMLStencilRouterElement;
     'stencil-route-switch': HTMLStencilRouteSwitchElement;
   }
-}
 
 
-import { DefaultIntrinsicElements } from '@stencil/core';
-
-declare global {
   export namespace JSX {
     export interface Element {}
-    export interface IntrinsicElements extends LocalIntrinsicElements, DefaultIntrinsicElements {
+    export interface IntrinsicElements extends StencilIntrinsicElements {
       [tagName: string]: any;
     }
   }
-  export interface HTMLAttributes extends JSXElements.HTMLAttributes {}
-}
+  export interface HTMLAttributes extends StencilHTMLAttributes {}
 
-export declare function defineCustomElements(window: any): void;
+}

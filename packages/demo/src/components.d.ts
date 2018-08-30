@@ -4,10 +4,10 @@
 */
 /* tslint:disable */
 
-import { JSXElements } from '@stencil/core';
+import '@stencil/core';
 
-import { LocalIntrinsicElements as DependentIntrinsicElements1 } from '@stencil/router';
-import '@stencil/state-tunnel'
+import '@stencil/router';
+import '@stencil/state-tunnel';
 import {
   LocationSegments,
   MatchResults,
@@ -15,16 +15,16 @@ import {
 } from '@stencil/router';
 
 
-declare namespace StencilComponents {
+export namespace Components {
 
   interface RouterDemoApp {}
-  interface RouterDemoAppAttributes extends JSXElements.HTMLAttributes {}
+  interface RouterDemoAppAttributes extends StencilHTMLAttributes {}
 
   interface TestDeepComponent {
     'history': RouterHistory;
     'location': LocationSegments;
   }
-  interface TestDeepComponentAttributes extends JSXElements.HTMLAttributes {
+  interface TestDeepComponentAttributes extends StencilHTMLAttributes {
     'history'?: RouterHistory;
     'location'?: LocationSegments;
   }
@@ -34,7 +34,7 @@ declare namespace StencilComponents {
     'match': MatchResults;
     'pages': string[];
   }
-  interface TestDemoFourAttributes extends JSXElements.HTMLAttributes {
+  interface TestDemoFourAttributes extends StencilHTMLAttributes {
     'history'?: RouterHistory;
     'match'?: MatchResults;
     'pages'?: string[];
@@ -45,7 +45,7 @@ declare namespace StencilComponents {
     'match': MatchResults;
     'pages': string[];
   }
-  interface TestDemoSevenAttributes extends JSXElements.HTMLAttributes {
+  interface TestDemoSevenAttributes extends StencilHTMLAttributes {
     'history'?: RouterHistory;
     'match'?: MatchResults;
     'pages'?: string[];
@@ -56,7 +56,7 @@ declare namespace StencilComponents {
     'match': MatchResults;
     'pages': string[];
   }
-  interface TestDemoSixAttributes extends JSXElements.HTMLAttributes {
+  interface TestDemoSixAttributes extends StencilHTMLAttributes {
     'history'?: RouterHistory;
     'match'?: MatchResults;
     'pages'?: string[];
@@ -67,55 +67,64 @@ declare namespace StencilComponents {
     'match': MatchResults;
     'pages': string[];
   }
-  interface TestDemoThreeAttributes extends JSXElements.HTMLAttributes {
+  interface TestDemoThreeAttributes extends StencilHTMLAttributes {
     'history'?: RouterHistory;
     'match'?: MatchResults;
     'pages'?: string[];
   }
 }
 
-export interface LocalIntrinsicElements {
-  'router-demo-app': StencilComponents.RouterDemoAppAttributes;
-  'test-deep-component': StencilComponents.TestDeepComponentAttributes;
-  'test-demo-four': StencilComponents.TestDemoFourAttributes;
-  'test-demo-seven': StencilComponents.TestDemoSevenAttributes;
-  'test-demo-six': StencilComponents.TestDemoSixAttributes;
-  'test-demo-three': StencilComponents.TestDemoThreeAttributes;
-}
-
 declare global {
+  interface StencilElementInterfaces {
+    'RouterDemoApp': Components.RouterDemoApp;
+    'TestDeepComponent': Components.TestDeepComponent;
+    'TestDemoFour': Components.TestDemoFour;
+    'TestDemoSeven': Components.TestDemoSeven;
+    'TestDemoSix': Components.TestDemoSix;
+    'TestDemoThree': Components.TestDemoThree;
+  }
 
-  interface HTMLRouterDemoAppElement extends StencilComponents.RouterDemoApp, HTMLStencilElement {}
+  interface StencilIntrinsicElements {
+    'router-demo-app': Components.RouterDemoAppAttributes;
+    'test-deep-component': Components.TestDeepComponentAttributes;
+    'test-demo-four': Components.TestDemoFourAttributes;
+    'test-demo-seven': Components.TestDemoSevenAttributes;
+    'test-demo-six': Components.TestDemoSixAttributes;
+    'test-demo-three': Components.TestDemoThreeAttributes;
+  }
+
+
+  interface HTMLRouterDemoAppElement extends Components.RouterDemoApp, HTMLStencilElement {}
   var HTMLRouterDemoAppElement: {
     prototype: HTMLRouterDemoAppElement;
     new (): HTMLRouterDemoAppElement;
   };
 
-  interface HTMLTestDeepComponentElement extends StencilComponents.TestDeepComponent, HTMLStencilElement {}
+  interface HTMLTestDeepComponentElement extends Components.TestDeepComponent, HTMLStencilElement {}
   var HTMLTestDeepComponentElement: {
     prototype: HTMLTestDeepComponentElement;
     new (): HTMLTestDeepComponentElement;
   };
 
-  interface HTMLTestDemoFourElement extends StencilComponents.TestDemoFour, HTMLStencilElement {}
+  interface HTMLTestDemoFourElement extends Components.TestDemoFour, HTMLStencilElement {}
   var HTMLTestDemoFourElement: {
     prototype: HTMLTestDemoFourElement;
     new (): HTMLTestDemoFourElement;
   };
 
-  interface HTMLTestDemoSevenElement extends StencilComponents.TestDemoSeven, HTMLStencilElement {}
+  interface HTMLTestDemoSevenElement extends Components.TestDemoSeven, HTMLStencilElement {}
   var HTMLTestDemoSevenElement: {
     prototype: HTMLTestDemoSevenElement;
     new (): HTMLTestDemoSevenElement;
   };
 
-  interface HTMLTestDemoSixElement extends StencilComponents.TestDemoSix, HTMLStencilElement {}
+  interface HTMLTestDemoSixElement extends Components.TestDemoSix, HTMLStencilElement {}
   var HTMLTestDemoSixElement: {
     prototype: HTMLTestDemoSixElement;
     new (): HTMLTestDemoSixElement;
   };
 
-  interface HTMLTestDemoThreeElement extends StencilComponents.TestDemoThree, HTMLStencilElement {}
+  interface HTMLTestDemoThreeElement extends Components.TestDemoThree, HTMLStencilElement {}
   var HTMLTestDemoThreeElement: {
     prototype: HTMLTestDemoThreeElement;
     new (): HTMLTestDemoThreeElement;
@@ -138,18 +147,14 @@ declare global {
     'test-demo-six': HTMLTestDemoSixElement;
     'test-demo-three': HTMLTestDemoThreeElement;
   }
-}
 
 
-import { DefaultIntrinsicElements } from '@stencil/core';
-
-declare global {
   export namespace JSX {
     export interface Element {}
-    export interface IntrinsicElements extends LocalIntrinsicElements, DefaultIntrinsicElements, DependentIntrinsicElements1 {
+    export interface IntrinsicElements extends StencilIntrinsicElements {
       [tagName: string]: any;
     }
   }
-  export interface HTMLAttributes extends JSXElements.HTMLAttributes {}
-}
+  export interface HTMLAttributes extends StencilHTMLAttributes {}
 
+}

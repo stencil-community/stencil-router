@@ -2,6 +2,13 @@
   "name": "root",
   "private": true,
   "devDependencies": {
-    "lerna": "^3.0.3"
+    "@stencil/core": "^0.12.4",
+    "@types/jest": "^23.3.1",
+    "jest": "^23.4.2",
+    "lerna": "^3.0.3",
+    "ts-jest": "^22.4.2"
+  },
+  "dependencies": {
+    "@stencil/state-tunnel": "0.0.8"
   }
 }

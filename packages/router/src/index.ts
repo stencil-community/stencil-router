@@ -1,5 +1,4 @@
 export { default as injectHistory } from './global/injectHistory';
-export { LocalIntrinsicElements } from './generated';
 export {
   ActiveRouter,
   Listener,
@@ -8,3 +7,4 @@ export {
   MatchOptions,
   MatchResults
 } from './global/interfaces';
+export { Components } from './components';

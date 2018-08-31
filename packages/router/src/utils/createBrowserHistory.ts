@@ -62,11 +62,9 @@ const createBrowserHistory = (props: CreateBrowserHistoryOptions = {}): RouterHi
   const needsHashChangeListener = !supportsPopStateOnHashChange();
   const scrollHistory = createScrollHistory();
 
-  const {
-    forceRefresh = false,
-    getUserConfirmation = getConfirmation,
-    keyLength = 6
-  } = props;
+  const forceRefresh = (props.forceRefresh != null) ? props.forceRefresh : false;
+  const getUserConfirmation = (props.getUserConfirmation != null) ? props.getUserConfirmation : getConfirmation;
+  const keyLength = (props.keyLength != null) ? props.keyLength : 6;
   const basename = props.basename ? stripTrailingSlash(addLeadingSlash(props.basename)) : '';
 
   const getDOMLocation = (historyState: LocationSegments) => {

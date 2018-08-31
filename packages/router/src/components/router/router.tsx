@@ -3,7 +3,7 @@ import createHistory from '../../utils/createBrowserHistory';
 import createHashHistory from '../../utils/createHashHistory';
 import { LocationSegments, HistoryType, RouterHistory, RouteViewOptions } from '../../global/interfaces';
 import ActiveRouter, { ActiveRouterState } from '../../global/active-router';
-import { QueueApi } from '@stencil/core/dist/declarations';
+import { QueueApi, ComponentInstance } from '@stencil/core/dist/declarations';
 
 
 const HISTORIES: { [key in HistoryType]: Function } = {
@@ -19,7 +19,7 @@ const HISTORIES: { [key in HistoryType]: Function } = {
 @Component({
   tag: 'stencil-router'
 })
-export class Router {
+export class Router implements ComponentInstance {
   @Prop() root: string = '/';
   @Prop({ context: 'isServer' }) private isServer: boolean;
   @Prop({ context: 'queue'}) queue: QueueApi;

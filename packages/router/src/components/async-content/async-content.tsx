@@ -1,9 +1,9 @@
-import { Component, Prop, State, Watch } from '@stencil/core';
+import { Component, Prop, State, Watch, ComponentInterface } from '@stencil/core';
 
 @Component({
   tag: 'stencil-async-content'
 })
-export class AsyncContent {
+export class AsyncContent implements ComponentInterface {
   @Prop() documentLocation: string;
   @State() content: string;
 

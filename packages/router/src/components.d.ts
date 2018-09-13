@@ -11,6 +11,7 @@ import {
   HistoryType,
   LocationSegments,
   MatchResults,
+  RouteRenderProps,
   RouterHistory,
   RouteViewOptions,
 } from './global/interfaces';
@@ -98,11 +99,11 @@ export namespace Components {
     'componentUpdated': (options: RouteViewOptions) => void;
     'exact': boolean;
     'group': string | null;
-    'groupMatch': MatchResults | null;
     'history': RouterHistory;
     'historyType': HistoryType;
     'location': LocationSegments;
-    'routeRender': Function;
+    'match': MatchResults | null;
+    'routeRender': (props: RouteRenderProps) => any;
     'routeViewsUpdated': (options: RouteViewOptions) => void;
     'scrollTopOffset': number;
     'url': string | string[];
@@ -113,11 +114,11 @@ export namespace Components {
     'componentUpdated'?: (options: RouteViewOptions) => void;
     'exact'?: boolean;
     'group'?: string | null;
-    'groupMatch'?: MatchResults | null;
     'history'?: RouterHistory;
     'historyType'?: HistoryType;
     'location'?: LocationSegments;
-    'routeRender'?: Function;
+    'match'?: MatchResults | null;
+    'routeRender'?: (props: RouteRenderProps) => any;
     'routeViewsUpdated'?: (options: RouteViewOptions) => void;
     'scrollTopOffset'?: number;
     'url'?: string | string[];

@@ -1,11 +1,11 @@
-import { Component, Prop, Element } from '@stencil/core';
+import { Component, Prop, Element, ComponentInterface } from '@stencil/core';
 import { RouterHistory } from '../../global/interfaces';
 import ActiveRouter from '../../global/active-router';
 
 @Component({
   tag: 'stencil-router-redirect'
 })
-export class Redirect {
+export class Redirect implements ComponentInterface {
   @Element() el: HTMLStencilElement;
 
   @Prop() history: RouterHistory = null;

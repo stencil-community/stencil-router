@@ -3,6 +3,12 @@ export interface ActiveRouter {
   dispatch: (location: LocationSegments, nextListeners: RouteSubscription[]) => void;
 }
 
+export interface RouteRenderProps {
+  history: RouterHistory;
+  match: MatchResults | null;
+  [key: string]: any;
+}
+
 
 export interface RouteViewOptions {
   scrollTopOffset?: number

@@ -1,4 +1,4 @@
-import { Component, Prop, State, Watch, Element } from '@stencil/core';
+import { Component, Prop, State, Watch, Element, ComponentInterface } from '@stencil/core';
 import { matchPath } from '../../utils/match-path';
 import { isModifiedEvent } from '../../utils/dom-utils';
 import { RouterHistory, Listener, LocationSegments, MatchResults } from '../../global/interfaces';
@@ -12,7 +12,7 @@ import ActiveRouter from '../../global/active-router';
 @Component({
   tag: 'stencil-route-link'
 })
-export class RouteLink {
+export class RouteLink implements ComponentInterface {
   @Element() el: HTMLStencilElement;
 
   unsubscribe: Listener = () => { return; };
@@ -36,7 +36,7 @@ export class RouteLink {
   @Prop() history: RouterHistory;
   @Prop() location: LocationSegments;
   @Prop() root: string;
-  
+
   @Prop() ariaHaspopup: string;
   @Prop() id: string;
   @Prop() ariaPosinset: string;
@@ -44,7 +44,7 @@ export class RouteLink {
   @Prop() ariaLabel: string;
 
   @State() match: MatchResults | null = null;
-  
+
 
   componentWillLoad() {
     this.computeMatch();

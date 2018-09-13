@@ -1,5 +1,5 @@
 import uuidv4 from '../../utils/uuid';
-import { Component, Prop, Element, Watch } from '@stencil/core';
+import { Component, Prop, Element, Watch, ComponentInterface } from '@stencil/core';
 import { QueueApi } from '@stencil/core/dist/declarations';
 import { LocationSegments, MatchResults, RouteViewOptions } from '../../global/interfaces';
 import ActiveRouter from '../../global/active-router';
@@ -28,7 +28,7 @@ function getMatch(pathname: string, url: any, exact: boolean) {
 @Component({
   tag: 'stencil-route-switch'
 })
-export class RouteSwitch {
+export class RouteSwitch implements ComponentInterface {
   @Prop({ context: 'queue'}) queue: QueueApi;
   @Element() el: HTMLStencilElement;
   @Prop({reflectToAttr: true}) group: string = getUniqueId();
@@ -62,7 +62,7 @@ export class RouteSwitch {
     // Check if this actually changes which child is active
     // then just pass the new match down if the active route isn't changing.
     if (this.activeIndex === newActiveIndex) {
-      this.subscribers[this.activeIndex].el.groupMatch = this.subscribers[this.activeIndex].match;
+      this.subscribers[this.activeIndex].el.match = this.subscribers[this.activeIndex].match;
       return;
     }
     this.activeIndex = newActiveIndex;
@@ -72,7 +72,7 @@ export class RouteSwitch {
     const activeChild = this.subscribers[this.activeIndex];
     activeChild.el.scrollTopOffset = this.scrollTopOffset;
     activeChild.el.group = this.group;
-    activeChild.el.groupMatch = activeChild.match;
+    activeChild.el.match = activeChild.match;
     activeChild.el.componentUpdated = (routeViewUpdatedOptions: RouteViewOptions) => {
       // After the new active route has completed then update visibility of routes
       this.queue.write(() => {
@@ -85,7 +85,7 @@ export class RouteSwitch {
 
           child.el.scrollTopOffset = this.scrollTopOffset;
           child.el.group = this.group;
-          child.el.groupMatch = null;
+          child.el.match = null;
           child.el.style.display = 'none';
         });
       });

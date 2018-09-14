@@ -40,13 +40,15 @@ export class RouteSwitch implements ComponentInterface {
   subscribers: Child[];
 
   componentWillLoad() {
-    if (this.location != null) {
-      this.regenerateSubscribers(this.location);
-    }
+    this.regenerateSubscribers(this.location);
   }
 
   @Watch('location')
   async regenerateSubscribers(newLocation: LocationSegments) {
+    if (!newLocation) {
+      return;
+    }
+
     let newActiveIndex: number = null;
     this.subscribers = Array.from(this.el.children)
       .map((childElement: HTMLStencilRouteElement, index): Child => {

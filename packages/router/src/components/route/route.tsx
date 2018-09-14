@@ -45,13 +45,13 @@ export class Route implements ComponentInterface {
 
   // Identify if the current route is a match.
   @Watch('location')
-  computeMatch() {
-    if (this.isGrouped) {
+  computeMatch(newLocation: LocationSegments) {
+    if (!newLocation || this.isGrouped) {
       return;
     }
 
     this.previousMatch = this.match;
-    return this.match = matchPath(this.location.pathname, {
+    return this.match = matchPath(newLocation.pathname, {
       path: this.url,
       exact: this.exact,
       strict: true

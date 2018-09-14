@@ -40,7 +40,9 @@ export class RouteSwitch implements ComponentInterface {
   subscribers: Child[];
 
   componentWillLoad() {
-    this.regenerateSubscribers(this.location);
+    if (this.location != null) {
+      this.regenerateSubscribers(this.location);
+    }
   }
 
   @Watch('location')

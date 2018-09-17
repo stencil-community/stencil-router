@@ -85,12 +85,12 @@ export namespace Components {
   }
 
   interface StencilRouteTitle {
-    'title': string;
-    'titleSuffix': string;
+    'pageTitle': string;
+    'pageTitleSuffix': string;
   }
   interface StencilRouteTitleAttributes extends StencilHTMLAttributes {
-    'title'?: string;
-    'titleSuffix'?: string;
+    'pageTitle'?: string;
+    'pageTitleSuffix'?: string;
   }
 
   interface StencilRoute {

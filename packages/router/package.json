@@ -24,7 +24,7 @@
   "dependencies": {},
   "devDependencies": {
     "np": "^3.0.4",
-    "@stencil/state-tunnel": "0.0.9-0"
+    "@stencil/state-tunnel": "0.0.9-1"
   },
   "author": "Ionic Team",
   "license": "MIT",

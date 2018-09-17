@@ -6,9 +6,9 @@ import { RouterHistory, MatchResults } from '@stencil/router';
 })
 export class TestDemoSix {
 
-  @Prop() pages: string[];
-  @Prop() match: MatchResults;
-  @Prop() history: RouterHistory;
+  @Prop() pages?: string[];
+  @Prop() match: MatchResults | null = null;
+  @Prop() history?: RouterHistory;
 
   render() {
     return [

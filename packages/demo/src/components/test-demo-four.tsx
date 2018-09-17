@@ -6,13 +6,15 @@ import { RouterHistory, MatchResults } from '@stencil/router';
 })
 export class TestDemoFour {
 
-  @Prop() pages: string[];
-  @Prop() match: MatchResults;
-  @Prop() history: RouterHistory;
+  @Prop() pages: string[] = [];
+  @Prop() match: MatchResults | null = null;
+  @Prop() history?: RouterHistory;
 
   handleClick(e: MouseEvent, linkLocation: string) {
     e.preventDefault();
-    this.history.push(linkLocation, { 'blue': 'blue'});
+    if (this.history) {
+      this.history.push(linkLocation, { 'blue': 'blue'});
+    }
   }
 
   componentDidLoad() {

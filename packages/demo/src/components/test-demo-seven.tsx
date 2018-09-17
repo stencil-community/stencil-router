@@ -6,9 +6,9 @@ import { RouterHistory, MatchResults } from '@stencil/router';
 })
 export class TestDemoSeven {
 
-  @Prop() pages: string[];
-  @Prop() match: MatchResults;
-  @Prop() history: RouterHistory;
+  @Prop() pages?: string[];
+  @Prop() match?: MatchResults;
+  @Prop() history?: RouterHistory;
 
   componentWillLoad() {
     console.log(`%c test-demo-seven - componentWillLoad`, 'color: red');

@@ -1,13 +1,12 @@
-import { Component } from '@stencil/core';
+import { Component, FunctionalComponent } from '@stencil/core';
 
-const PrivateRoute = ({ component, ...props}: { [key: string]: any}) => (
-  <stencil-route {...props} routeRender={
-    (props: { [key: string]: any}) => {
+const PrivateRoute: FunctionalComponent<{url: string, routeRender: Function }> = ({ url, routeRender }) => (
+  <stencil-route url={url} routeRender={
+    ({ history, match, pages }) => {
       if ((window as any).userAuthenticated) {
-        const Component = component;
-        return <Component {...props} {...props.componentProps}></Component>;
+        return routeRender({ history, match, pages });
       }
-      return <stencil-router-redirect url="/"></stencil-router-redirect>
+      return <stencil-router-redirect url="/"></stencil-router-redirect>;
     }
   }/>
 )
@@ -57,15 +56,15 @@ export class RouterDemoApp {
               </div>
             }></stencil-route>
 
-            <stencil-route url="/demo3" routeRender={(props) =>
+            <stencil-route url="/demo3" routeRender={({ history, match, pages }) =>
               <div class="content-holder">
-                <test-demo-three {...props}></test-demo-three>
+                <test-demo-three {...{history, match, pages}}></test-demo-three>
               </div>
             }></stencil-route>
 
-            <stencil-route url="/demo4" routeRender={(props) =>
+            <stencil-route url="/demo4" routeRender={({ history, match, pages }) =>
               <div class="content-holder">
-                <test-demo-four {...props}></test-demo-four>
+                <test-demo-four {...{history, match, pages}}></test-demo-four>
               </div>
             }></stencil-route>
 
@@ -75,15 +74,15 @@ export class RouterDemoApp {
               </div>
             }></stencil-route>
 
-            <stencil-route url="/demo6" routeRender={(props) =>
+            <stencil-route url="/demo6" routeRender={({ history, match, pages }) =>
               <div class="content-holder">
-                <test-demo-six {...props}></test-demo-six>
+                <test-demo-six {...{history, match, pages}}></test-demo-six>
               </div>
             }></stencil-route>
 
-            <PrivateRoute url="/demo7" routeRender={(props) =>
+            <PrivateRoute url="/demo7" routeRender={(props: any) =>
               <div class="content-holder">
-                <test-demo-six {...props} testing={true}></test-demo-six>
+                <test-demo-six {...props}></test-demo-six>
               </div>
             }></PrivateRoute>
 

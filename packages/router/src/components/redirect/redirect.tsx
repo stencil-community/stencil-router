@@ -2,28 +2,30 @@ import { Component, Prop, Element, ComponentInterface } from '@stencil/core';
 import { RouterHistory } from '../../global/interfaces';
 import ActiveRouter from '../../global/active-router';
 
+// Get the URL for this route link without the root from the router
+function getUrl(url: string, root: string) {
+  // Don't allow double slashes
+  if(url.charAt(0) == '/' && root.charAt(root.length - 1) == '/') {
+    return root.slice(0, root.length-1) + url;
+  }
+  return root + url;
+}
+
 @Component({
   tag: 'stencil-router-redirect'
 })
 export class Redirect implements ComponentInterface {
-  @Element() el: HTMLStencilElement;
+  @Element() el!: HTMLStencilElement;
 
-  @Prop() history: RouterHistory = null;
-  @Prop() root: string = null;
+  @Prop() history?: RouterHistory;
+  @Prop() root?: string;
 
-  @Prop() url: string;
+  @Prop() url?: string;
 
   componentWillLoad() {
-    return this.history.replace(this.getUrl(this.url));
-  }
-
-  // Get the URL for this route link without the root from the router
-  getUrl(url: string) {
-    // Don't allow double slashes
-    if(url.charAt(0) == '/' && this.root.charAt(this.root.length - 1) == '/') {
-      return this.root.slice(0, this.root.length-1) + url;
+    if (this.history && this.root && this.url) {
+      return this.history.replace(getUrl(this.url, this.root));
     }
-    return this.root + url;
   }
 }
 

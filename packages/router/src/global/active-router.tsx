@@ -7,15 +7,18 @@ export interface ActiveRouterState {
   location: LocationSegments;
   titleSuffix: string;
   root: string;
-  history: RouterHistory;
+  history?: RouterHistory;
   routeViewsUpdated: (options: RouteViewOptions) => void;
 }
 
 export default createProviderConsumer<ActiveRouterState>({
   historyType: 'browser',
-  location: null,
+  location: {
+    pathname: '',
+    query: {},
+    key: ''
+  },
   titleSuffix: '',
   root: '/',
-  history: null,
   routeViewsUpdated: () => {}
 });

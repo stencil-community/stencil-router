@@ -5,6 +5,7 @@ export {
   LocationSegments,
   RouterHistory,
   MatchOptions,
-  MatchResults
+  MatchResults,
+  RouteRenderProps
 } from './global/interfaces';
 export { Components } from './components';

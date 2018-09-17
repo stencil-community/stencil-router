@@ -13,7 +13,9 @@ describe('a browser history', () => {
       const href = history.createHref({
         pathname: '/the/path',
         search: '?the=query',
-        hash: '#the-hash'
+        hash: '#the-hash',
+        query: {},
+        key: ''
       });
 
       expect(href).toEqual('/the/path?the=query#the-hash');
@@ -30,7 +32,9 @@ describe('a browser history', () => {
       const href = history.createHref({
         pathname: '/the/path',
         search: '?the=query',
-        hash: '#the-hash'
+        hash: '#the-hash',
+        query: {},
+        key: ''
       });
 
       expect(href).toEqual('/the/base/the/path?the=query#the-hash');
@@ -47,7 +51,9 @@ describe('a browser history', () => {
       const href = history.createHref({
         pathname: '/the/path',
         search: '?the=query',
-        hash: '#the-hash'
+        hash: '#the-hash',
+        query: {},
+        key: ''
       });
 
       expect(href).toEqual('/the/bad/base/the/path?the=query#the-hash');
@@ -64,7 +70,9 @@ describe('a browser history', () => {
       const href = history.createHref({
         pathname: '/the/path',
         search: '?the=query',
-        hash: '#the-hash'
+        hash: '#the-hash',
+        query: {},
+        key: ''
       });
 
       expect(href).toEqual('/the/path?the=query#the-hash');
@@ -80,11 +88,15 @@ describe('a browser history', () => {
     it('does not encode the generated path', () => {
       // encoded
       const encodedHref = history.createHref({
-        pathname: '/%23abc'
+        pathname: '/%23abc',
+        query: {},
+        key: ''
       });
       // unencoded
       const unencodedHref = history.createHref({
-        pathname: '/#abc'
+        pathname: '/#abc',
+        query: {},
+        key: ''
       });
 
       expect(encodedHref).toEqual('/%23abc');
@@ -104,7 +116,9 @@ describe('a hash history', () => {
       const href = history.createHref({
         pathname: '/the/path',
         search: '?the=query',
-        hash: '#the-hash'
+        hash: '#the-hash',
+        query: {},
+        key: ''
       });
 
       expect(href).toEqual('#/the/path?the=query#the-hash');
@@ -121,7 +135,9 @@ describe('a hash history', () => {
       const href = history.createHref({
         pathname: '/the/path',
         search: '?the=query',
-        hash: '#the-hash'
+        hash: '#the-hash',
+        query: {},
+        key: ''
       });
 
       expect(href).toEqual('#the/path?the=query#the-hash');
@@ -138,7 +154,9 @@ describe('a hash history', () => {
       const href = history.createHref({
         pathname: '/the/path',
         search: '?the=query',
-        hash: '#the-hash'
+        hash: '#the-hash',
+        query: {},
+        key: ''
       });
 
       expect(href).toEqual('#!/the/path?the=query#the-hash');
@@ -154,7 +172,9 @@ describe('a hash history', () => {
     it('knows how to create hrefs', () => {
       const href = history.createHref({
         pathname: '/the/path',
-        search: '?the=query'
+        search: '?the=query',
+        query: {},
+        key: ''
       });
 
       expect(href).toEqual('#/the/base/the/path?the=query');
@@ -170,7 +190,9 @@ describe('a hash history', () => {
     it('knows how to create hrefs', () => {
       const href = history.createHref({
         pathname: '/the/path',
-        search: '?the=query'
+        search: '?the=query',
+        query: {},
+        key: ''
       });
 
       expect(href).toEqual('#/the/bad/base/the/path?the=query');
@@ -186,7 +208,9 @@ describe('a hash history', () => {
     it('knows how to create hrefs', () => {
       const href = history.createHref({
         pathname: '/the/path',
-        search: '?the=query'
+        search: '?the=query',
+        query: {},
+        key: ''
       });
 
       expect(href).toEqual('#/the/path?the=query');
@@ -202,11 +226,15 @@ describe('a hash history', () => {
     it('does not encode the generated path', () => {
       // encoded
       const encodedHref = history.createHref({
-        pathname: '/%23abc'
+        pathname: '/%23abc',
+        query: {},
+        key: ''
       });
       // unencoded
       const unencodedHref = history.createHref({
-        pathname: '/#abc'
+        pathname: '/#abc',
+        query: {},
+        key: ''
       });
 
       expect(encodedHref).toEqual('#/%23abc');

@@ -44,7 +44,9 @@ export function parsePath(path: string): LocationSegments {
   return {
     pathname,
     search: search === '?' ? '' : search,
-    hash: hash === '#' ? '' : hash
+    hash: hash === '#' ? '' : hash,
+    query: {},
+    key: ''
   };
 }
 

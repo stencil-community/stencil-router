@@ -11,7 +11,7 @@ import ActiveRouter from '../../global/active-router';
   tag: 'stencil-route-title'
 })
 export class RouteTitle implements ComponentInterface {
-  @Element() el: HTMLStencilElement;
+  @Element() el!: HTMLStencilElement;
   @Prop() titleSuffix: string = '';
   @Prop() title: string = '';
 

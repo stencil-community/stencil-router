@@ -25,13 +25,13 @@ export type HistoryType = 'browser' | 'hash';
 export type Listener = () => void;
 
 export interface LocationSegments {
-  pathname?: string;
+  pathname: string;
+  query: { [key: string]: any };
+  key: string;
+  scrollPosition?: [number, number];
   search?: string;
   hash?: string;
   state?: any;
-  key?: string;
-  query?: { [key: string]: any };
-  scrollPosition?: [number, number];
 }
 
 export type LocationSegmentPart = 'pathname' | 'search' | 'hash' | 'state' | 'key';

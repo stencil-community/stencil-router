@@ -67,7 +67,7 @@ export function matchPath(pathname: string, options: MatchOptions = {}): null | 
   };
 }
 
-export function matchesAreEqual(a: MatchResults, b: MatchResults) {
+export function matchesAreEqual(a: MatchResults | null, b: MatchResults | null) {
   if (a == null && b == null) {
     return true;
   }

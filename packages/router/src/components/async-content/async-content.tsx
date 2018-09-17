@@ -4,16 +4,18 @@ import { Component, Prop, State, Watch, ComponentInterface } from '@stencil/core
   tag: 'stencil-async-content'
 })
 export class AsyncContent implements ComponentInterface {
-  @Prop() documentLocation: string;
-  @State() content: string;
+  @Prop() documentLocation?: string;
+  @State() content: string = '';
 
   componentWillLoad() {
-    return this.fetchNewContent();
+    if (this.documentLocation != null) {
+      return this.fetchNewContent(this.documentLocation);
+    }
   }
 
   @Watch('documentLocation')
-  fetchNewContent() {
-    return fetch(this.documentLocation)
+  fetchNewContent(newDocumentLocation: string) {
+    return fetch(newDocumentLocation)
       .then(response => response.text())
       .then(data => {
         this.content = data;

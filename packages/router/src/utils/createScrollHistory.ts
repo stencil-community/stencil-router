@@ -5,8 +5,9 @@ const createScrollHistory = (applicationScrollKey: string = 'scrollPositions') =
   let scrollPositions = new Map<string, [number, number]>();
 
   if (storageAvailable('sessionStorage')) {
-    scrollPositions = window.sessionStorage.getItem(applicationScrollKey) ?
-      new Map(JSON.parse(window.sessionStorage.getItem(applicationScrollKey))) :
+    const scrollData = window.sessionStorage.getItem(applicationScrollKey);
+    scrollPositions = scrollData ?
+      new Map(JSON.parse(scrollData)) :
       scrollPositions;
   }
 

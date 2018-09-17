@@ -92,7 +92,9 @@ describe('path-utils', () => {
       expect(resp).toEqual({
         pathname: '/base/path',
         search: '',
-        hash: ''
+        hash: '',
+        key: '',
+        query: {}
       });
     });
     it('should parse a simple url path with search', () => {
@@ -100,7 +102,9 @@ describe('path-utils', () => {
       expect(resp).toEqual({
         pathname: '/base/path',
         search: '?a=1&b=2',
-        hash: ''
+        hash: '',
+        key: '',
+        query: {}
       });
     });
     it('should parse a simple url path with hash', () => {
@@ -108,7 +112,9 @@ describe('path-utils', () => {
       expect(resp).toEqual({
         pathname: '/base/path',
         search: '',
-        hash: '#blue'
+        hash: '#blue',
+        key: '',
+        query: {}
       });
     });
     it('should parse a url path with hash and search', () => {
@@ -116,7 +122,9 @@ describe('path-utils', () => {
       expect(resp).toEqual({
         pathname: '/base/path',
         search: '?a=1&b=2',
-        hash: '#blue'
+        hash: '#blue',
+        key: '',
+        query: {}
       });
     });
 
@@ -127,7 +135,9 @@ describe('path-utils', () => {
       const resp = createPath({
         pathname: '/base/path',
         search: '',
-        hash: ''
+        hash: '',
+        query: {},
+        key: ''
       });
       expect(resp).toEqual('/base/path');
     });
@@ -135,7 +145,9 @@ describe('path-utils', () => {
       const resp = createPath({
         pathname: '/base/path',
         search: '?a=1&b=2',
-        hash: ''
+        hash: '',
+        query: {},
+        key: ''
       });
       expect(resp).toEqual('/base/path?a=1&b=2');
     });
@@ -143,7 +155,9 @@ describe('path-utils', () => {
       const resp = createPath({
         pathname: '/base/path',
         search: '',
-        hash: '#blue'
+        hash: '#blue',
+        query: {},
+        key: ''
       });
       expect(resp).toEqual('/base/path#blue');
     });
@@ -151,7 +165,9 @@ describe('path-utils', () => {
       const resp = createPath({
         pathname: '/base/path',
         search: '?a=1&b=2',
-        hash: '#blue'
+        hash: '#blue',
+        query: {},
+        key: ''
       });
       expect(resp).toEqual('/base/path?a=1&b=2#blue');
     });

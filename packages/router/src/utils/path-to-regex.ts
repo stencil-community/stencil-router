@@ -18,11 +18,11 @@ export interface ParseOptions {
 
 export interface Key {
   name: string | number;
-  prefix: string;
-  delimiter: string;
+  prefix: string | null;
+  delimiter: string| null;
   optional: boolean;
   repeat: boolean;
-  pattern: string;
+  pattern: string | null;
   partial: boolean;
 }
 
@@ -293,7 +293,7 @@ export function tokensToRegExp(tokens: Token[], keys?: Key[], options?: RegExpOp
   var end = options.end !== false;
   var delimiter = escapeString(options.delimiter || DEFAULT_DELIMITER);
   var delimiters = options.delimiters || DEFAULT_DELIMITERS;
-  var endsWith = [].concat(options.endsWith || []).map(escapeString).concat('$').join('|');
+  var endsWith = (<Array<string>>[]).concat(options.endsWith || []).map(escapeString).concat('$').join('|');
   var route = '';
   var isEndDelimited = false;
 
@@ -305,7 +305,7 @@ export function tokensToRegExp(tokens: Token[], keys?: Key[], options?: RegExpOp
       route += escapeString(token);
       isEndDelimited = i === tokens.length - 1 && delimiters.indexOf(token[token.length - 1]) > -1;
     } else {
-      var prefix = escapeString(token.prefix);
+      var prefix = escapeString(token.prefix || '');
       var capture = token.repeat
         ? '(?:' + token.pattern + ')(?:' + prefix + '(?:' + token.pattern + '))*'
         : token.pattern;

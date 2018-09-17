@@ -20,16 +20,16 @@ import {
 export namespace Components {
 
   interface StencilAsyncContent {
-    'documentLocation': string;
+    'documentLocation'?: string;
   }
   interface StencilAsyncContentAttributes extends StencilHTMLAttributes {
     'documentLocation'?: string;
   }
 
   interface StencilRouterRedirect {
-    'history': RouterHistory;
-    'root': string;
-    'url': string;
+    'history'?: RouterHistory;
+    'root'?: string;
+    'url'?: string;
   }
   interface StencilRouterRedirectAttributes extends StencilHTMLAttributes {
     'history'?: RouterHistory;
@@ -39,30 +39,31 @@ export namespace Components {
 
   interface StencilRouteLink {
     'activeClass': string;
-    'anchorClass': string;
-    'anchorRole': string;
-    'anchorTabIndex': string;
-    'anchorTitle': string;
-    'ariaHaspopup': string;
-    'ariaLabel': string;
-    'ariaPosinset': string;
-    'ariaSetsize': number;
+    'anchorClass'?: string;
+    'anchorId'?: string;
+    'anchorRole'?: string;
+    'anchorTabIndex'?: string;
+    'anchorTitle'?: string;
+    'ariaHaspopup'?: string;
+    'ariaLabel'?: string;
+    'ariaPosinset'?: string;
+    'ariaSetsize'?: number;
     /**
     * Custom tag to use instead of an anchor
     */
     'custom': string;
     'exact': boolean;
-    'history': RouterHistory;
-    'id': string;
-    'location': LocationSegments;
-    'root': string;
+    'history'?: RouterHistory;
+    'location'?: LocationSegments;
+    'root'?: string;
     'strict': boolean;
-    'url': string;
-    'urlMatch': string | string[];
+    'url'?: string;
+    'urlMatch'?: string | string[];
   }
   interface StencilRouteLinkAttributes extends StencilHTMLAttributes {
     'activeClass'?: string;
     'anchorClass'?: string;
+    'anchorId'?: string;
     'anchorRole'?: string;
     'anchorTabIndex'?: string;
     'anchorTitle'?: string;
@@ -76,7 +77,6 @@ export namespace Components {
     'custom'?: string;
     'exact'?: boolean;
     'history'?: RouterHistory;
-    'id'?: string;
     'location'?: LocationSegments;
     'root'?: string;
     'strict'?: boolean;
@@ -94,19 +94,19 @@ export namespace Components {
   }
 
   interface StencilRoute {
-    'component': string;
-    'componentProps': { [key: string]: any };
-    'componentUpdated': (options: RouteViewOptions) => void;
+    'component'?: string;
+    'componentProps'?: { [key: string]: any };
+    'componentUpdated'?: (options: RouteViewOptions) => void;
     'exact': boolean;
     'group': string | null;
-    'history': RouterHistory;
-    'historyType': HistoryType;
-    'location': LocationSegments;
+    'history'?: RouterHistory;
+    'historyType'?: HistoryType;
+    'location'?: LocationSegments;
     'match': MatchResults | null;
-    'routeRender': (props: RouteRenderProps) => any;
-    'routeViewsUpdated': (options: RouteViewOptions) => void;
-    'scrollTopOffset': number;
-    'url': string | string[];
+    'routeRender'?: (props: RouteRenderProps) => any;
+    'routeViewsUpdated'?: (options: RouteViewOptions) => void;
+    'scrollTopOffset'?: number;
+    'url'?: string | string[];
   }
   interface StencilRouteAttributes extends StencilHTMLAttributes {
     'component'?: string;
@@ -127,7 +127,7 @@ export namespace Components {
   interface StencilRouter {
     'historyType': HistoryType;
     'root': string;
-    'scrollTopOffset': number;
+    'scrollTopOffset'?: number;
     'titleSuffix': string;
   }
   interface StencilRouterAttributes extends StencilHTMLAttributes {
@@ -139,9 +139,9 @@ export namespace Components {
 
   interface StencilRouteSwitch {
     'group': string;
-    'location': LocationSegments;
-    'routeViewsUpdated': (options: RouteViewOptions) => void;
-    'scrollTopOffset': number;
+    'location'?: LocationSegments;
+    'routeViewsUpdated'?: (options: RouteViewOptions) => void;
+    'scrollTopOffset'?: number;
   }
   interface StencilRouteSwitchAttributes extends StencilHTMLAttributes {
     'group'?: string;

@@ -5,6 +5,10 @@ function isAbsolute(pathname: string) {
   return pathname.charAt(0) === '/';
 }
 
+export function createKey(keyLength: number) {
+  return Math.random().toString(36).substr(2, keyLength)
+};
+
 // About 1.5x faster than the two-arg version of Array#splice()
 function spliceOne(list: string[], index: number) {
   for (let i = index, k = i + 1, n = list.length; k < n; i += 1, k += 1) {
@@ -132,34 +136,27 @@ export function locationsAreEqual(a: LocationSegments, b: LocationSegments) {
   valueEqual(a.state, b.state);
 }
 
-export function createLocation(path: string | LocationSegments, state?: any, key?: string, currentLocation?: LocationSegments): LocationSegments {
+export function createLocation(path: string | LocationSegments, state: any, key: string, currentLocation?: LocationSegments): LocationSegments {
   let location;
   if (typeof path === 'string') {
     // Two-arg form: push(path, state)
     location = parsePath(path);
-    location.state = state;
+    if (location.state !== undefined) {
+      location.state = state;
+    }
   } else {
     // One-arg form: push(location)
-    location = { ...path };
+    location = {
+      pathname: '',
+      ...path
+    };
 
-    if (location.pathname === undefined) {
-      location.pathname = '';
+    if (location.search && location.search.charAt(0) !== '?') {
+      location.search = '?' + location.search;
     }
 
-    if (location.search) {
-      if (location.search.charAt(0) !== '?') {
-        location.search = '?' + location.search;
-      }
-    } else {
-      location.search = '';
-    }
-
-    if (location.hash) {
-      if (location.hash.charAt(0) !== '#') {
-        location.hash = '#' + location.hash;
-      }
-    } else {
-      location.hash = '';
+    if (location.hash && location.hash.charAt(0) !== '#') {
+      location.hash = '#' + location.hash;
     }
 
     if (state !== undefined && location.state === undefined) {
@@ -180,9 +177,7 @@ export function createLocation(path: string | LocationSegments, state?: any, key
     }
   }
 
-  if (key) {
-    location.key = key;
-  }
+  location.key = key;
 
   if (currentLocation) {
     // Resolve incomplete/relative pathname relative to current location.
@@ -198,7 +193,7 @@ export function createLocation(path: string | LocationSegments, state?: any, key
     }
   }
 
-  location.query = parseQueryString(location.search);
+  location.query = parseQueryString(location.search || '');
 
   return location;
 };

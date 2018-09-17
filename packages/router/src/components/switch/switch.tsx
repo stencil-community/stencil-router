@@ -7,14 +7,14 @@ import { matchPath } from '../../utils/match-path';
 
 interface Child {
   el: HTMLStencilRouteElement,
-  match: MatchResults
+  match: MatchResults | null
 }
 
 function getUniqueId() {
   if (window.crypto) {
     return uuidv4();
   }
-  return (Math.random() * 10e16).toString().match(/.{4}/g).join('-');
+  return ((Math.random() * 10e16).toString().match(/.{4}/g) || []).join('-');
 }
 
 function getMatch(pathname: string, url: any, exact: boolean) {
@@ -25,36 +25,45 @@ function getMatch(pathname: string, url: any, exact: boolean) {
   });
 }
 
+function isHTMLStencilRouteElement(element: Element): element is HTMLStencilRouteElement {
+  return element.tagName.toLocaleLowerCase() === 'stencil-route';
+}
+
 @Component({
   tag: 'stencil-route-switch'
 })
 export class RouteSwitch implements ComponentInterface {
-  @Prop({ context: 'queue'}) queue: QueueApi;
-  @Element() el: HTMLStencilElement;
-  @Prop({reflectToAttr: true}) group: string = getUniqueId();
-  @Prop() scrollTopOffset: number = null;
-  @Prop() location: LocationSegments;
-  @Prop() routeViewsUpdated: (options: RouteViewOptions) => void;
+  @Element() el!: HTMLStencilElement;
 
-  activeIndex: number = null;
-  subscribers: Child[];
+  @Prop({ context: 'queue'}) queue!: QueueApi;
+
+  @Prop({reflectToAttr: true}) group: string = getUniqueId();
+  @Prop() scrollTopOffset?: number;
+  @Prop() location?: LocationSegments;
+  @Prop() routeViewsUpdated?: (options: RouteViewOptions) => void;
+
+  activeIndex?: number;
+  subscribers: Child[] = [];
 
   componentWillLoad() {
-    this.regenerateSubscribers(this.location);
+    if (this.location != null) {
+      this.regenerateSubscribers(this.location);
+    }
   }
 
   @Watch('location')
   async regenerateSubscribers(newLocation: LocationSegments) {
-    if (!newLocation) {
+    if (newLocation == null) {
       return;
     }
 
-    let newActiveIndex: number = null;
+    let newActiveIndex: number = -1;
     this.subscribers = Array.from(this.el.children)
+      .filter(isHTMLStencilRouteElement)
       .map((childElement: HTMLStencilRouteElement, index): Child => {
         const match = getMatch(newLocation.pathname, childElement.url, childElement.exact);
 
-        if (match && newActiveIndex === null) {
+        if (match && newActiveIndex === -1) {
           newActiveIndex = index;
         }
         return {
@@ -63,10 +72,14 @@ export class RouteSwitch implements ComponentInterface {
         };
       });
 
+    if (newActiveIndex === -1) {
+      return;
+    }
+
     // Check if this actually changes which child is active
     // then just pass the new match down if the active route isn't changing.
     if (this.activeIndex === newActiveIndex) {
-      this.subscribers[this.activeIndex].el.match = this.subscribers[this.activeIndex].match;
+      this.subscribers[newActiveIndex].el.match = this.subscribers[newActiveIndex].match;
       return;
     }
     this.activeIndex = newActiveIndex;
@@ -74,30 +87,36 @@ export class RouteSwitch implements ComponentInterface {
     // Set all props on the new active route then wait until it says that it
     // is completed
     const activeChild = this.subscribers[this.activeIndex];
-    activeChild.el.scrollTopOffset = this.scrollTopOffset;
+    if (this.scrollTopOffset) {
+      activeChild.el.scrollTopOffset = this.scrollTopOffset;
+    }
     activeChild.el.group = this.group;
     activeChild.el.match = activeChild.match;
     activeChild.el.componentUpdated = (routeViewUpdatedOptions: RouteViewOptions) => {
       // After the new active route has completed then update visibility of routes
       this.queue.write(() => {
         this.subscribers.forEach((child, index) => {
-          child.el.componentUpdated = null;
+          delete child.el.componentUpdated;
 
           if (index === this.activeIndex) {
             return child.el.style.display = null;
           }
 
-          child.el.scrollTopOffset = this.scrollTopOffset;
+          if (this.scrollTopOffset) {
+            child.el.scrollTopOffset = this.scrollTopOffset;
+          }
           child.el.group = this.group;
           child.el.match = null;
           child.el.style.display = 'none';
         });
       });
 
-      this.routeViewsUpdated({
-        scrollTopOffset: this.scrollTopOffset,
-        ...routeViewUpdatedOptions
-      });
+      if (this.routeViewsUpdated) {
+        this.routeViewsUpdated({
+          scrollTopOffset: this.scrollTopOffset,
+          ...routeViewUpdatedOptions
+        });
+      }
     };
   }
 

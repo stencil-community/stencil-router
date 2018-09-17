@@ -14,33 +14,33 @@ import ActiveRouter from '../../global/active-router';
 })
 export class Route implements ComponentInterface {
   @Prop() group: string | null = null;
-  @Prop() componentUpdated: (options: RouteViewOptions) => void = null;
+  @Prop() componentUpdated?: (options: RouteViewOptions) => void;
   @Prop({ mutable: true }) match: MatchResults | null = null;
 
-  @Prop() url: string | string[];
-  @Prop() component: string;
-  @Prop() componentProps: { [key: string]: any } = {};
+  @Prop() url?: string | string[];
+  @Prop() component?: string;
+  @Prop() componentProps?: { [key: string]: any } = {};
   @Prop() exact: boolean = false;
-  @Prop() routeRender: (props: RouteRenderProps) => any = null;
-  @Prop() scrollTopOffset: number = null;
-  @Prop() routeViewsUpdated: (options: RouteViewOptions) => void;
+  @Prop() routeRender?: (props: RouteRenderProps) => any;
+  @Prop() scrollTopOffset?: number;
+  @Prop() routeViewsUpdated?: (options: RouteViewOptions) => void;
 
-  @Prop() location: LocationSegments;
-  @Prop() history: RouterHistory;
-  @Prop() historyType: HistoryType;
+  @Prop() location?: LocationSegments;
+  @Prop() history?: RouterHistory;
+  @Prop() historyType?: HistoryType;
 
 
-  @Element() el: HTMLStencilRouteElement;
+  @Element() el!: HTMLStencilRouteElement;
 
   componentDidRerender: Function | undefined;
   scrollOnNextRender: boolean = false;
-  previousMatch: MatchResults = null;
+  previousMatch: MatchResults | null = null;
   isGrouped: boolean = false;
 
   componentWillLoad() {
     // We need to check if it is part of a group. This will load before parent
     // can pass down props
-    this.isGrouped = this.group != null || this.el.parentElement.tagName.toLowerCase() === 'stencil-route-switch';
+    this.isGrouped = (this.group != null || (this.el.parentElement != null && this.el.parentElement.tagName.toLowerCase() === 'stencil-route-switch'));
   }
 
   // Identify if the current route is a match.
@@ -60,26 +60,29 @@ export class Route implements ComponentInterface {
 
 
   async componentDidUpdate() {
+    let routeViewOptions: RouteViewOptions = {};
+
+    if (this.scrollTopOffset) {
+      routeViewOptions = {
+        scrollTopOffset: this.scrollTopOffset
+      }
+    }
     // After all children have completed then tell switch
     // the provided callback will get executed after this route is in view
     if (typeof this.componentUpdated === 'function') {
-      this.componentUpdated({
-        scrollTopOffset: this.scrollTopOffset
-      });
+      this.componentUpdated(routeViewOptions);
 
     // If this is an independent route and it matches then routes have updated.
     // If the only change to location is a hash change then do not scroll.
-    } else if (this.match && !matchesAreEqual(this.match, this.previousMatch)) {
-      this.routeViewsUpdated({
-        scrollTopOffset: this.scrollTopOffset
-      });
+    } else if (this.match && !matchesAreEqual(this.match, this.previousMatch) && this.routeViewsUpdated) {
+      this.routeViewsUpdated(routeViewOptions);
     }
   }
 
   render() {
     // If there is no activeRouter then do not render
     // Check if this route is in the matching URL (for example, a parent route)
-    if (!this.match) {
+    if (!this.match || !this.history) {
       return null;
     }
 

@@ -24,5 +24,8 @@
       "json",
       "jsx"
     ]
+  },
+  "devDependencies": {
+    "workbox-build": "3.4.1"
   }
 }

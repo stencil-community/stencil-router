@@ -23,7 +23,7 @@ export class TestDemoThree {
       <span>Demo 3 Test Page<br/></span>,
       <stencil-route url="/demo3/page1" exact={true} routeRender={() =>
         <div>
-          <a href="#" onClick={this.pushToPage('/demo3/page2', { 'blue': 'blue' })}>
+          <a href="/demo3/page2" onClick={this.pushToPage('/demo3/page2', { 'blue': 'blue' })}>
             History push to /demo3/page2
           </a>,
           <pre>
@@ -43,11 +43,11 @@ export class TestDemoThree {
             {JSON.stringify(this.history ? this.history.location.state: {}, null, 2)}
           </pre>
         </div>
-    }></stencil-route>,
+      }></stencil-route>,
 
       <stencil-route url="/demo3/page2" exact={true} routeRender={() =>
         <div>
-          <a href="#" onClick={this.pushToPage('/demo3/page1', { 'red': 'red' })}>
+          <a href="/demo3/page1" onClick={this.pushToPage('/demo3/page1', { 'red': 'red' })}>
             History push to /demo3/page1
           </a>,
           <pre>

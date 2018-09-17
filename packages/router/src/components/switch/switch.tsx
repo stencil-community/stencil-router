@@ -58,9 +58,10 @@ export class RouteSwitch implements ComponentInterface {
     }
 
     let newActiveIndex: number = -1;
-    this.subscribers = Array.from(this.el.children)
+
+    this.subscribers = Array.prototype.slice.call(this.el.children)
       .filter(isHTMLStencilRouteElement)
-      .map((childElement: HTMLStencilRouteElement, index): Child => {
+      .map((childElement: HTMLStencilRouteElement, index: number): Child => {
         const match = getMatch(newLocation.pathname, childElement.url, childElement.exact);
 
         if (match && newActiveIndex === -1) {

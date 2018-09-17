@@ -12,11 +12,11 @@ import ActiveRouter from '../../global/active-router';
 })
 export class RouteTitle implements ComponentInterface {
   @Element() el!: HTMLStencilElement;
-  @Prop() pageTitleSuffix: string = '';
+  @Prop() titleSuffix: string = '';
   @Prop() pageTitle: string = '';
 
   componentWillLoad() {
-    document.title = `${this.pageTitle}${this.pageTitleSuffix || ''}`;
+    document.title = `${this.pageTitle}${this.titleSuffix || ''}`;
   }
 }
 

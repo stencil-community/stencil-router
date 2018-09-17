@@ -96,7 +96,7 @@ export class RouteSwitch implements ComponentInterface {
       // After the new active route has completed then update visibility of routes
       this.queue.write(() => {
         this.subscribers.forEach((child, index) => {
-          delete child.el.componentUpdated;
+          child.el.componentUpdated = undefined;
 
           if (index === this.activeIndex) {
             return child.el.style.display = null;

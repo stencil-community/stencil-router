@@ -13,7 +13,7 @@ import ActiveRouter from '../../global/active-router';
   styleUrl: 'route.css'
 })
 export class Route implements ComponentInterface {
-  @Prop() group: string | null = null;
+  @Prop({ reflectToAttr: true }) group: string | null = null;
   @Prop() componentUpdated?: (options: RouteViewOptions) => void;
   @Prop({ mutable: true }) match: MatchResults | null = null;
 
@@ -35,18 +35,13 @@ export class Route implements ComponentInterface {
   componentDidRerender: Function | undefined;
   scrollOnNextRender: boolean = false;
   previousMatch: MatchResults | null = null;
-  isGrouped: boolean = false;
-
-  componentWillLoad() {
-    // We need to check if it is part of a group. This will load before parent
-    // can pass down props
-    this.isGrouped = (this.group != null || (this.el.parentElement != null && this.el.parentElement.tagName.toLowerCase() === 'stencil-route-switch'));
-  }
 
   // Identify if the current route is a match.
   @Watch('location')
   computeMatch(newLocation: LocationSegments) {
-    if (!newLocation || this.isGrouped) {
+    const isGrouped = this.group != null || (this.el.parentElement != null && this.el.parentElement.tagName.toLowerCase() === 'stencil-route-switch');
+
+    if (!newLocation || isGrouped) {
       return;
     }
 

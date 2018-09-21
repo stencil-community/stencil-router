@@ -1,6 +1,6 @@
 {
   "name": "@stencil/router",
-  "version": "0.2.7-5",
+  "version": "0.2.7",
   "description": "Stencil Router",
   "module": "dist/esm/index.js",
   "main": "dist/index.js",
@@ -21,10 +21,11 @@
     "type": "git",
     "url": "git+https://github.com/ionic-team/stencil-router.git"
   },
-  "dependencies": {},
-  "devDependencies": {
-    "np": "^3.0.4",
+  "dependencies": {
     "@stencil/state-tunnel": "0.0.9-1"
+  },
+  "devDependencies": {
+    "np": "^3.0.4"
   },
   "author": "Ionic Team",
   "license": "MIT",

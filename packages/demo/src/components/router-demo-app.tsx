@@ -29,6 +29,7 @@ export class RouterDemoApp {
           <li><stencil-route-link url="/demo3/page1">Demo3 Page1 Link</stencil-route-link></li>
           <li><stencil-route-link url="/demo3/page2">Demo3 Page2 Link</stencil-route-link></li>
           <li><stencil-route-link url="/demo4">Demo4 Link</stencil-route-link></li>
+          <li><stencil-route-link url="/route-guard">Test Route Guard</stencil-route-link></li>
           <li><stencil-route-link anchorClass="what" url="/demo6/">Demo6 Link</stencil-route-link></li>
           <li><stencil-route-link anchorTabIndex="1" url="/demo7/">Demo7 Link</stencil-route-link></li>
           <stencil-route-link custom="li" url="/demo8/">Demo8 Link</stencil-route-link>
@@ -90,6 +91,13 @@ export class RouterDemoApp {
               <div class="content-holder">
                 <stencil-route-title title="Demo 8"></stencil-route-title>,
                 <span>rendering /demo 8</span>
+              </div>
+            }></stencil-route>
+
+            <stencil-route url="/route-guard" routeRender={({ history, match, pages }) =>
+              <div class="content-holder">
+                <stencil-route-title title="Demo 8"></stencil-route-title>,
+                <test-route-guard {...{history, match, pages}}></test-route-guard>
               </div>
             }></stencil-route>
 

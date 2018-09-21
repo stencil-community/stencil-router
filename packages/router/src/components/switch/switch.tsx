@@ -100,7 +100,7 @@ export class RouteSwitch implements ComponentInterface {
           child.el.componentUpdated = undefined;
 
           if (index === this.activeIndex) {
-            return child.el.style.display = null;
+            return child.el.style.display = '';
           }
 
           if (this.scrollTopOffset) {

@@ -10,28 +10,25 @@ export class TestRouteGuard implements ComponentInterface {
   @Prop() match: MatchResults | null = null;
   @Prop() history?: RouterHistory;
 
-  @State() routeGuardBlock?: () => void;
+  @State() routeGuardBlock: boolean = true;
 
   toggleRouteGuard = () => {
-    if (this.routeGuardBlock != null) {
-      this.routeGuardBlock();
-    } else if (this.history) {
-      this.routeGuardBlock = this.history.block('oh you got blocked');
-    }
+    this.routeGuardBlock = !this.routeGuardBlock;
   }
 
   render() {
-    const currentlyBlocked = this.routeGuardBlock != null;
     return (
       <div>
-        {currentlyBlocked ?
+        <stencil-router-prompt when={this.routeGuardBlock} message={'you are still editing'}></stencil-router-prompt>
+
+        {this.routeGuardBlock ?
           <span>You are currently blocked</span> :
           <span>Go freely about your business</span>
         }
         <br/>
         <br/>
         <button onClick={this.toggleRouteGuard}>
-          {currentlyBlocked ? 'Unblock' : 'Block'}
+          {this.routeGuardBlock ? 'Unblock' : 'Block'}
         </button>
         <br/>
         <br/>

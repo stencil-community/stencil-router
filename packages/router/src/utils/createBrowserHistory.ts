@@ -1,7 +1,7 @@
 // Adapted from the https://github.com/ReactTraining/history and converted to TypeScript
 
 import { createLocation, createKey } from './location-utils';
-import { RouterHistory, LocationSegments } from '../global/interfaces';
+import { RouterHistory, LocationSegments, Prompt } from '../global/interfaces';
 import { invariant, warning } from './log';
 import {
   addLeadingSlash,
@@ -290,7 +290,7 @@ const createBrowserHistory = (props: CreateBrowserHistoryOptions = {}): RouterHi
 
   let isBlocked = false;
 
-  const block = (prompt = '') => {
+  const block = (prompt: string | Prompt = '') => {
     const unblock = transitionManager.setPrompt(prompt);
 
     if (!isBlocked) {

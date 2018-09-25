@@ -3,6 +3,8 @@ export interface ActiveRouter {
   dispatch: (location: LocationSegments, nextListeners: RouteSubscription[]) => void;
 }
 
+export type Prompt = (location: LocationSegments, action: string) => string;
+
 export interface RouteRenderProps {
   history: RouterHistory;
   match: MatchResults | null;
@@ -46,7 +48,7 @@ export interface RouterHistory {
   go: (n: number) => void;
   goBack: () => void;
   goForward: () => void;
-  block: (prompt?: string) => () => void;
+  block: (prompt?: string | Prompt) => () => void;
   listen: (listener: Function) => () => void;
 }
 

@@ -11,6 +11,7 @@ import {
   HistoryType,
   LocationSegments,
   MatchResults,
+  Prompt,
   RouteRenderProps,
   RouterHistory,
   RouteViewOptions,
@@ -24,6 +25,17 @@ export namespace Components {
   }
   interface StencilAsyncContentAttributes extends StencilHTMLAttributes {
     'documentLocation'?: string;
+  }
+
+  interface StencilRouterPrompt {
+    'history'?: RouterHistory;
+    'message': string | Prompt;
+    'when': boolean;
+  }
+  interface StencilRouterPromptAttributes extends StencilHTMLAttributes {
+    'history'?: RouterHistory;
+    'message'?: string | Prompt;
+    'when'?: boolean;
   }
 
   interface StencilRouterRedirect {
@@ -154,6 +166,7 @@ export namespace Components {
 declare global {
   interface StencilElementInterfaces {
     'StencilAsyncContent': Components.StencilAsyncContent;
+    'StencilRouterPrompt': Components.StencilRouterPrompt;
     'StencilRouterRedirect': Components.StencilRouterRedirect;
     'StencilRouteLink': Components.StencilRouteLink;
     'StencilRouteTitle': Components.StencilRouteTitle;
@@ -164,6 +177,7 @@ declare global {
 
   interface StencilIntrinsicElements {
     'stencil-async-content': Components.StencilAsyncContentAttributes;
+    'stencil-router-prompt': Components.StencilRouterPromptAttributes;
     'stencil-router-redirect': Components.StencilRouterRedirectAttributes;
     'stencil-route-link': Components.StencilRouteLinkAttributes;
     'stencil-route-title': Components.StencilRouteTitleAttributes;
@@ -177,6 +191,12 @@ declare global {
   var HTMLStencilAsyncContentElement: {
     prototype: HTMLStencilAsyncContentElement;
     new (): HTMLStencilAsyncContentElement;
+  };
+
+  interface HTMLStencilRouterPromptElement extends Components.StencilRouterPrompt, HTMLStencilElement {}
+  var HTMLStencilRouterPromptElement: {
+    prototype: HTMLStencilRouterPromptElement;
+    new (): HTMLStencilRouterPromptElement;
   };
 
   interface HTMLStencilRouterRedirectElement extends Components.StencilRouterRedirect, HTMLStencilElement {}
@@ -217,6 +237,7 @@ declare global {
 
   interface HTMLElementTagNameMap {
     'stencil-async-content': HTMLStencilAsyncContentElement
+    'stencil-router-prompt': HTMLStencilRouterPromptElement
     'stencil-router-redirect': HTMLStencilRouterRedirectElement
     'stencil-route-link': HTMLStencilRouteLinkElement
     'stencil-route-title': HTMLStencilRouteTitleElement
@@ -227,6 +248,7 @@ declare global {
 
   interface ElementTagNameMap {
     'stencil-async-content': HTMLStencilAsyncContentElement;
+    'stencil-router-prompt': HTMLStencilRouterPromptElement;
     'stencil-router-redirect': HTMLStencilRouterRedirectElement;
     'stencil-route-link': HTMLStencilRouteLinkElement;
     'stencil-route-title': HTMLStencilRouteTitleElement;

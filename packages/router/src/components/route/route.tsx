@@ -54,10 +54,14 @@ export class Route implements ComponentInterface {
   }
 
 
-  async componentDidUpdate() {
+  async loadCompleted() {
     let routeViewOptions: RouteViewOptions = {};
 
-    if (this.scrollTopOffset) {
+    if (this.history && this.history.location.hash) {
+      routeViewOptions = {
+        scrollToId: this.history.location.hash.substr(1)
+      }
+    } else if (this.scrollTopOffset) {
       routeViewOptions = {
         scrollTopOffset: this.scrollTopOffset
       }
@@ -72,6 +76,13 @@ export class Route implements ComponentInterface {
     } else if (this.match && !matchesAreEqual(this.match, this.previousMatch) && this.routeViewsUpdated) {
       this.routeViewsUpdated(routeViewOptions);
     }
+  }
+
+  async componentDidUpdate() {
+    await this.loadCompleted();
+  }
+  async componentDidLoad() {
+    await this.loadCompleted();
   }
 
   render() {

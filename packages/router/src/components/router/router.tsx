@@ -56,6 +56,12 @@ export class Router implements ComponentInterface {
   }
 
   routeViewsUpdated = (options: RouteViewOptions = {}) => {
+    if (options.scrollToId) {
+      const element = document.getElementById(options.scrollToId);
+      if (element) {
+        return element.scrollIntoView();
+      }
+    }
     this.scrollTo(options.scrollTopOffset || this.scrollTopOffset);
   }
 

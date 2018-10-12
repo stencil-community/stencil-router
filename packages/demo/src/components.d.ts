@@ -7,6 +7,7 @@
 import '@stencil/core';
 
 import '@stencil/router';
+import '@stencil/state-tunnel';
 import {
   LocationSegments,
   MatchResults,
@@ -27,6 +28,9 @@ export namespace Components {
     'history'?: RouterHistory;
     'location'?: LocationSegments;
   }
+
+  interface TestDemoEight {}
+  interface TestDemoEightAttributes extends StencilHTMLAttributes {}
 
   interface TestDemoFour {
     'history'?: RouterHistory;
@@ -88,6 +92,7 @@ declare global {
   interface StencilElementInterfaces {
     'RouterDemoApp': Components.RouterDemoApp;
     'TestDeepComponent': Components.TestDeepComponent;
+    'TestDemoEight': Components.TestDemoEight;
     'TestDemoFour': Components.TestDemoFour;
     'TestDemoSeven': Components.TestDemoSeven;
     'TestDemoSix': Components.TestDemoSix;
@@ -98,6 +103,7 @@ declare global {
   interface StencilIntrinsicElements {
     'router-demo-app': Components.RouterDemoAppAttributes;
     'test-deep-component': Components.TestDeepComponentAttributes;
+    'test-demo-eight': Components.TestDemoEightAttributes;
     'test-demo-four': Components.TestDemoFourAttributes;
     'test-demo-seven': Components.TestDemoSevenAttributes;
     'test-demo-six': Components.TestDemoSixAttributes;
@@ -116,6 +122,12 @@ declare global {
   var HTMLTestDeepComponentElement: {
     prototype: HTMLTestDeepComponentElement;
     new (): HTMLTestDeepComponentElement;
+  };
+
+  interface HTMLTestDemoEightElement extends Components.TestDemoEight, HTMLStencilElement {}
+  var HTMLTestDemoEightElement: {
+    prototype: HTMLTestDemoEightElement;
+    new (): HTMLTestDemoEightElement;
   };
 
   interface HTMLTestDemoFourElement extends Components.TestDemoFour, HTMLStencilElement {}
@@ -151,6 +163,7 @@ declare global {
   interface HTMLElementTagNameMap {
     'router-demo-app': HTMLRouterDemoAppElement
     'test-deep-component': HTMLTestDeepComponentElement
+    'test-demo-eight': HTMLTestDemoEightElement
     'test-demo-four': HTMLTestDemoFourElement
     'test-demo-seven': HTMLTestDemoSevenElement
     'test-demo-six': HTMLTestDemoSixElement
@@ -161,6 +174,7 @@ declare global {
   interface ElementTagNameMap {
     'router-demo-app': HTMLRouterDemoAppElement;
     'test-deep-component': HTMLTestDeepComponentElement;
+    'test-demo-eight': HTMLTestDemoEightElement;
     'test-demo-four': HTMLTestDemoFourElement;
     'test-demo-seven': HTMLTestDemoSevenElement;
     'test-demo-six': HTMLTestDemoSixElement;

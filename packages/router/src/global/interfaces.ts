@@ -13,7 +13,8 @@ export interface RouteRenderProps {
 
 
 export interface RouteViewOptions {
-  scrollTopOffset?: number
+  scrollTopOffset?: number,
+  scrollToId?: string
 }
 
 export interface RouteSubscription {

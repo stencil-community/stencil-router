@@ -56,7 +56,7 @@ export class Router implements ComponentInterface {
   }
 
   routeViewsUpdated = (options: RouteViewOptions = {}) => {
-    if (options.scrollToId) {
+    if (options.scrollToId && this.historyType === 'browser') {
       const element = document.getElementById(options.scrollToId);
       if (element) {
         return element.scrollIntoView();

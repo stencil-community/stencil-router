@@ -51,7 +51,7 @@ export class StencilRouterPrompt implements ComponentInterface {
     this.disable();
   }
 
-  render() {
+  render():void {
     return null;
   }
 }

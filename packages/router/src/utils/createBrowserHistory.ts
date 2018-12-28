@@ -68,7 +68,6 @@ const createBrowserHistory = (props: CreateBrowserHistoryOptions = {}): RouterHi
   const basename = props.basename ? stripTrailingSlash(addLeadingSlash(props.basename)) : '';
 
   const getDOMLocation = (historyState: LocationSegments) => {
-    historyState = historyState || {};
     const { key, state } = historyState;
     const { pathname, search, hash } = window.location;
 

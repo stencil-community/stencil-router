@@ -1,4 +1,4 @@
-import pathToRegexp, { Key } from './path-to-regex';
+import pathToRegexp, { Key, Path } from './path-to-regex';
 import { MatchOptions, MatchResults } from '../global/interfaces';
 import { valueEqual } from './location-utils';
 
@@ -12,7 +12,7 @@ const cacheLimit = 10000;
 let cacheCount = 0;
 
 // Memoized function for creating the path match regex
-function compilePath(pattern: string | string[], options: CompileOptions): { re: RegExp, keys: Key[]} {
+function compilePath(pattern: Path, options: CompileOptions): { re: RegExp, keys: Key[]} {
   const cacheKey = `${options.end}${options.strict}`;
   const cache = patternCache[cacheKey] || (patternCache[cacheKey] = {});
   const cachePattern = JSON.stringify(pattern);

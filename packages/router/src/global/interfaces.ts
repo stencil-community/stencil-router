@@ -1,3 +1,5 @@
+export type Path = string | RegExp | Array<string | RegExp>;
+
 export interface ActiveRouter {
   subscribe: (location: LocationSegments, nextListeners: RouteSubscription[], routeSubscription: RouteSubscription) => Listener
   dispatch: (location: LocationSegments, nextListeners: RouteSubscription[]) => void;
@@ -60,7 +62,7 @@ export interface RouterGroup {
 }
 
 export interface MatchOptions {
-  path?: string | string[];
+  path?: Path;
   exact?: boolean;
   strict?: boolean;
 }

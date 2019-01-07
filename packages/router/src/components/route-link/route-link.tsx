@@ -1,7 +1,7 @@
 import { Component, Prop, State, Watch, Element, ComponentInterface } from '@stencil/core';
 import { matchPath } from '../../utils/match-path';
 import { isModifiedEvent } from '../../utils/dom-utils';
-import { RouterHistory, Listener, LocationSegments, MatchResults } from '../../global/interfaces';
+import { RouterHistory, Listener, LocationSegments, MatchResults, Path } from '../../global/interfaces';
 import ActiveRouter from '../../global/active-router';
 
 function getUrl(url: string, root: string) {
@@ -27,7 +27,7 @@ export class RouteLink implements ComponentInterface {
   unsubscribe: Listener = () => { return; };
 
   @Prop() url?: string;
-  @Prop() urlMatch?: string | string[];
+  @Prop() urlMatch?: Path;
   @Prop() activeClass: string = 'link-active';
   @Prop() exact: boolean = false;
   @Prop() strict: boolean = true;

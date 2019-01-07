@@ -11,6 +11,7 @@ import {
   HistoryType,
   LocationSegments,
   MatchResults,
+  Path,
   Prompt,
   RouteRenderProps,
   RouterHistory,
@@ -70,7 +71,7 @@ export namespace Components {
     'root'?: string;
     'strict': boolean;
     'url'?: string;
-    'urlMatch'?: string | string[];
+    'urlMatch'?: Path;
   }
   interface StencilRouteLinkAttributes extends StencilHTMLAttributes {
     'activeClass'?: string;
@@ -93,7 +94,7 @@ export namespace Components {
     'root'?: string;
     'strict'?: boolean;
     'url'?: string;
-    'urlMatch'?: string | string[];
+    'urlMatch'?: Path;
   }
 
   interface StencilRouteTitle {

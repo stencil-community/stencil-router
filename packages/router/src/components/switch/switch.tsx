@@ -26,7 +26,7 @@ function getMatch(pathname: string, url: any, exact: boolean) {
 }
 
 function isHTMLStencilRouteElement(element: Element): element is HTMLStencilRouteElement {
-  return element.tagName.toLocaleLowerCase() === 'stencil-route';
+  return element.tagName.toLowerCase() === 'stencil-route';
 }
 
 @Component({

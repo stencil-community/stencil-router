@@ -48,9 +48,10 @@ export function matchPath(pathname: string, options: MatchOptions = {}): null | 
   if (!match) {
     return null;
   }
-
   const [ url, ...values ] = match;
   const isExact = pathname === url;
+  console.log(pathname);
+  console.log(url);
 
   if (exact && !isExact) {
     return null;

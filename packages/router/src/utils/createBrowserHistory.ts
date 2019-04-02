@@ -194,7 +194,7 @@ const createBrowserHistory = (props: CreateBrowserHistoryOptions = {}): RouterHi
       const { key, state } = location;
 
       if (canUseHistory) {
-        globalHistory.pushState({ key, state }, undefined, href);
+        globalHistory.pushState({ key, state }, '', href);
 
         if (forceRefresh) {
           window.location.href = href;
@@ -237,7 +237,7 @@ const createBrowserHistory = (props: CreateBrowserHistoryOptions = {}): RouterHi
       const { key, state } = location;
 
       if (canUseHistory) {
-        globalHistory.replaceState({ key, state }, undefined, href);
+        globalHistory.replaceState({ key, state }, '', href);
 
         if (forceRefresh) {
           window.location.replace(href);

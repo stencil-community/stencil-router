@@ -11,14 +11,19 @@ export interface ActiveRouterState {
   routeViewsUpdated: (options: RouteViewOptions) => void;
 }
 
-export default createProviderConsumer<ActiveRouterState>({
-  historyType: 'browser',
-  location: {
-    pathname: '',
-    query: {},
-    key: ''
+export default createProviderConsumer<ActiveRouterState>(
+  {
+    historyType: 'browser',
+    location: {
+      pathname: '',
+      query: {},
+      key: ''
+    },
+    titleSuffix: '',
+    root: '/',
+    routeViewsUpdated: () => {}
   },
-  titleSuffix: '',
-  root: '/',
-  routeViewsUpdated: () => {}
-});
+  (subscribe, child) => (
+    <context-consumer subscribe={subscribe} renderer={child} />
+  )
+);

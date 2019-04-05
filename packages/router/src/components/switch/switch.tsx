@@ -1,5 +1,4 @@
-import uuidv4 from '../../utils/uuid';
-import { Component, Prop, Element, Watch, ComponentInterface } from '@stencil/core';
+import { Component, Prop, Element, Watch, ComponentInterface, h } from '@stencil/core';
 import { QueueApi } from '@stencil/core/dist/declarations';
 import { LocationSegments, MatchResults, RouteViewOptions } from '../../global/interfaces';
 import ActiveRouter from '../../global/active-router';
@@ -10,14 +9,11 @@ interface Child {
   match: MatchResults | null
 }
 
-function getUniqueId() {
-  if (window.crypto) {
-    return uuidv4();
-  }
+const getUniqueId = () => {
   return ((Math.random() * 10e16).toString().match(/.{4}/g) || []).join('-');
 }
 
-function getMatch(pathname: string, url: any, exact: boolean) {
+const getMatch = (pathname: string, url: any, exact: boolean) => {
   return matchPath(pathname, {
     path: url,
     exact: exact,
@@ -25,7 +21,7 @@ function getMatch(pathname: string, url: any, exact: boolean) {
   });
 }
 
-function isHTMLStencilRouteElement(element: Element): element is HTMLStencilRouteElement {
+const isHTMLStencilRouteElement = (element: Element): element is HTMLStencilRouteElement => {
   return element.tagName.toLowerCase() === 'stencil-route';
 }
 
@@ -33,7 +29,7 @@ function isHTMLStencilRouteElement(element: Element): element is HTMLStencilRout
   tag: 'stencil-route-switch'
 })
 export class RouteSwitch implements ComponentInterface {
-  @Element() el!: HTMLStencilElement;
+  @Element() el!: HTMLElement;
 
   @Prop({ context: 'queue'}) queue!: QueueApi;
 

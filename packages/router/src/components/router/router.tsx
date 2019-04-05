@@ -1,11 +1,11 @@
-import { Component, Prop, State, ComponentInterface } from '@stencil/core';
+import { Component, Prop, State, ComponentInterface, getWindow, h } from '@stencil/core';
 import createHistory from '../../utils/createBrowserHistory';
 import createHashHistory from '../../utils/createHashHistory';
 import { LocationSegments, HistoryType, RouterHistory, RouteViewOptions } from '../../global/interfaces';
 import ActiveRouter, { ActiveRouterState } from '../../global/active-router';
 import { QueueApi } from '@stencil/core/dist/declarations';
 
-function getLocation(location: LocationSegments, root: string): LocationSegments {
+const getLocation = (location: LocationSegments, root: string): LocationSegments => {
   // Remove the root URL if found at beginning of string
   const pathname = location.pathname.indexOf(root) == 0 ?
                     '/' + location.pathname.slice(root.length) :
@@ -17,7 +17,7 @@ function getLocation(location: LocationSegments, root: string): LocationSegments
   };
 }
 
-const HISTORIES: { [key in HistoryType]: () => RouterHistory } = {
+const HISTORIES: { [key in HistoryType]: (win: Window) => RouterHistory } = {
   'browser': createHistory,
   'hash': createHashHistory
 };
@@ -31,6 +31,7 @@ const HISTORIES: { [key in HistoryType]: () => RouterHistory } = {
   tag: 'stencil-router'
 })
 export class Router implements ComponentInterface {
+  win = getWindow(this);
   @Prop() root: string = '/';
   @Prop({ context: 'isServer' }) private isServer!: boolean;
   @Prop({ context: 'queue'}) queue!: QueueApi;
@@ -46,7 +47,7 @@ export class Router implements ComponentInterface {
   @State() history?: RouterHistory;
 
   componentWillLoad() {
-    this.history = HISTORIES[this.historyType]();
+    this.history = HISTORIES[this.historyType](this.win);
 
     this.history.listen(async (location: LocationSegments) => {
       location = getLocation(location, this.root);
@@ -73,16 +74,15 @@ export class Router implements ComponentInterface {
     if (this.history.action === 'POP' && Array.isArray(this.history.location.scrollPosition)) {
       return this.queue.write(() => {
         if (this.history && this.history.location && Array.isArray(this.history.location.scrollPosition)) {
-          window.scrollTo(this.history.location.scrollPosition[0], this.history.location.scrollPosition[1]);
+          this.win.scrollTo(this.history.location.scrollPosition[0], this.history.location.scrollPosition[1]);
         }
       });
     }
     // okay, the frame has passed. Go ahead and render now
     return this.queue.write(() => {
-      window.scrollTo(0, scrollToLocation);
+      this.win.scrollTo(0, scrollToLocation);
     });
   }
-
 
   render() {
     if (!this.location || !this.history) {

@@ -6,7 +6,7 @@ import ActiveRouter from '../../global/active-router';
   tag: 'stencil-router-prompt'
 })
 export class StencilRouterPrompt implements ComponentInterface {
-  @Element() el!: HTMLStencilElement;
+  @Element() el!: HTMLElement;
   @Prop() when = true;
   @Prop() message: string | Prompt = '';
   @Prop() history?: RouterHistory;

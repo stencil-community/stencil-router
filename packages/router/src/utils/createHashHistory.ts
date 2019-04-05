@@ -2,7 +2,7 @@
 
 import { createLocation, locationsAreEqual, createKey } from './location-utils';
 import { RouterHistory, LocationSegments, Prompt } from '../global/interfaces';
-import { invariant, warning } from './log';
+import { warning } from './log';
 import {
   addLeadingSlash,
   stripLeadingSlash,
@@ -13,7 +13,6 @@ import {
 } from './path-utils';
 import createTransitionManager from './createTransitionManager';
 import {
-  canUseDOM,
   addEventListener,
   removeEventListener,
   getConfirmation,
@@ -43,34 +42,29 @@ const HashPathCoders = {
   }
 };
 
-const getHashPath = () => {
+const getHashPath = (win: Window) => {
   // We can't use window.location.hash here because it's not
   // consistent across browsers - Firefox will pre-decode it!
-  const href = window.location.href;
+  const href = win.location.href;
   const hashIndex = href.indexOf('#');
   return hashIndex === -1 ? '' : href.substring(hashIndex + 1);
 };
 
-const pushHashPath = (path: string) => (
-  window.location.hash = path
+const pushHashPath = (win: Window, path: string) => (
+  win.location.hash = path
 );
 
-const replaceHashPath = (path: string) => {
-  const hashIndex = window.location.href.indexOf('#');
+const replaceHashPath = (win: Window, path: string) => {
+  const hashIndex = win.location.href.indexOf('#');
 
-  window.location.replace(
-    window.location.href.slice(0, hashIndex >= 0 ? hashIndex : 0) + '#' + path
+  win.location.replace(
+    win.location.href.slice(0, hashIndex >= 0 ? hashIndex : 0) + '#' + path
   );
 };
 
-const createHashHistory = (props: CreateHashHistoryOptions = {}): RouterHistory => {
-  invariant(
-    canUseDOM,
-    'Hash history needs a DOM'
-  );
-
-  const globalHistory = window.history;
-  const canGoWithoutReload = supportsGoWithoutReloadUsingHash();
+const createHashHistory = (win: Window, props: CreateHashHistoryOptions = {}): RouterHistory => {
+  const globalHistory = win.history;
+  const canGoWithoutReload = supportsGoWithoutReloadUsingHash(win.navigator);
   const keyLength = (props.keyLength != null) ? props.keyLength : 6;
 
   const {
@@ -81,8 +75,8 @@ const createHashHistory = (props: CreateHashHistoryOptions = {}): RouterHistory 
 
   const { encodePath, decodePath } = HashPathCoders[hashType];
 
-  const getDOMLocation = () => {
-    let path = decodePath(getHashPath());
+  const getDOMLocation = (win: Window) => {
+    let path = decodePath(getHashPath(win));
 
     warning(
       (!basename || hasBasename(path, basename)),
@@ -114,14 +108,14 @@ const createHashHistory = (props: CreateHashHistoryOptions = {}): RouterHistory 
   let ignorePath: any = null;
 
   const handleHashChange = () => {
-    const path = getHashPath();
+    const path = getHashPath(win);
     const encodedPath = encodePath(path);
 
     if (path !== encodedPath) {
       // Ensure we always have a properly-encoded hash.
-      replaceHashPath(encodedPath);
+      replaceHashPath(win, encodedPath);
     } else {
-      const location = getDOMLocation();
+      const location = getDOMLocation(win);
       const prevLocation = history.location;
 
       if (!forceNextPop && locationsAreEqual(prevLocation, location)) {
@@ -183,14 +177,14 @@ const createHashHistory = (props: CreateHashHistoryOptions = {}): RouterHistory 
   };
 
   // Ensure the hash is encoded properly before doing anything else.
-  const path = getHashPath();
+  const path = getHashPath(win);
   const encodedPath = encodePath(path);
 
   if (path !== encodedPath) {
-    replaceHashPath(encodedPath);
+    replaceHashPath(win, encodedPath);
   }
 
-  const initialLocation = getDOMLocation();
+  const initialLocation = getDOMLocation(win);
   let allPaths = [ createPath(initialLocation) ];
 
   // Public interface
@@ -215,14 +209,14 @@ const createHashHistory = (props: CreateHashHistoryOptions = {}): RouterHistory 
 
       const path = createPath(location);
       const encodedPath = encodePath(basename + path);
-      const hashChanged = getHashPath() !== encodedPath;
+      const hashChanged = getHashPath(win) !== encodedPath;
 
       if (hashChanged) {
         // We cannot tell if a hashchange was caused by a PUSH, so we'd
         // rather setState here and ignore the hashchange. The caveat here
         // is that other hash histories in the page will consider it a POP.
         ignorePath = path;
-        pushHashPath(encodedPath);
+        pushHashPath(win, encodedPath);
 
         const prevIndex = allPaths.lastIndexOf(createPath(history.location));
         const nextPaths = allPaths.slice(0, prevIndex === -1 ? 0 : prevIndex + 1);
@@ -258,14 +252,14 @@ const createHashHistory = (props: CreateHashHistoryOptions = {}): RouterHistory 
 
       const path = createPath(location);
       const encodedPath = encodePath(basename + path);
-      const hashChanged = getHashPath() !== encodedPath;
+      const hashChanged = getHashPath(win) !== encodedPath;
 
       if (hashChanged) {
         // We cannot tell if a hashchange was caused by a REPLACE, so we'd
         // rather setState here and ignore the hashchange. The caveat here
         // is that other hash histories in the page will consider it a POP.
         ignorePath = path;
-        replaceHashPath(encodedPath);
+        replaceHashPath(win, encodedPath);
       }
 
       const prevIndex = allPaths.indexOf(createPath(history.location));

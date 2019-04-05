@@ -1,6 +1,3 @@
-export const canUseDOM = !!(
-  typeof window !== 'undefined' && window.document && window.document.createElement
-);
 
 export const addEventListener = (node: HTMLElement | Window, event: any, listener: any) => (
   node.addEventListener
@@ -14,8 +11,8 @@ export const removeEventListener = (node: HTMLElement | Window, event: any, list
     : (node as any).detachEvent('on' + event, listener)
 );
 
-export const getConfirmation = (message: string, callback: (confirmed: boolean) => {}) => (
-  callback(window.confirm(message))
+export const getConfirmation = (win: Window, message: string, callback: (confirmed: boolean) => {}) => (
+  callback(win.confirm(message))
 );
 
 export const isModifiedEvent = (event: MouseEvent) => (
@@ -29,8 +26,8 @@ export const isModifiedEvent = (event: MouseEvent) => (
  * https://github.com/Modernizr/Modernizr/blob/master/feature-detects/history.js
  * changed to avoid false negatives for Windows Phones: https://github.com/reactjs/react-router/issues/586
  */
-export const supportsHistory = () => {
-  const ua = window.navigator.userAgent;
+export const supportsHistory = (win: Window) => {
+  const ua = win.navigator.userAgent;
 
   if ((ua.indexOf('Android 2.') !== -1 || ua.indexOf('Android 4.0') !== -1) &&
     ua.indexOf('Mobile Safari') !== -1 &&
@@ -40,22 +37,22 @@ export const supportsHistory = () => {
     return false;
   }
 
-  return window.history && 'pushState' in window.history;
+  return win.history && 'pushState' in win.history;
 };
 
 /**
  * Returns true if browser fires popstate on hash change.
  * IE10 and IE11 do not.
  */
-export const supportsPopStateOnHashChange = () => (
-  window.navigator.userAgent.indexOf('Trident') === -1
+export const supportsPopStateOnHashChange = (nav: Navigator) => (
+  nav.userAgent.indexOf('Trident') === -1
 );
 
 /**
  * Returns false if using go(n) with hash history causes a full page reload.
  */
-export const supportsGoWithoutReloadUsingHash = () => (
-  window.navigator.userAgent.indexOf('Firefox') === -1
+export const supportsGoWithoutReloadUsingHash = (nav: Navigator) => (
+  nav.userAgent.indexOf('Firefox') === -1
 );
 
 export const isExtraneousPopstateEvent = (event: any) => (

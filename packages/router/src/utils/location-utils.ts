@@ -92,7 +92,7 @@ export function valueEqual(a: any, b: any): boolean {
   }
 
   if (Array.isArray(a)) {
-    return Array.isArray(b) && a.length === b.length && a.every(function (item, index) {
+    return Array.isArray(b) && a.length === b.length && a.every((item, index) => {
       return valueEqual(item, b[index])
     })
   }
@@ -119,7 +119,7 @@ export function valueEqual(a: any, b: any): boolean {
       return false;
     }
 
-    return aKeys.every(function (key) {
+    return aKeys.every((key) => {
       return valueEqual(a[key], b[key]);
     });
   }

@@ -1,23 +1,10 @@
 import { storageAvailable } from './dom-utils';
 
-const createScrollHistory = (applicationScrollKey: string = 'scrollPositions') => {
+const createScrollHistory = (win: Window, applicationScrollKey: string = 'scrollPositions') => {
 
   let scrollPositions = new Map<string, [number, number]>();
 
-  if (storageAvailable('sessionStorage')) {
-    const scrollData = window.sessionStorage.getItem(applicationScrollKey);
-    scrollPositions = scrollData ?
-      new Map(JSON.parse(scrollData)) :
-      scrollPositions;
-  }
-
-
-  if ('scrollRestoration' in history) {
-    history.scrollRestoration = 'manual';
-  }
-
-
-  function set(key: string, value: [number, number]) {
+  const set = (key: string, value: [number, number]) => {
     scrollPositions.set(key, value);
     if (storageAvailable('sessionStorage')) {
       const arrayData: [string, [number, number]][] = [];
@@ -25,20 +12,31 @@ const createScrollHistory = (applicationScrollKey: string = 'scrollPositions') =
       scrollPositions.forEach((value, key) => {
         arrayData.push([key, value]);
       });
-      window.sessionStorage.setItem('scrollPositions', JSON.stringify(arrayData));
+      win.sessionStorage.setItem('scrollPositions', JSON.stringify(arrayData));
     }
   }
 
-  function get(key: string) {
+  const get = (key: string) => {
     return scrollPositions.get(key);
   }
 
-  function has(key: string) {
+  const has = (key: string) => {
     return scrollPositions.has(key);
   }
 
-  function capture(key: string) {
-    set(key, [window.scrollX, window.scrollY])
+  const capture = (key: string) => {
+    set(key, [win.scrollX, win.scrollY])
+  }
+
+  if (storageAvailable('sessionStorage')) {
+    const scrollData = win.sessionStorage.getItem(applicationScrollKey);
+    scrollPositions = scrollData ?
+      new Map(JSON.parse(scrollData)) :
+      scrollPositions;
+  }
+
+  if ('scrollRestoration' in history) {
+    history.scrollRestoration = 'manual';
   }
 
   return {

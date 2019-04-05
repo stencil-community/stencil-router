@@ -1,13 +1,12 @@
-import { Component, Prop, State, Watch, Element, ComponentInterface } from '@stencil/core';
+import { Component, Prop, State, Watch, Element, ComponentInterface, h } from '@stencil/core';
 import { matchPath } from '../../utils/match-path';
 import { isModifiedEvent } from '../../utils/dom-utils';
 import { RouterHistory, Listener, LocationSegments, MatchResults, Path } from '../../global/interfaces';
 import ActiveRouter from '../../global/active-router';
 
-function getUrl(url: string, root: string) {
-
+const getUrl = (url: string, root: string) => {
   // Don't allow double slashes
-  if(url.charAt(0) == '/' && root.charAt(root.length - 1) == '/') {
+  if (url.charAt(0) == '/' && root.charAt(root.length - 1) == '/') {
     return root.slice(0, root.length-1) + url;
   }
   return root + url;
@@ -22,7 +21,7 @@ function getUrl(url: string, root: string) {
   tag: 'stencil-route-link'
 })
 export class RouteLink implements ComponentInterface {
-  @Element() el!: HTMLStencilElement;
+  @Element() el!: HTMLElement;
 
   unsubscribe: Listener = () => { return; };
 

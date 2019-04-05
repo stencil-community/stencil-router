@@ -15,7 +15,7 @@ function getUrl(url: string, root: string) {
   tag: 'stencil-router-redirect'
 })
 export class Redirect implements ComponentInterface {
-  @Element() el!: HTMLStencilElement;
+  @Element() el!: HTMLElement;
 
   @Prop() history?: RouterHistory;
   @Prop() root?: string;

@@ -6,7 +6,7 @@ const createScrollHistory = (win: Window, applicationScrollKey: string = 'scroll
 
   const set = (key: string, value: [number, number]) => {
     scrollPositions.set(key, value);
-    if (storageAvailable('sessionStorage')) {
+    if (storageAvailable(win, 'sessionStorage')) {
       const arrayData: [string, [number, number]][] = [];
 
       scrollPositions.forEach((value, key) => {
@@ -28,7 +28,7 @@ const createScrollHistory = (win: Window, applicationScrollKey: string = 'scroll
     set(key, [win.scrollX, win.scrollY])
   }
 
-  if (storageAvailable('sessionStorage')) {
+  if (storageAvailable(win, 'sessionStorage')) {
     const scrollData = win.sessionStorage.getItem(applicationScrollKey);
     scrollPositions = scrollData ?
       new Map(JSON.parse(scrollData)) :
@@ -46,7 +46,6 @@ const createScrollHistory = (win: Window, applicationScrollKey: string = 'scroll
     capture
   }
 }
-
 
 
 export default createScrollHistory;

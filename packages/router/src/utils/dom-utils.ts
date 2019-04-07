@@ -55,21 +55,21 @@ export const supportsGoWithoutReloadUsingHash = (nav: Navigator) => (
   nav.userAgent.indexOf('Firefox') === -1
 );
 
-export const isExtraneousPopstateEvent = (event: any) => (
+export const isExtraneousPopstateEvent = (nav: Navigator, event: any) => (
   event.state === undefined &&
-  navigator.userAgent.indexOf('CriOS') === -1
+  nav.userAgent.indexOf('CriOS') === -1
 );
 
-export const storageAvailable = (type: 'localStorage' | 'sessionStorage') => {
-  var storage = window[type],
-      x = '__storage_test__';
+export const storageAvailable = (win: any, type: 'localStorage' | 'sessionStorage') => {
+  const storage = win[type];
+  const x = '__storage_test__';
 
   try {
     storage.setItem(x, x);
     storage.removeItem(x);
     return true;
-  }
-  catch(e) {
+
+  } catch(e) {
     return e instanceof DOMException && (
       // everything except Firefox
       e.code === 22 ||

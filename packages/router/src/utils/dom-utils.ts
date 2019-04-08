@@ -1,16 +1,4 @@
 
-export const addEventListener = (node: HTMLElement | Window, event: any, listener: any) => (
-  node.addEventListener
-    ? node.addEventListener(event, listener, false)
-    : (node as any).attachEvent('on' + event, listener)
-);
-
-export const removeEventListener = (node: HTMLElement | Window, event: any, listener: any) => (
-  node.removeEventListener
-    ? node.removeEventListener(event, listener, false)
-    : (node as any).detachEvent('on' + event, listener)
-);
-
 export const getConfirmation = (win: Window, message: string, callback: (confirmed: boolean) => {}) => (
   callback(win.confirm(message))
 );

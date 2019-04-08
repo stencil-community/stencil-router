@@ -13,8 +13,6 @@ import {
 } from './path-utils';
 import createTransitionManager from './createTransitionManager';
 import {
-  addEventListener,
-  removeEventListener,
   getConfirmation,
   supportsGoWithoutReloadUsingHash
 } from './dom-utils';
@@ -287,13 +285,13 @@ const createHashHistory = (win: Window, props: CreateHashHistoryOptions = {}): R
 
   let listenerCount = 0;
 
-  const checkDOMListeners = (delta: number) => {
+  const checkDOMListeners = (win: Window, delta: number) => {
     listenerCount += delta;
 
     if (listenerCount === 1) {
-      addEventListener(window, HashChangeEvent, handleHashChange);
+      win.addEventListener(HashChangeEvent, handleHashChange);
     } else if (listenerCount === 0) {
-      removeEventListener(window, HashChangeEvent, handleHashChange);
+      win.removeEventListener(HashChangeEvent, handleHashChange);
     }
   };
 
@@ -303,14 +301,14 @@ const createHashHistory = (win: Window, props: CreateHashHistoryOptions = {}): R
     const unblock = transitionManager.setPrompt(prompt);
 
     if (!isBlocked) {
-      checkDOMListeners(1);
+      checkDOMListeners(win, 1);
       isBlocked = true;
     }
 
     return () => {
       if (isBlocked) {
         isBlocked = false;
-        checkDOMListeners(-1);
+        checkDOMListeners(win, -1);
       }
 
       return unblock();
@@ -319,10 +317,10 @@ const createHashHistory = (win: Window, props: CreateHashHistoryOptions = {}): R
 
   const listen = (listener: Function) => {
     const unlisten = transitionManager.appendListener(listener);
-    checkDOMListeners(1);
+    checkDOMListeners(win, 1);
 
     return () => {
-      checkDOMListeners(-1);
+      checkDOMListeners(win, -1);
       unlisten();
     };
   };

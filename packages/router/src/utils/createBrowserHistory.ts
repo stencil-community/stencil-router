@@ -13,8 +13,6 @@ import {
 import createTransitionManager from './createTransitionManager';
 import createScrollHistory from './createScrollHistory';
 import {
-  addEventListener,
-  removeEventListener,
   getConfirmation,
   supportsHistory,
   supportsPopStateOnHashChange,
@@ -110,7 +108,7 @@ const createBrowserHistory = (win: Window, props: CreateBrowserHistoryOptions = 
     }
   };
 
-  const handleHashChange = (win: Window) => {
+  const handleHashChange = () => {
     handlePop(getDOMLocation(win, getHistoryState(win)));
   };
 
@@ -161,6 +159,8 @@ const createBrowserHistory = (win: Window, props: CreateBrowserHistoryOptions = 
 
   const initialLocation = getDOMLocation(win, getHistoryState(win));
   let allKeys = [ initialLocation.key ];
+  let listenerCount = 0;
+  let isBlocked = false;
 
   // Public interface
 
@@ -261,27 +261,24 @@ const createBrowserHistory = (win: Window, props: CreateBrowserHistoryOptions = 
   const goBack = () => go(-1);
   const goForward = () => go(1);
 
-  let listenerCount = 0;
 
   const checkDOMListeners = (delta: number) => {
     listenerCount += delta;
 
     if (listenerCount === 1) {
-      addEventListener(window, PopStateEvent, handlePopState);
+      win.addEventListener(PopStateEvent, handlePopState);
 
       if (needsHashChangeListener) {
-        addEventListener(window, HashChangeEvent, handleHashChange);
+        win.addEventListener(HashChangeEvent, handleHashChange);
       }
     } else if (listenerCount === 0) {
-      removeEventListener(window, PopStateEvent, handlePopState);
+      win.removeEventListener(PopStateEvent, handlePopState);
 
       if (needsHashChangeListener) {
-        removeEventListener(window, HashChangeEvent, handleHashChange);
+        win.removeEventListener(HashChangeEvent, handleHashChange);
       }
     }
   };
-
-  let isBlocked = false;
 
   const block = (prompt: string | Prompt = '') => {
     const unblock = transitionManager.setPrompt(prompt);

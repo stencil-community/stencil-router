@@ -21,8 +21,8 @@ const getMatch = (pathname: string, url: any, exact: boolean) => {
   });
 }
 
-const isHTMLStencilRouteElement = (element: Element): element is HTMLStencilRouteElement => {
-  return element.tagName.toLowerCase() === 'stencil-route';
+const isHTMLStencilRouteElement = (elm: Element): elm is HTMLStencilRouteElement => {
+  return elm.tagName === 'STENCIL-ROUTE';
 }
 
 @Component({
@@ -53,11 +53,11 @@ export class RouteSwitch implements ComponentInterface {
       return;
     }
 
-    let newActiveIndex: number = -1;
+    let newActiveIndex = -1;
 
     this.subscribers = Array.prototype.slice.call(this.el.children)
       .filter(isHTMLStencilRouteElement)
-      .map((childElement: HTMLStencilRouteElement, index: number): Child => {
+      .map((childElement, index): Child => {
         const match = getMatch(newLocation.pathname, childElement.url, childElement.exact);
 
         if (match && newActiveIndex === -1) {

@@ -1,4 +1,4 @@
-import { Component, Prop, State, ComponentInterface, getWindow, h } from '@stencil/core';
+import { Component, Prop, State, ComponentInterface, getDocument, getWindow, h } from '@stencil/core';
 import createHistory from '../../utils/createBrowserHistory';
 import createHashHistory from '../../utils/createHashHistory';
 import { LocationSegments, HistoryType, RouterHistory, RouteViewOptions } from '../../global/interfaces';
@@ -58,9 +58,9 @@ export class Router implements ComponentInterface {
 
   routeViewsUpdated = (options: RouteViewOptions = {}) => {
     if (options.scrollToId && this.historyType === 'browser') {
-      const element = document.getElementById(options.scrollToId);
-      if (element) {
-        return element.scrollIntoView();
+      const elm = getDocument(this).getElementById(options.scrollToId);
+      if (elm) {
+        return elm.scrollIntoView();
       }
     }
     this.scrollTo(options.scrollTopOffset || this.scrollTopOffset);

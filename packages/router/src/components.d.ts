@@ -191,6 +191,7 @@ declare module "@stencil/core" {
 
 declare global {
 
+
   interface HTMLStencilAsyncContentElement extends Components.StencilAsyncContent, HTMLStencilElement {}
   var HTMLStencilAsyncContentElement: {
     prototype: HTMLStencilAsyncContentElement;

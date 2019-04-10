@@ -1,4 +1,4 @@
-import { Component, Prop, Element, Watch, ComponentInterface } from '@stencil/core';
+import { Component, Prop, Element, Watch, ComponentInterface, getDocument } from '@stencil/core';
 import ActiveRouter from '../../global/active-router';
 
 /**
@@ -11,13 +11,14 @@ import ActiveRouter from '../../global/active-router';
   tag: 'stencil-route-title'
 })
 export class RouteTitle implements ComponentInterface {
+  doc = getDocument(this);
   @Element() el!: HTMLElement;
   @Prop() titleSuffix: string = '';
   @Prop() pageTitle: string = '';
 
   @Watch('pageTitle')
   updateDocumentTitle() {
-    document.title = `${this.pageTitle}${this.titleSuffix || ''}`;
+    this.doc.title = `${this.pageTitle}${this.titleSuffix || ''}`;
   }
 
   componentWillLoad() {

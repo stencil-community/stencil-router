@@ -9,3 +9,4 @@ export {
   RouteRenderProps
 } from './global/interfaces';
 export { Components } from './components';
+export { matchPath } from './utils/match-path';

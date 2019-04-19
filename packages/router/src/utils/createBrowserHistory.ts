@@ -34,26 +34,18 @@ interface NextState {
 const PopStateEvent = 'popstate';
 const HashChangeEvent = 'hashchange';
 
-const getHistoryState = (win: Window) => {
-  try {
-    return win.history.state || {};
-  } catch (e) {
-    // IE 11 sometimes throws when accessing window.history.state
-    // See https://github.com/ReactTraining/history/pull/289
-    return {};
-  }
-};
-
 /**
  * Creates a history object that uses the HTML5 history API including
  * pushState, replaceState, and the popstate event.
  */
-const createBrowserHistory = (win: Window, props: CreateBrowserHistoryOptions = {}): RouterHistory => {
+const createBrowserHistory = (win: Window, props: CreateBrowserHistoryOptions = {}) => {
   let forceNextPop = false;
 
   const globalHistory = win.history;
+  const globalLocation = win.location;
+  const globalNavigator = win.navigator;
   const canUseHistory = supportsHistory(win);
-  const needsHashChangeListener = !supportsPopStateOnHashChange(win.navigator);
+  const needsHashChangeListener = !supportsPopStateOnHashChange(globalNavigator);
   const scrollHistory = createScrollHistory(win);
 
   const forceRefresh = (props.forceRefresh != null) ? props.forceRefresh : false;
@@ -61,10 +53,20 @@ const createBrowserHistory = (win: Window, props: CreateBrowserHistoryOptions = 
   const keyLength = (props.keyLength != null) ? props.keyLength : 6;
   const basename = props.basename ? stripTrailingSlash(addLeadingSlash(props.basename)) : '';
 
-  const getDOMLocation = (win: Window, historyState: LocationSegments) => {
+  const getHistoryState = () => {
+    try {
+      return win.history.state || {};
+    } catch (e) {
+      // IE 11 sometimes throws when accessing window.history.state
+      // See https://github.com/ReactTraining/history/pull/289
+      return {};
+    }
+  };
+
+  const getDOMLocation = (historyState: LocationSegments) => {
     historyState = historyState || {};
     const { key, state } = historyState;
-    const { pathname, search, hash } = win.location;
+    const { pathname, search, hash } = globalLocation;
 
     let path = pathname + search + hash;
 
@@ -103,13 +105,13 @@ const createBrowserHistory = (win: Window, props: CreateBrowserHistoryOptions = 
 
   const handlePopState = (event: any) => {
     // Ignore extraneous popstate events in WebKit.
-    if (!isExtraneousPopstateEvent(win.navigator, event)) {
-      handlePop(getDOMLocation(win, event.state));
+    if (!isExtraneousPopstateEvent(globalNavigator, event)) {
+      handlePop(getDOMLocation(event.state));
     }
   };
 
   const handleHashChange = () => {
-    handlePop(getDOMLocation(win, getHistoryState(win)));
+    handlePop(getDOMLocation(getHistoryState()));
   };
 
 
@@ -138,12 +140,11 @@ const createBrowserHistory = (win: Window, props: CreateBrowserHistoryOptions = 
     // Instead, we just default to 0 for keys we don't know.
 
     let toIndex = allKeys.indexOf(toLocation.key);
+    let fromIndex = allKeys.indexOf(fromLocation.key);
 
     if (toIndex === -1) {
       toIndex = 0;
     }
-
-    let fromIndex = allKeys.indexOf(fromLocation.key);
 
     if (fromIndex === -1) {
       fromIndex = 0;
@@ -157,7 +158,7 @@ const createBrowserHistory = (win: Window, props: CreateBrowserHistoryOptions = 
     }
   };
 
-  const initialLocation = getDOMLocation(win, getHistoryState(win));
+  const initialLocation = getDOMLocation(getHistoryState());
   let allKeys = [ initialLocation.key ];
   let listenerCount = 0;
   let isBlocked = false;
@@ -190,7 +191,7 @@ const createBrowserHistory = (win: Window, props: CreateBrowserHistoryOptions = 
         globalHistory.pushState({ key, state }, '', href);
 
         if (forceRefresh) {
-          win.location.href = href;
+          globalLocation.href = href;
         } else {
           const prevIndex = allKeys.indexOf(history.location.key);
           const nextKeys = allKeys.slice(0, prevIndex === -1 ? 0 : prevIndex + 1);
@@ -206,7 +207,7 @@ const createBrowserHistory = (win: Window, props: CreateBrowserHistoryOptions = 
           'Browser history cannot push state in browsers that do not support HTML5 history'
         );
 
-        win.location.href = href;
+        globalLocation.href = href;
       }
     });
   };
@@ -233,7 +234,8 @@ const createBrowserHistory = (win: Window, props: CreateBrowserHistoryOptions = 
         globalHistory.replaceState({ key, state }, '', href);
 
         if (forceRefresh) {
-          win.location.replace(href);
+          globalLocation.replace(href);
+
         } else {
           const prevIndex = allKeys.indexOf(history.location.key);
 
@@ -249,7 +251,7 @@ const createBrowserHistory = (win: Window, props: CreateBrowserHistoryOptions = 
           'Browser history cannot replace state in browsers that do not support HTML5 history'
         );
 
-        win.location.replace(href);
+        globalLocation.replace(href);
       }
     });
   };
@@ -308,7 +310,7 @@ const createBrowserHistory = (win: Window, props: CreateBrowserHistoryOptions = 
     };
   };
 
-  const history = {
+  const history: RouterHistory = {
     length: globalHistory.length,
     action: 'POP',
     location: initialLocation,
@@ -319,7 +321,8 @@ const createBrowserHistory = (win: Window, props: CreateBrowserHistoryOptions = 
     goBack,
     goForward,
     block,
-    listen
+    listen,
+    win: win
   };
 
   return history;

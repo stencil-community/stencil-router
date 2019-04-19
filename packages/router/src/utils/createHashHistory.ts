@@ -40,27 +40,13 @@ const HashPathCoders = {
   }
 };
 
-const getHashPath = (win: Window) => {
-  // We can't use window.location.hash here because it's not
-  // consistent across browsers - Firefox will pre-decode it!
-  const href = win.location.href;
-  const hashIndex = href.indexOf('#');
-  return hashIndex === -1 ? '' : href.substring(hashIndex + 1);
-};
+const createHashHistory = (win: Window, props: CreateHashHistoryOptions = {}) => {
+  let forceNextPop = false;
+  let ignorePath: any = null;
+  let listenerCount = 0;
+  let isBlocked = false;
 
-const pushHashPath = (win: Window, path: string) => (
-  win.location.hash = path
-);
-
-const replaceHashPath = (win: Window, path: string) => {
-  const hashIndex = win.location.href.indexOf('#');
-
-  win.location.replace(
-    win.location.href.slice(0, hashIndex >= 0 ? hashIndex : 0) + '#' + path
-  );
-};
-
-const createHashHistory = (win: Window, props: CreateHashHistoryOptions = {}): RouterHistory => {
+  const globalLocation = win.location;
   const globalHistory = win.history;
   const canGoWithoutReload = supportsGoWithoutReloadUsingHash(win.navigator);
   const keyLength = (props.keyLength != null) ? props.keyLength : 6;
@@ -73,8 +59,28 @@ const createHashHistory = (win: Window, props: CreateHashHistoryOptions = {}): R
 
   const { encodePath, decodePath } = HashPathCoders[hashType];
 
-  const getDOMLocation = (win: Window) => {
-    let path = decodePath(getHashPath(win));
+  const getHashPath = () => {
+    // We can't use window.location.hash here because it's not
+    // consistent across browsers - Firefox will pre-decode it!
+    const href = globalLocation.href;
+    const hashIndex = href.indexOf('#');
+    return hashIndex === -1 ? '' : href.substring(hashIndex + 1);
+  };
+
+  const pushHashPath = (path: string) => (
+    globalLocation.hash = path
+  );
+
+  const replaceHashPath = (path: string) => {
+    const hashIndex = globalLocation.href.indexOf('#');
+
+    globalLocation.replace(
+      globalLocation.href.slice(0, hashIndex >= 0 ? hashIndex : 0) + '#' + path
+    );
+  };
+
+  const getDOMLocation = () => {
+    let path = decodePath(getHashPath());
 
     warning(
       (!basename || hasBasename(path, basename)),
@@ -102,18 +108,16 @@ const createHashHistory = (win: Window, props: CreateHashHistoryOptions = {}): R
     );
   };
 
-  let forceNextPop = false;
-  let ignorePath: any = null;
-
   const handleHashChange = () => {
-    const path = getHashPath(win);
+    const path = getHashPath();
     const encodedPath = encodePath(path);
 
     if (path !== encodedPath) {
       // Ensure we always have a properly-encoded hash.
-      replaceHashPath(win, encodedPath);
+      replaceHashPath(encodedPath);
+
     } else {
-      const location = getDOMLocation(win);
+      const location = getDOMLocation();
       const prevLocation = history.location;
 
       if (!forceNextPop && locationsAreEqual(prevLocation, location)) {
@@ -155,12 +159,11 @@ const createHashHistory = (win: Window, props: CreateHashHistoryOptions = {}): R
     // Instead, we just default to 0 for paths we don't know.
 
     let toIndex = allPaths.lastIndexOf(createPath(toLocation));
+    let fromIndex = allPaths.lastIndexOf(createPath(fromLocation));
 
     if (toIndex === -1) {
       toIndex = 0;
     }
-
-    let fromIndex = allPaths.lastIndexOf(createPath(fromLocation));
 
     if (fromIndex === -1) {
       fromIndex = 0;
@@ -175,14 +178,14 @@ const createHashHistory = (win: Window, props: CreateHashHistoryOptions = {}): R
   };
 
   // Ensure the hash is encoded properly before doing anything else.
-  const path = getHashPath(win);
+  const path = getHashPath();
   const encodedPath = encodePath(path);
 
   if (path !== encodedPath) {
-    replaceHashPath(win, encodedPath);
+    replaceHashPath(encodedPath);
   }
 
-  const initialLocation = getDOMLocation(win);
+  const initialLocation = getDOMLocation();
   let allPaths = [ createPath(initialLocation) ];
 
   // Public interface
@@ -207,14 +210,14 @@ const createHashHistory = (win: Window, props: CreateHashHistoryOptions = {}): R
 
       const path = createPath(location);
       const encodedPath = encodePath(basename + path);
-      const hashChanged = getHashPath(win) !== encodedPath;
+      const hashChanged = getHashPath() !== encodedPath;
 
       if (hashChanged) {
         // We cannot tell if a hashchange was caused by a PUSH, so we'd
         // rather setState here and ignore the hashchange. The caveat here
         // is that other hash histories in the page will consider it a POP.
         ignorePath = path;
-        pushHashPath(win, encodedPath);
+        pushHashPath(encodedPath);
 
         const prevIndex = allPaths.lastIndexOf(createPath(history.location));
         const nextPaths = allPaths.slice(0, prevIndex === -1 ? 0 : prevIndex + 1);
@@ -250,14 +253,14 @@ const createHashHistory = (win: Window, props: CreateHashHistoryOptions = {}): R
 
       const path = createPath(location);
       const encodedPath = encodePath(basename + path);
-      const hashChanged = getHashPath(win) !== encodedPath;
+      const hashChanged = getHashPath() !== encodedPath;
 
       if (hashChanged) {
         // We cannot tell if a hashchange was caused by a REPLACE, so we'd
         // rather setState here and ignore the hashchange. The caveat here
         // is that other hash histories in the page will consider it a POP.
         ignorePath = path;
-        replaceHashPath(win, encodedPath);
+        replaceHashPath(encodedPath);
       }
 
       const prevIndex = allPaths.indexOf(createPath(history.location));
@@ -283,8 +286,6 @@ const createHashHistory = (win: Window, props: CreateHashHistoryOptions = {}): R
 
   const goForward = () => go(1);
 
-  let listenerCount = 0;
-
   const checkDOMListeners = (win: Window, delta: number) => {
     listenerCount += delta;
 
@@ -294,8 +295,6 @@ const createHashHistory = (win: Window, props: CreateHashHistoryOptions = {}): R
       win.removeEventListener(HashChangeEvent, handleHashChange);
     }
   };
-
-  let isBlocked = false;
 
   const block = (prompt: string | Prompt = '') => {
     const unblock = transitionManager.setPrompt(prompt);
@@ -325,7 +324,7 @@ const createHashHistory = (win: Window, props: CreateHashHistoryOptions = {}): R
     };
   };
 
-  const history = {
+  const history: RouterHistory = {
     length: globalHistory.length,
     action: 'POP',
     location: initialLocation,
@@ -336,7 +335,8 @@ const createHashHistory = (win: Window, props: CreateHashHistoryOptions = {}): R
     goBack,
     goForward,
     block,
-    listen
+    listen,
+    win: win
   };
 
   return history;

@@ -3,8 +3,8 @@ export const getConfirmation = (win: Window, message: string, callback: (confirm
   callback(win.confirm(message))
 );
 
-export const isModifiedEvent = (event: MouseEvent) => (
-  event.metaKey || event.altKey || event.ctrlKey || event.shiftKey
+export const isModifiedEvent = (ev: MouseEvent) => (
+  ev.metaKey || ev.altKey || ev.ctrlKey || ev.shiftKey
 );
 
 /**

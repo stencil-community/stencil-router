@@ -37,13 +37,13 @@ export type PathFunction = (data?: { [key: string]: any }, options?: PathFunctio
 /**
  * Default configs.
  */
-var DEFAULT_DELIMITER = '/'
-var DEFAULT_DELIMITERS = './'
+const DEFAULT_DELIMITER = '/'
+const DEFAULT_DELIMITERS = './'
 
 /**
  * The main path matching regexp utility.
  */
-var PATH_REGEXP = new RegExp([
+const PATH_REGEXP = new RegExp([
   // Match escaped characters that would otherwise appear in future matches.
   // This allows the user to escape special characters that won't transform.
   '(\\\\.)',

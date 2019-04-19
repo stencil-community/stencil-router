@@ -1,4 +1,4 @@
-import { Component, Prop, State, ComponentInterface, getDocument, getWindow, h } from '@stencil/core';
+import { Component, Element, Prop, State, ComponentInterface, h } from '@stencil/core';
 import createHistory from '../../utils/createBrowserHistory';
 import createHashHistory from '../../utils/createHashHistory';
 import { LocationSegments, HistoryType, RouterHistory, RouteViewOptions } from '../../global/interfaces';
@@ -31,7 +31,7 @@ const HISTORIES: { [key in HistoryType]: (win: Window) => RouterHistory } = {
   tag: 'stencil-router'
 })
 export class Router implements ComponentInterface {
-  win = getWindow(this);
+  @Element() el!: HTMLElement;
   @Prop() root: string = '/';
   @Prop({ context: 'isServer' }) private isServer!: boolean;
   @Prop({ context: 'queue'}) queue!: QueueApi;
@@ -47,9 +47,9 @@ export class Router implements ComponentInterface {
   @State() history?: RouterHistory;
 
   componentWillLoad() {
-    this.history = HISTORIES[this.historyType](this.win);
+    this.history = HISTORIES[this.historyType]((this.el.ownerDocument as any).defaultView);
 
-    this.history.listen(async (location: LocationSegments) => {
+    this.history.listen((location: LocationSegments) => {
       location = getLocation(location, this.root);
       this.location = location;
     });
@@ -57,8 +57,8 @@ export class Router implements ComponentInterface {
   }
 
   routeViewsUpdated = (options: RouteViewOptions = {}) => {
-    if (options.scrollToId && this.historyType === 'browser') {
-      const elm = getDocument(this).getElementById(options.scrollToId);
+    if (this.history && options.scrollToId && this.historyType === 'browser') {
+      const elm = this.history.win.document.getElementById(options.scrollToId);
       if (elm) {
         return elm.scrollIntoView();
       }
@@ -67,20 +67,22 @@ export class Router implements ComponentInterface {
   }
 
   scrollTo(scrollToLocation?: number) {
-    if (scrollToLocation == null || this.isServer || !this.history) {
+    const history = this.history;
+
+    if (scrollToLocation == null || this.isServer || !history) {
       return;
     }
 
-    if (this.history.action === 'POP' && Array.isArray(this.history.location.scrollPosition)) {
+    if (history.action === 'POP' && Array.isArray(history.location.scrollPosition)) {
       return this.queue.write(() => {
-        if (this.history && this.history.location && Array.isArray(this.history.location.scrollPosition)) {
-          this.win.scrollTo(this.history.location.scrollPosition[0], this.history.location.scrollPosition[1]);
+        if (history && history.location && Array.isArray(history.location.scrollPosition)) {
+          history.win.scrollTo(history.location.scrollPosition[0], history.location.scrollPosition[1]);
         }
       });
     }
     // okay, the frame has passed. Go ahead and render now
     return this.queue.write(() => {
-      this.win.scrollTo(0, scrollToLocation);
+      history.win.scrollTo(0, scrollToLocation);
     });
   }
 

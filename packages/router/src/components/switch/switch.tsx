@@ -1,5 +1,5 @@
 import uuidv4 from '../../utils/uuid';
-import { Component, Prop, Element, Event, EventEmitter, Watch, ComponentInterface } from '@stencil/core';
+import { Component, Prop, Element, Watch, ComponentInterface } from '@stencil/core';
 import { QueueApi } from '@stencil/core/dist/declarations';
 import { LocationSegments, MatchResults, RouteViewOptions } from '../../global/interfaces';
 import ActiveRouter from '../../global/active-router';
@@ -41,8 +41,6 @@ export class RouteSwitch implements ComponentInterface {
   @Prop() scrollTopOffset?: number;
   @Prop() location?: LocationSegments;
   @Prop() routeViewsUpdated?: (options: RouteViewOptions) => void;
-
-  @Event() routeDidChange!: EventEmitter;
 
   activeIndex?: number;
   subscribers: Child[] = [];
@@ -112,8 +110,6 @@ export class RouteSwitch implements ComponentInterface {
           child.el.match = null;
           child.el.style.display = 'none';
         });
-
-        this.routeDidChange.emit();
       });
 
       if (this.routeViewsUpdated) {

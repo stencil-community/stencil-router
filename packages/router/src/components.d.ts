@@ -159,7 +159,6 @@ export namespace Components {
   interface StencilRouteSwitchAttributes extends StencilHTMLAttributes {
     'group'?: string;
     'location'?: LocationSegments;
-    'onRouteDidChange'?: (event: CustomEvent) => void;
     'routeViewsUpdated'?: (options: RouteViewOptions) => void;
     'scrollTopOffset'?: number;
   }

@@ -238,6 +238,49 @@ describe('createLocation', () => {
       expect(location).toHaveProperty('key');
     });
   });
+
+  describe('with a state value', () => {
+    describe('given as the second parameter', () => {
+      it('has a matching property', () => {
+        const location = createLocation('/a/path', { foo: 'bar' }, '');
+        expect(location).toHaveProperty('state');
+        expect(location.state).toEqual({ foo: 'bar' });
+      });
+    });
+
+    describe('given as an object property of the first parameter', () => {
+      it('has the correct property', () => {
+        const location = createLocation({
+          pathname: '/a/path',
+          state: { foo: 'bar' },
+          key: '',
+          query: {},
+        }, undefined, '');
+        expect(location).toHaveProperty('state');
+        expect(location.state).toEqual({ foo: 'bar' });
+      });
+    });
+  });
+
+  describe('with an undefined state value', () => {
+    describe('given as the second parameter', () => {
+      it('does not have the state property', () => {
+        const location = createLocation('/a/path', undefined, '');
+        expect(location).not.toHaveProperty('state');
+      });
+    });
+
+    describe('given as an object property of the first parameter', () => {
+      it('does not have the state property', () => {
+        const location = createLocation({
+          pathname: '/a/path',
+          key: '',
+          query: {},
+        }, undefined, '');
+        expect(location).not.toHaveProperty('state');
+      });
+    });
+  });
 });
 
 describe('valueEqual', () => {

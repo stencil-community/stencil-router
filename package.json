@@ -2,7 +2,7 @@
   "name": "root",
   "private": true,
   "devDependencies": {
-    "@stencil/core": "^1.0.0-alpha.8",
+    "@stencil/core": "one",
     "@types/jest": "^23.3.1",
     "jest": "^23.4.2",
     "lerna": "^3.0.3",

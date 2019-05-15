@@ -2,9 +2,9 @@
   "name": "@stencil/router",
   "version": "0.3.4-2",
   "description": "Stencil Router",
-  "module": "dist/index.mjs",
   "main": "dist/index.js",
-  "unpkg": "dist/stencilrouter.js",
+  "module": "dist/index.mjs",
+  "unpkg": "dist/stencilrouter/stencilrouter.js",
   "types": "dist/types/index.d.ts",
   "collection": "dist/collection/collection-manifest.json",
   "collection:main": "dist/collection/index.js",
@@ -14,7 +14,7 @@
   "scripts": {
     "build": "../../node_modules/.bin/stencil build",
     "dev": "../../node_modules/.bin/stencil build --dev --watch",
-    "release": "npm run build && np --any-branch",
+    "release": "npm run build && np --any-branch --tag=one",
     "start": "npm run dev",
     "test": "../../node_modules/.bin/jest"
   },
@@ -23,10 +23,10 @@
     "url": "git+https://github.com/ionic-team/stencil-router.git"
   },
   "dependencies": {
-    "@stencil/state-tunnel": "^0.0.9-5"
+    "@stencil/state-tunnel": "one"
   },
   "devDependencies": {
-    "np": "^3.0.4"
+    "np": "^5.0.1"
   },
   "author": "Ionic Team",
   "license": "MIT",

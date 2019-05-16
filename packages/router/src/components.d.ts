@@ -158,38 +158,30 @@ declare namespace LocalJSX {
     'url'?: string;
   }
 
-  interface ElementInterfaces {
-    'StencilAsyncContent': Components.StencilAsyncContent;
-    'StencilRoute': Components.StencilRoute;
-    'StencilRouteLink': Components.StencilRouteLink;
-    'StencilRouteSwitch': Components.StencilRouteSwitch;
-    'StencilRouteTitle': Components.StencilRouteTitle;
-    'StencilRouter': Components.StencilRouter;
-    'StencilRouterPrompt': Components.StencilRouterPrompt;
-    'StencilRouterRedirect': Components.StencilRouterRedirect;
-  }
-
   interface IntrinsicElements {
-    'StencilAsyncContent': LocalJSX.StencilAsyncContent;
-    'StencilRoute': LocalJSX.StencilRoute;
-    'StencilRouteLink': LocalJSX.StencilRouteLink;
-    'StencilRouteSwitch': LocalJSX.StencilRouteSwitch;
-    'StencilRouteTitle': LocalJSX.StencilRouteTitle;
-    'StencilRouter': LocalJSX.StencilRouter;
-    'StencilRouterPrompt': LocalJSX.StencilRouterPrompt;
-    'StencilRouterRedirect': LocalJSX.StencilRouterRedirect;
+    'stencil-async-content': StencilAsyncContent;
+    'stencil-route': StencilRoute;
+    'stencil-route-link': StencilRouteLink;
+    'stencil-route-switch': StencilRouteSwitch;
+    'stencil-route-title': StencilRouteTitle;
+    'stencil-router': StencilRouter;
+    'stencil-router-prompt': StencilRouterPrompt;
+    'stencil-router-redirect': StencilRouterRedirect;
   }
 }
+
 export { LocalJSX as JSX };
+
 
 declare module "@stencil/core" {
   export namespace JSX {
-    interface ElementInterfaces extends LocalJSX.ElementInterfaces {}
     interface IntrinsicElements extends LocalJSX.IntrinsicElements {}
   }
 }
 
+
 declare global {
+
 
 
   interface HTMLStencilAsyncContentElement extends Components.StencilAsyncContent, HTMLStencilElement {}
@@ -239,18 +231,8 @@ declare global {
     prototype: HTMLStencilRouterRedirectElement;
     new (): HTMLStencilRouterRedirectElement;
   };
-  interface HTMLElementTagNameMap {
-    'stencil-async-content': HTMLStencilAsyncContentElement
-    'stencil-route': HTMLStencilRouteElement
-    'stencil-route-link': HTMLStencilRouteLinkElement
-    'stencil-route-switch': HTMLStencilRouteSwitchElement
-    'stencil-route-title': HTMLStencilRouteTitleElement
-    'stencil-router': HTMLStencilRouterElement
-    'stencil-router-prompt': HTMLStencilRouterPromptElement
-    'stencil-router-redirect': HTMLStencilRouterRedirectElement
-  }
 
-  interface ElementTagNameMap {
+  interface HTMLElementTagNameMap {
     'stencil-async-content': HTMLStencilAsyncContentElement;
     'stencil-route': HTMLStencilRouteElement;
     'stencil-route-link': HTMLStencilRouteLinkElement;
@@ -260,5 +242,7 @@ declare global {
     'stencil-router-prompt': HTMLStencilRouterPromptElement;
     'stencil-router-redirect': HTMLStencilRouterRedirectElement;
   }
+
+  interface ElementTagNameMap extends HTMLElementTagNameMap {}
 }
 

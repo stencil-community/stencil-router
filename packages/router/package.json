@@ -14,7 +14,7 @@
   "scripts": {
     "build": "../../node_modules/.bin/stencil build",
     "dev": "../../node_modules/.bin/stencil build --dev --watch",
-    "release": "npm run build && np --any-branch --tag=one",
+    "release": "npm run build && np --any-branch",
     "start": "npm run dev",
     "test": "../../node_modules/.bin/jest"
   },

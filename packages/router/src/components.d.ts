@@ -6,7 +6,6 @@
 
 
 import { HTMLStencilElement, JSXBase } from '@stencil/core/internal';
-import { JSX } from '@stencil/core';
 import {
   HistoryType,
   LocationSegments,
@@ -89,99 +88,7 @@ export namespace Components {
   }
 }
 
-declare namespace LocalJSX {
-  interface StencilAsyncContent extends JSXBase.HTMLAttributes {
-    'documentLocation'?: string;
-  }
-  interface StencilRoute extends JSXBase.HTMLAttributes {
-    'component'?: string;
-    'componentProps'?: { [key: string]: any };
-    'componentUpdated'?: (options: RouteViewOptions) => void;
-    'exact'?: boolean;
-    'group'?: string | null;
-    'history'?: RouterHistory;
-    'historyType'?: HistoryType;
-    'location'?: LocationSegments;
-    'match'?: MatchResults | null;
-    'routeRender'?: (props: RouteRenderProps) => any;
-    'routeViewsUpdated'?: (options: RouteViewOptions) => void;
-    'scrollTopOffset'?: number;
-    'url'?: string | string[];
-  }
-  interface StencilRouteLink extends JSXBase.HTMLAttributes {
-    'activeClass'?: string;
-    'anchorClass'?: string;
-    'anchorId'?: string;
-    'anchorRole'?: string;
-    'anchorTabIndex'?: string;
-    'anchorTitle'?: string;
-    'ariaHaspopup'?: string;
-    'ariaLabel'?: string;
-    'ariaPosinset'?: string;
-    'ariaSetsize'?: number;
-    /**
-    * Custom tag to use instead of an anchor
-    */
-    'custom'?: string;
-    'exact'?: boolean;
-    'history'?: RouterHistory;
-    'location'?: LocationSegments;
-    'root'?: string;
-    'strict'?: boolean;
-    'url'?: string;
-    'urlMatch'?: Path;
-  }
-  interface StencilRouteSwitch extends JSXBase.HTMLAttributes {
-    'group'?: string;
-    'location'?: LocationSegments;
-    'routeViewsUpdated'?: (options: RouteViewOptions) => void;
-    'scrollTopOffset'?: number;
-  }
-  interface StencilRouteTitle extends JSXBase.HTMLAttributes {
-    'pageTitle'?: string;
-    'titleSuffix'?: string;
-  }
-  interface StencilRouter extends JSXBase.HTMLAttributes {
-    'historyType'?: HistoryType;
-    'root'?: string;
-    'scrollTopOffset'?: number;
-    'titleSuffix'?: string;
-  }
-  interface StencilRouterPrompt extends JSXBase.HTMLAttributes {
-    'history'?: RouterHistory;
-    'message'?: string | Prompt;
-    'when'?: boolean;
-  }
-  interface StencilRouterRedirect extends JSXBase.HTMLAttributes {
-    'history'?: RouterHistory;
-    'root'?: string;
-    'url'?: string;
-  }
-
-  interface IntrinsicElements {
-    'stencil-async-content': StencilAsyncContent;
-    'stencil-route': StencilRoute;
-    'stencil-route-link': StencilRouteLink;
-    'stencil-route-switch': StencilRouteSwitch;
-    'stencil-route-title': StencilRouteTitle;
-    'stencil-router': StencilRouter;
-    'stencil-router-prompt': StencilRouterPrompt;
-    'stencil-router-redirect': StencilRouterRedirect;
-  }
-}
-
-export { LocalJSX as JSX };
-
-
-declare module "@stencil/core" {
-  export namespace JSX {
-    interface IntrinsicElements extends LocalJSX.IntrinsicElements {}
-  }
-}
-
-
 declare global {
-
 
 
   interface HTMLStencilAsyncContentElement extends Components.StencilAsyncContent, HTMLStencilElement {}
@@ -231,7 +138,6 @@ declare global {
     prototype: HTMLStencilRouterRedirectElement;
     new (): HTMLStencilRouterRedirectElement;
   };
-
   interface HTMLElementTagNameMap {
     'stencil-async-content': HTMLStencilAsyncContentElement;
     'stencil-route': HTMLStencilRouteElement;
@@ -242,7 +148,96 @@ declare global {
     'stencil-router-prompt': HTMLStencilRouterPromptElement;
     'stencil-router-redirect': HTMLStencilRouterRedirectElement;
   }
-
-  interface ElementTagNameMap extends HTMLElementTagNameMap {}
 }
+
+declare namespace LocalJSX {
+  interface StencilAsyncContent extends JSXBase.HTMLAttributes<HTMLStencilAsyncContentElement> {
+    'documentLocation'?: string;
+  }
+  interface StencilRoute extends JSXBase.HTMLAttributes<HTMLStencilRouteElement> {
+    'component'?: string;
+    'componentProps'?: { [key: string]: any };
+    'componentUpdated'?: (options: RouteViewOptions) => void;
+    'exact'?: boolean;
+    'group'?: string | null;
+    'history'?: RouterHistory;
+    'historyType'?: HistoryType;
+    'location'?: LocationSegments;
+    'match'?: MatchResults | null;
+    'routeRender'?: (props: RouteRenderProps) => any;
+    'routeViewsUpdated'?: (options: RouteViewOptions) => void;
+    'scrollTopOffset'?: number;
+    'url'?: string | string[];
+  }
+  interface StencilRouteLink extends JSXBase.HTMLAttributes<HTMLStencilRouteLinkElement> {
+    'activeClass'?: string;
+    'anchorClass'?: string;
+    'anchorId'?: string;
+    'anchorRole'?: string;
+    'anchorTabIndex'?: string;
+    'anchorTitle'?: string;
+    'ariaHaspopup'?: string;
+    'ariaLabel'?: string;
+    'ariaPosinset'?: string;
+    'ariaSetsize'?: number;
+    /**
+    * Custom tag to use instead of an anchor
+    */
+    'custom'?: string;
+    'exact'?: boolean;
+    'history'?: RouterHistory;
+    'location'?: LocationSegments;
+    'root'?: string;
+    'strict'?: boolean;
+    'url'?: string;
+    'urlMatch'?: Path;
+  }
+  interface StencilRouteSwitch extends JSXBase.HTMLAttributes<HTMLStencilRouteSwitchElement> {
+    'group'?: string;
+    'location'?: LocationSegments;
+    'routeViewsUpdated'?: (options: RouteViewOptions) => void;
+    'scrollTopOffset'?: number;
+  }
+  interface StencilRouteTitle extends JSXBase.HTMLAttributes<HTMLStencilRouteTitleElement> {
+    'pageTitle'?: string;
+    'titleSuffix'?: string;
+  }
+  interface StencilRouter extends JSXBase.HTMLAttributes<HTMLStencilRouterElement> {
+    'historyType'?: HistoryType;
+    'root'?: string;
+    'scrollTopOffset'?: number;
+    'titleSuffix'?: string;
+  }
+  interface StencilRouterPrompt extends JSXBase.HTMLAttributes<HTMLStencilRouterPromptElement> {
+    'history'?: RouterHistory;
+    'message'?: string | Prompt;
+    'when'?: boolean;
+  }
+  interface StencilRouterRedirect extends JSXBase.HTMLAttributes<HTMLStencilRouterRedirectElement> {
+    'history'?: RouterHistory;
+    'root'?: string;
+    'url'?: string;
+  }
+
+  interface IntrinsicElements {
+    'stencil-async-content': StencilAsyncContent;
+    'stencil-route': StencilRoute;
+    'stencil-route-link': StencilRouteLink;
+    'stencil-route-switch': StencilRouteSwitch;
+    'stencil-route-title': StencilRouteTitle;
+    'stencil-router': StencilRouter;
+    'stencil-router-prompt': StencilRouterPrompt;
+    'stencil-router-redirect': StencilRouterRedirect;
+  }
+}
+
+export { LocalJSX as JSX };
+
+
+declare module "@stencil/core" {
+  export namespace JSX {
+    interface IntrinsicElements extends LocalJSX.IntrinsicElements {}
+  }
+}
+
 

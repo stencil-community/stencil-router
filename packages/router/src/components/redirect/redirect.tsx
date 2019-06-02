@@ -3,9 +3,9 @@ import { RouterHistory } from '../../global/interfaces';
 import ActiveRouter from '../../global/active-router';
 
 // Get the URL for this route link without the root from the router
-function getUrl(url: string, root: string) {
+const getUrl = (url: string, root: string) => {
   // Don't allow double slashes
-  if(url.charAt(0) == '/' && root.charAt(root.length - 1) == '/') {
+  if (url.charAt(0) == '/' && root.charAt(root.length - 1) == '/') {
     return root.slice(0, root.length-1) + url;
   }
   return root + url;
@@ -15,7 +15,7 @@ function getUrl(url: string, root: string) {
   tag: 'stencil-router-redirect'
 })
 export class Redirect implements ComponentInterface {
-  @Element() el!: HTMLStencilElement;
+  @Element() el!: HTMLElement;
 
   @Prop() history?: RouterHistory;
   @Prop() root?: string;

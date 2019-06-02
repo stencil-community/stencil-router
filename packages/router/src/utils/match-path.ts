@@ -1,4 +1,4 @@
-import pathToRegexp, { Key, Path } from './path-to-regex';
+import { Key, Path, pathToRegexp } from './path-to-regex';
 import { MatchOptions, MatchResults } from '../global/interfaces';
 import { valueEqual } from './location-utils';
 
@@ -7,12 +7,12 @@ interface CompileOptions {
   strict: boolean;
 }
 
+let cacheCount = 0;
 const patternCache: {[key: string]: any } = {};
 const cacheLimit = 10000;
-let cacheCount = 0;
 
 // Memoized function for creating the path match regex
-function compilePath(pattern: Path, options: CompileOptions): { re: RegExp, keys: Key[]} {
+const compilePath = (pattern: Path, options: CompileOptions): { re: RegExp, keys: Key[]} => {
   const cacheKey = `${options.end}${options.strict}`;
   const cache = patternCache[cacheKey] || (patternCache[cacheKey] = {});
   const cachePattern = JSON.stringify(pattern);
@@ -36,7 +36,7 @@ function compilePath(pattern: Path, options: CompileOptions): { re: RegExp, keys
 /**
  * Public API for matching a URL pathname to a path pattern.
  */
-export function matchPath(pathname: string, options: MatchOptions = {}): null | MatchResults {
+export const matchPath = (pathname: string, options: MatchOptions = {}): null | MatchResults => {
   if (typeof options === 'string') {
     options = { path: options };
   }
@@ -67,7 +67,7 @@ export function matchPath(pathname: string, options: MatchOptions = {}): null | 
   };
 }
 
-export function matchesAreEqual(a: MatchResults | null, b: MatchResults | null) {
+export const matchesAreEqual = (a: MatchResults | null, b: MatchResults | null) => {
   if (a == null && b == null) {
     return true;
   }

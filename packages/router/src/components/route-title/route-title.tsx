@@ -11,13 +11,16 @@ import ActiveRouter from '../../global/active-router';
   tag: 'stencil-route-title'
 })
 export class RouteTitle implements ComponentInterface {
-  @Element() el!: HTMLStencilElement;
+  @Element() el!: HTMLElement;
   @Prop() titleSuffix: string = '';
   @Prop() pageTitle: string = '';
-  
+
   @Watch('pageTitle')
   updateDocumentTitle() {
-    document.title = `${this.pageTitle}${this.titleSuffix || ''}`;
+    const el = this.el;
+    if (el.ownerDocument) {
+      el.ownerDocument.title = `${this.pageTitle}${this.titleSuffix || ''}`;
+    }
   }
 
   componentWillLoad() {

@@ -1,4 +1,4 @@
-import { Component, Prop, Element, Watch, ComponentInterface } from '@stencil/core';
+import { Component, Prop, Element, Watch, ComponentInterface, h } from '@stencil/core';
 import { matchPath, matchesAreEqual } from '../../utils/match-path';
 import { RouterHistory, LocationSegments, MatchResults, RouteViewOptions, HistoryType, RouteRenderProps } from '../../global/interfaces';
 import ActiveRouter from '../../global/active-router';

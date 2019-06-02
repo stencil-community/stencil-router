@@ -6,6 +6,7 @@ import { LocationSegments, Prompt } from '../global/interfaces';
 
 const createTransitionManager = () => {
   let prompt: Prompt | string | null;
+  let listeners: Function[] = [];
 
   const setPrompt = (nextPrompt: Prompt | string | null) => {
     warning(
@@ -48,8 +49,6 @@ const createTransitionManager = () => {
       callback(true);
     }
   }
-
-  let listeners: Function[] = [];
 
   const appendListener = (fn: Function) => {
     let isActive = true;

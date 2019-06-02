@@ -1,4 +1,4 @@
-import { Component, Prop, State, Watch, ComponentInterface } from '@stencil/core';
+import { Component, Prop, State, Watch, ComponentInterface, h } from '@stencil/core';
 
 @Component({
   tag: 'stencil-async-content'

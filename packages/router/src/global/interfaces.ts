@@ -9,7 +9,7 @@ export type Prompt = (location: LocationSegments, action: string) => string;
 
 export interface RouteRenderProps {
   history: RouterHistory;
-  match: MatchResults | null;
+  match: MatchResults;
   [key: string]: any;
 }
 

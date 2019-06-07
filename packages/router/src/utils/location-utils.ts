@@ -142,7 +142,7 @@ export const createLocation = (path: string | LocationSegments, state: any, key:
   if (typeof path === 'string') {
     // Two-arg form: push(path, state)
     location = parsePath(path);
-    if (location.state !== undefined) {
+    if (state !== undefined) {
       location.state = state;
     }
   } else {

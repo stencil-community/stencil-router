@@ -14,6 +14,7 @@ const getUniqueId = () => {
 }
 
 const getMatch = (pathname: string, url: any, exact: boolean) => {
+  url = (typeof url === "undefined") ? pathname : url;
   return matchPath(pathname, {
     path: url,
     exact: exact,

@@ -1,16 +1,16 @@
 import { parsePath, parseQueryString } from './path-utils';
 import { LocationSegments } from '../global/interfaces';
 
-function isAbsolute(pathname: string) {
+const isAbsolute = (pathname: string) => {
   return pathname.charAt(0) === '/';
 }
 
-export function createKey(keyLength: number) {
+export const createKey = (keyLength: number) => {
   return Math.random().toString(36).substr(2, keyLength)
 };
 
 // About 1.5x faster than the two-arg version of Array#splice()
-function spliceOne(list: string[], index: number) {
+const spliceOne = (list: string[], index: number) => {
   for (let i = index, k = i + 1, n = list.length; k < n; i += 1, k += 1) {
     list[i] = list[k];
   }
@@ -19,10 +19,12 @@ function spliceOne(list: string[], index: number) {
 }
 
 // This implementation is based heavily on node's url.parse
-export function resolvePathname(to: string, from = '') {
-  const toParts = to && to.split('/') || [];
+export const resolvePathname = (to: string, from = '') => {
   let fromParts = from && from.split('/') || [];
+  let hasTrailingSlash;
+  let up = 0;
 
+  const toParts = to && to.split('/') || [];
   const isToAbs = to && isAbsolute(to);
   const isFromAbs = from && isAbsolute(from);
   const mustEndAbs = isToAbs || isFromAbs;
@@ -40,7 +42,6 @@ export function resolvePathname(to: string, from = '') {
     return '/';
   }
 
-  let hasTrailingSlash;
   if (fromParts.length) {
     const last = fromParts[fromParts.length - 1];
     hasTrailingSlash = (last === '.' || last === '..' || last === '');
@@ -48,7 +49,6 @@ export function resolvePathname(to: string, from = '') {
     hasTrailingSlash = false;
   }
 
-  let up = 0;
   for (let i = fromParts.length; i >= 0; i--) {
     const part = fromParts[i];
 
@@ -82,7 +82,7 @@ export function resolvePathname(to: string, from = '') {
   return result;
 }
 
-export function valueEqual(a: any, b: any): boolean {
+export const valueEqual = (a: any, b: any): boolean => {
   if (a === b) {
     return true;
   }
@@ -92,7 +92,7 @@ export function valueEqual(a: any, b: any): boolean {
   }
 
   if (Array.isArray(a)) {
-    return Array.isArray(b) && a.length === b.length && a.every(function (item, index) {
+    return Array.isArray(b) && a.length === b.length && a.every((item, index) => {
       return valueEqual(item, b[index])
     })
   }
@@ -119,7 +119,7 @@ export function valueEqual(a: any, b: any): boolean {
       return false;
     }
 
-    return aKeys.every(function (key) {
+    return aKeys.every((key) => {
       return valueEqual(a[key], b[key]);
     });
   }
@@ -128,7 +128,7 @@ export function valueEqual(a: any, b: any): boolean {
 }
 
 
-export function locationsAreEqual(a: LocationSegments, b: LocationSegments) {
+export const locationsAreEqual = (a: LocationSegments, b: LocationSegments) => {
   return a.pathname === b.pathname &&
   a.search === b.search &&
   a.hash === b.hash &&
@@ -136,8 +136,9 @@ export function locationsAreEqual(a: LocationSegments, b: LocationSegments) {
   valueEqual(a.state, b.state);
 }
 
-export function createLocation(path: string | LocationSegments, state: any, key: string, currentLocation?: LocationSegments): LocationSegments {
-  let location;
+export const createLocation = (path: string | LocationSegments, state: any, key: string, currentLocation?: LocationSegments) => {
+  let location: LocationSegments;
+
   if (typeof path === 'string') {
     // Two-arg form: push(path, state)
     location = parsePath(path);

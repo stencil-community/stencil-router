@@ -6,7 +6,7 @@ describe('a browser history', () => {
   describe('with no basename', () => {
     let history: RouterHistory;
     beforeEach(() => {
-      history = createBrowserHistory();
+      history = createBrowserHistory(window);
     });
 
     it('knows how to create hrefs', () => {
@@ -25,7 +25,7 @@ describe('a browser history', () => {
   describe('with a basename', () => {
     let history: RouterHistory;
     beforeEach(() => {
-      history = createBrowserHistory({ basename: '/the/base' });
+      history = createBrowserHistory(window, { basename: '/the/base' });
     });
 
     it('knows how to create hrefs', () => {
@@ -44,7 +44,7 @@ describe('a browser history', () => {
   describe('with a bad basename', () => {
     let history: RouterHistory;
     beforeEach(() => {
-      history = createBrowserHistory({ basename: '/the/bad/base/' });
+      history = createBrowserHistory(window, { basename: '/the/bad/base/' });
     });
 
     it('knows how to create hrefs', () => {
@@ -63,7 +63,7 @@ describe('a browser history', () => {
   describe('with a slash basename', () => {
     let history: RouterHistory;
     beforeEach(() => {
-      history = createBrowserHistory({ basename: '/' });
+      history = createBrowserHistory(window, { basename: '/' });
     });
 
     it('knows how to create hrefs', () => {
@@ -82,7 +82,7 @@ describe('a browser history', () => {
   describe('encoding', () => {
     let history: RouterHistory;
     beforeEach(() => {
-      history = createBrowserHistory();
+      history = createBrowserHistory(window);
     });
 
     it('does not encode the generated path', () => {
@@ -109,7 +109,7 @@ describe('a hash history', () => {
   describe('with default encoding', () => {
     let history: RouterHistory;
     beforeEach(() => {
-      history = createHashHistory();
+      history = createHashHistory(window);
     });
 
     it('knows how to create hrefs', () => {
@@ -128,7 +128,7 @@ describe('a hash history', () => {
   describe('with hashType="noslash"', () => {
     let history: RouterHistory;
     beforeEach(() => {
-      history = createHashHistory({ hashType: 'noslash' });
+      history = createHashHistory(window, { hashType: 'noslash' });
     });
 
     it('knows how to create hrefs', () => {
@@ -147,7 +147,7 @@ describe('a hash history', () => {
   describe('with hashType="hashbang"', () => {
     let history: RouterHistory;
     beforeEach(() => {
-      history = createHashHistory({ hashType: 'hashbang' });
+      history = createHashHistory(window, { hashType: 'hashbang' });
     });
 
     it('knows how to create hrefs', () => {
@@ -166,7 +166,7 @@ describe('a hash history', () => {
   describe('with a basename', () => {
     let history: RouterHistory;
     beforeEach(() => {
-      history = createHashHistory({ basename: '/the/base' });
+      history = createHashHistory(window, { basename: '/the/base' });
     });
 
     it('knows how to create hrefs', () => {
@@ -184,7 +184,7 @@ describe('a hash history', () => {
   describe('with a bad basename', () => {
     let history: RouterHistory;
     beforeEach(() => {
-      history = createHashHistory({ basename: '/the/bad/base/' });
+      history = createHashHistory(window, { basename: '/the/bad/base/' });
     });
 
     it('knows how to create hrefs', () => {
@@ -202,7 +202,7 @@ describe('a hash history', () => {
   describe('with a slash basename', () => {
     let history: RouterHistory;
     beforeEach(() => {
-      history = createHashHistory({ basename: '/' });
+      history = createHashHistory(window, { basename: '/' });
     });
 
     it('knows how to create hrefs', () => {
@@ -220,7 +220,7 @@ describe('a hash history', () => {
   describe('encoding', () => {
     let history: RouterHistory;
     beforeEach(() => {
-      history = createHashHistory();
+      history = createHashHistory(window);
     });
 
     it('does not encode the generated path', () => {

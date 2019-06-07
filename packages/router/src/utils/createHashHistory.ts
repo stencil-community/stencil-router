@@ -2,7 +2,7 @@
 
 import { createLocation, locationsAreEqual, createKey } from './location-utils';
 import { RouterHistory, LocationSegments, Prompt } from '../global/interfaces';
-import { invariant, warning } from './log';
+import { warning } from './log';
 import {
   addLeadingSlash,
   stripLeadingSlash,
@@ -13,9 +13,6 @@ import {
 } from './path-utils';
 import createTransitionManager from './createTransitionManager';
 import {
-  canUseDOM,
-  addEventListener,
-  removeEventListener,
   getConfirmation,
   supportsGoWithoutReloadUsingHash
 } from './dom-utils';
@@ -43,34 +40,15 @@ const HashPathCoders = {
   }
 };
 
-const getHashPath = () => {
-  // We can't use window.location.hash here because it's not
-  // consistent across browsers - Firefox will pre-decode it!
-  const href = window.location.href;
-  const hashIndex = href.indexOf('#');
-  return hashIndex === -1 ? '' : href.substring(hashIndex + 1);
-};
+const createHashHistory = (win: Window, props: CreateHashHistoryOptions = {}) => {
+  let forceNextPop = false;
+  let ignorePath: any = null;
+  let listenerCount = 0;
+  let isBlocked = false;
 
-const pushHashPath = (path: string) => (
-  window.location.hash = path
-);
-
-const replaceHashPath = (path: string) => {
-  const hashIndex = window.location.href.indexOf('#');
-
-  window.location.replace(
-    window.location.href.slice(0, hashIndex >= 0 ? hashIndex : 0) + '#' + path
-  );
-};
-
-const createHashHistory = (props: CreateHashHistoryOptions = {}): RouterHistory => {
-  invariant(
-    canUseDOM,
-    'Hash history needs a DOM'
-  );
-
-  const globalHistory = window.history;
-  const canGoWithoutReload = supportsGoWithoutReloadUsingHash();
+  const globalLocation = win.location;
+  const globalHistory = win.history;
+  const canGoWithoutReload = supportsGoWithoutReloadUsingHash(win.navigator);
   const keyLength = (props.keyLength != null) ? props.keyLength : 6;
 
   const {
@@ -80,6 +58,26 @@ const createHashHistory = (props: CreateHashHistoryOptions = {}): RouterHistory 
   const basename = props.basename ? stripTrailingSlash(addLeadingSlash(props.basename)) : '';
 
   const { encodePath, decodePath } = HashPathCoders[hashType];
+
+  const getHashPath = () => {
+    // We can't use window.location.hash here because it's not
+    // consistent across browsers - Firefox will pre-decode it!
+    const href = globalLocation.href;
+    const hashIndex = href.indexOf('#');
+    return hashIndex === -1 ? '' : href.substring(hashIndex + 1);
+  };
+
+  const pushHashPath = (path: string) => (
+    globalLocation.hash = path
+  );
+
+  const replaceHashPath = (path: string) => {
+    const hashIndex = globalLocation.href.indexOf('#');
+
+    globalLocation.replace(
+      globalLocation.href.slice(0, hashIndex >= 0 ? hashIndex : 0) + '#' + path
+    );
+  };
 
   const getDOMLocation = () => {
     let path = decodePath(getHashPath());
@@ -110,9 +108,6 @@ const createHashHistory = (props: CreateHashHistoryOptions = {}): RouterHistory 
     );
   };
 
-  let forceNextPop = false;
-  let ignorePath: any = null;
-
   const handleHashChange = () => {
     const path = getHashPath();
     const encodedPath = encodePath(path);
@@ -120,6 +115,7 @@ const createHashHistory = (props: CreateHashHistoryOptions = {}): RouterHistory 
     if (path !== encodedPath) {
       // Ensure we always have a properly-encoded hash.
       replaceHashPath(encodedPath);
+
     } else {
       const location = getDOMLocation();
       const prevLocation = history.location;
@@ -163,12 +159,11 @@ const createHashHistory = (props: CreateHashHistoryOptions = {}): RouterHistory 
     // Instead, we just default to 0 for paths we don't know.
 
     let toIndex = allPaths.lastIndexOf(createPath(toLocation));
+    let fromIndex = allPaths.lastIndexOf(createPath(fromLocation));
 
     if (toIndex === -1) {
       toIndex = 0;
     }
-
-    let fromIndex = allPaths.lastIndexOf(createPath(fromLocation));
 
     if (fromIndex === -1) {
       fromIndex = 0;
@@ -291,32 +286,28 @@ const createHashHistory = (props: CreateHashHistoryOptions = {}): RouterHistory 
 
   const goForward = () => go(1);
 
-  let listenerCount = 0;
-
-  const checkDOMListeners = (delta: number) => {
+  const checkDOMListeners = (win: Window, delta: number) => {
     listenerCount += delta;
 
     if (listenerCount === 1) {
-      addEventListener(window, HashChangeEvent, handleHashChange);
+      win.addEventListener(HashChangeEvent, handleHashChange);
     } else if (listenerCount === 0) {
-      removeEventListener(window, HashChangeEvent, handleHashChange);
+      win.removeEventListener(HashChangeEvent, handleHashChange);
     }
   };
-
-  let isBlocked = false;
 
   const block = (prompt: string | Prompt = '') => {
     const unblock = transitionManager.setPrompt(prompt);
 
     if (!isBlocked) {
-      checkDOMListeners(1);
+      checkDOMListeners(win, 1);
       isBlocked = true;
     }
 
     return () => {
       if (isBlocked) {
         isBlocked = false;
-        checkDOMListeners(-1);
+        checkDOMListeners(win, -1);
       }
 
       return unblock();
@@ -325,15 +316,15 @@ const createHashHistory = (props: CreateHashHistoryOptions = {}): RouterHistory 
 
   const listen = (listener: Function) => {
     const unlisten = transitionManager.appendListener(listener);
-    checkDOMListeners(1);
+    checkDOMListeners(win, 1);
 
     return () => {
-      checkDOMListeners(-1);
+      checkDOMListeners(win, -1);
       unlisten();
     };
   };
 
-  const history = {
+  const history: RouterHistory = {
     length: globalHistory.length,
     action: 'POP',
     location: initialLocation,
@@ -344,7 +335,8 @@ const createHashHistory = (props: CreateHashHistoryOptions = {}): RouterHistory 
     goBack,
     goForward,
     block,
-    listen
+    listen,
+    win: win
   };
 
   return history;

@@ -1,11 +1,11 @@
-import { Component, Prop, State, ComponentInterface } from '@stencil/core';
+import { Component, Element, Prop, State, ComponentInterface, h } from '@stencil/core';
 import createHistory from '../../utils/createBrowserHistory';
 import createHashHistory from '../../utils/createHashHistory';
 import { LocationSegments, HistoryType, RouterHistory, RouteViewOptions } from '../../global/interfaces';
 import ActiveRouter, { ActiveRouterState } from '../../global/active-router';
 import { QueueApi } from '@stencil/core/dist/declarations';
 
-function getLocation(location: LocationSegments, root: string): LocationSegments {
+const getLocation = (location: LocationSegments, root: string): LocationSegments => {
   // Remove the root URL if found at beginning of string
   const pathname = location.pathname.indexOf(root) == 0 ?
                     '/' + location.pathname.slice(root.length) :
@@ -17,7 +17,7 @@ function getLocation(location: LocationSegments, root: string): LocationSegments
   };
 }
 
-const HISTORIES: { [key in HistoryType]: () => RouterHistory } = {
+const HISTORIES: { [key in HistoryType]: (win: Window) => RouterHistory } = {
   'browser': createHistory,
   'hash': createHashHistory
 };
@@ -31,6 +31,7 @@ const HISTORIES: { [key in HistoryType]: () => RouterHistory } = {
   tag: 'stencil-router'
 })
 export class Router implements ComponentInterface {
+  @Element() el!: HTMLElement;
   @Prop() root: string = '/';
   @Prop({ context: 'isServer' }) private isServer!: boolean;
   @Prop({ context: 'queue'}) queue!: QueueApi;
@@ -46,9 +47,9 @@ export class Router implements ComponentInterface {
   @State() history?: RouterHistory;
 
   componentWillLoad() {
-    this.history = HISTORIES[this.historyType]();
+    this.history = HISTORIES[this.historyType]((this.el.ownerDocument as any).defaultView);
 
-    this.history.listen(async (location: LocationSegments) => {
+    this.history.listen((location: LocationSegments) => {
       location = getLocation(location, this.root);
       this.location = location;
     });
@@ -56,33 +57,34 @@ export class Router implements ComponentInterface {
   }
 
   routeViewsUpdated = (options: RouteViewOptions = {}) => {
-    if (options.scrollToId && this.historyType === 'browser') {
-      const element = document.getElementById(options.scrollToId);
-      if (element) {
-        return element.scrollIntoView();
+    if (this.history && options.scrollToId && this.historyType === 'browser') {
+      const elm = this.history.win.document.getElementById(options.scrollToId);
+      if (elm) {
+        return elm.scrollIntoView();
       }
     }
     this.scrollTo(options.scrollTopOffset || this.scrollTopOffset);
   }
 
   scrollTo(scrollToLocation?: number) {
-    if (scrollToLocation == null || this.isServer || !this.history) {
+    const history = this.history;
+
+    if (scrollToLocation == null || this.isServer || !history) {
       return;
     }
 
-    if (this.history.action === 'POP' && Array.isArray(this.history.location.scrollPosition)) {
+    if (history.action === 'POP' && Array.isArray(history.location.scrollPosition)) {
       return this.queue.write(() => {
-        if (this.history && this.history.location && Array.isArray(this.history.location.scrollPosition)) {
-          window.scrollTo(this.history.location.scrollPosition[0], this.history.location.scrollPosition[1]);
+        if (history && history.location && Array.isArray(history.location.scrollPosition)) {
+          history.win.scrollTo(history.location.scrollPosition[0], history.location.scrollPosition[1]);
         }
       });
     }
     // okay, the frame has passed. Go ahead and render now
     return this.queue.write(() => {
-      window.scrollTo(0, scrollToLocation);
+      history.win.scrollTo(0, scrollToLocation);
     });
   }
-
 
   render() {
     if (!this.location || !this.history) {

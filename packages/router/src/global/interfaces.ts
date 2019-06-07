@@ -53,6 +53,7 @@ export interface RouterHistory {
   goForward: () => void;
   block: (prompt?: string | Prompt) => () => void;
   listen: (listener: Function) => () => void;
+  win: Window;
 }
 
 export interface RouterGroup {

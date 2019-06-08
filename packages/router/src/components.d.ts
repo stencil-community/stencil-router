@@ -17,7 +17,6 @@ import {
   RouteViewOptions,
 } from './global/interfaces';
 
-
 export namespace Components {
   interface StencilAsyncContent {
     'documentLocation'?: string;

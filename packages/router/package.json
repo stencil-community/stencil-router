@@ -23,7 +23,7 @@
     "url": "git+https://github.com/ionic-team/stencil-router.git"
   },
   "dependencies": {
-    "@stencil/state-tunnel": "^1.0.0-1"
+    "@stencil/state-tunnel": "^1.0.0"
   },
   "devDependencies": {
     "np": "^5.0.1"

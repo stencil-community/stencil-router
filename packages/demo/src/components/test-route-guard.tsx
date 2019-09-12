@@ -1,4 +1,4 @@
-import { Component, ComponentInterface, Prop, State } from '@stencil/core';
+import { Component, ComponentInterface, Prop, State, h } from '@stencil/core';
 import { RouterHistory, MatchResults } from '@stencil/router';
 
 @Component({
@@ -25,13 +25,13 @@ export class TestRouteGuard implements ComponentInterface {
           <span>You are currently blocked</span> :
           <span>Go freely about your business</span>
         }
-        <br/>
-        <br/>
+        <br />
+        <br />
         <button onClick={this.toggleRouteGuard}>
           {this.routeGuardBlock ? 'Unblock' : 'Block'}
         </button>
-        <br/>
-        <br/>
+        <br />
+        <br />
         <stencil-route-link url="/demo6/asdf">Next</stencil-route-link>
       </div>
     );

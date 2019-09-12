@@ -1,6 +1,7 @@
-import { Component, FunctionalComponent } from '@stencil/core';
+import '@stencil/router';
+import { Component, FunctionalComponent, h } from '@stencil/core';
 
-const PrivateRoute: FunctionalComponent<{url: string, routeRender: Function }> = ({ url, routeRender }) => (
+const PrivateRoute: FunctionalComponent<{ url: string, routeRender: Function }> = ({ url, routeRender }) => (
   <stencil-route url={url} routeRender={
     ({ history, match, pages }) => {
       if ((window as any).userAuthenticated) {
@@ -8,7 +9,7 @@ const PrivateRoute: FunctionalComponent<{url: string, routeRender: Function }> =
       }
       return <stencil-router-redirect url="/"></stencil-router-redirect>;
     }
-  }/>
+  } />
 )
 
 
@@ -60,13 +61,13 @@ export class RouterDemoApp {
 
             <stencil-route url="/demo3" routeRender={({ history, match, pages }) =>
               <div class="content-holder">
-                <test-demo-three {...{history, match, pages}}></test-demo-three>
+                <test-demo-three {...{ history, match, pages }}></test-demo-three>
               </div>
             }></stencil-route>
 
             <stencil-route url="/demo4" routeRender={({ history, match, pages }) =>
               <div class="content-holder">
-                <test-demo-four {...{history, match, pages}}></test-demo-four>
+                <test-demo-four {...{ history, match, pages }}></test-demo-four>
               </div>
             }></stencil-route>
 
@@ -78,7 +79,7 @@ export class RouterDemoApp {
 
             <stencil-route url="/demo6" routeRender={({ history, match, pages }) =>
               <div class="content-holder">
-                <test-demo-six {...{history, match, pages}}></test-demo-six>
+                <test-demo-six {...{ history, match, pages }}></test-demo-six>
               </div>
             }></stencil-route>
 
@@ -103,7 +104,7 @@ export class RouterDemoApp {
 
             <stencil-route url="/route-guard" routeRender={({ history, match, pages }) =>
               <div class="content-holder">
-                <test-route-guard {...{history, match, pages}}></test-route-guard>
+                <test-route-guard {...{ history, match, pages }}></test-route-guard>
               </div>
             }></stencil-route>
 

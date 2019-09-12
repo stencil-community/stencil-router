@@ -1,4 +1,4 @@
-import { Component, Prop } from '@stencil/core';
+import { Component, Prop, h } from '@stencil/core';
 import { RouterHistory, MatchResults } from '@stencil/router';
 
 @Component({
@@ -29,11 +29,11 @@ export class TestDemoSeven {
       <div>
         <h1>Test Demo Seven</h1>
         <pre>
-          <b>this.pages</b>:<br/>
+          <b>this.pages</b>:<br />
           {JSON.stringify(this.pages, null, 2)}
         </pre>
         <pre>
-          <b>this.match</b>:<br/>
+          <b>this.match</b>:<br />
           {JSON.stringify(this.match, null, 2)}
         </pre>
       </div>

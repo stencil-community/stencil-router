@@ -1,15 +1,15 @@
-import { Component, Element, Prop, State, ComponentInterface, h } from '@stencil/core';
+import { Component, Element, Prop, State, ComponentInterface, h, Event } from '@stencil/core';
 import createHistory from '../../utils/createBrowserHistory';
 import createHashHistory from '../../utils/createHashHistory';
 import { LocationSegments, HistoryType, RouterHistory, RouteViewOptions } from '../../global/interfaces';
 import ActiveRouter, { ActiveRouterState } from '../../global/active-router';
-import { QueueApi } from '@stencil/core/dist/declarations';
+import { QueueApi, EventEmitter } from '@stencil/core/dist/declarations';
 
 const getLocation = (location: LocationSegments, root: string): LocationSegments => {
   // Remove the root URL if found at beginning of string
   const pathname = location.pathname.indexOf(root) == 0 ?
-                    '/' + location.pathname.slice(root.length) :
-                    location.pathname;
+    '/' + location.pathname.slice(root.length) :
+    location.pathname;
 
   return {
     ...location,
@@ -34,7 +34,7 @@ export class Router implements ComponentInterface {
   @Element() el!: HTMLElement;
   @Prop() root: string = '/';
   @Prop({ context: 'isServer' }) private isServer!: boolean;
-  @Prop({ context: 'queue'}) queue!: QueueApi;
+  @Prop({ context: 'queue' }) queue!: QueueApi;
 
   @Prop() historyType: HistoryType = 'browser';
 
@@ -46,12 +46,16 @@ export class Router implements ComponentInterface {
   @State() location?: LocationSegments;
   @State() history?: RouterHistory;
 
+  @Event()
+  routeDidChange!: EventEmitter;
+
   componentWillLoad() {
     this.history = HISTORIES[this.historyType]((this.el.ownerDocument as any).defaultView);
 
     this.history.listen((location: LocationSegments) => {
       location = getLocation(location, this.root);
       this.location = location;
+      this.routeDidChange.emit({});
     });
     this.location = getLocation(this.history.location, this.root);
   }

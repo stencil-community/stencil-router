@@ -1,4 +1,4 @@
-import { Component, Element, Prop, State, ComponentInterface, h } from '@stencil/core';
+import { Component, Element, Event, EventEmitter, Prop, State, ComponentInterface, h } from '@stencil/core';
 import createHistory from '../../utils/createBrowserHistory';
 import createHashHistory from '../../utils/createHashHistory';
 import { LocationSegments, HistoryType, RouterHistory, RouteViewOptions } from '../../global/interfaces';
@@ -46,12 +46,16 @@ export class Router implements ComponentInterface {
   @State() location?: LocationSegments;
   @State() history?: RouterHistory;
 
+  @Event()
+  routeDidChange!: EventEmitter;
+
   componentWillLoad() {
     this.history = HISTORIES[this.historyType]((this.el.ownerDocument as any).defaultView);
 
     this.history.listen((location: LocationSegments) => {
       location = getLocation(location, this.root);
       this.location = location;
+      this.routeDidChange.emit({});
     });
     this.location = getLocation(this.history.location, this.root);
   }

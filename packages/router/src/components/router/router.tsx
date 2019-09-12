@@ -8,8 +8,8 @@ import { QueueApi } from '@stencil/core/dist/declarations';
 const getLocation = (location: LocationSegments, root: string): LocationSegments => {
   // Remove the root URL if found at beginning of string
   const pathname = location.pathname.indexOf(root) == 0 ?
-                    '/' + location.pathname.slice(root.length) :
-                    location.pathname;
+    '/' + location.pathname.slice(root.length) :
+    location.pathname;
 
   return {
     ...location,

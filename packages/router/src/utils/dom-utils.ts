@@ -49,6 +49,13 @@ export const isExtraneousPopstateEvent = (nav: Navigator, event: any) => (
 );
 
 export const storageAvailable = (win: any, type: 'localStorage' | 'sessionStorage') => {
+  try {
+    // test for errors thrown when accessing the property
+    win[type];
+  } catch(e) {
+    return false;
+  }
+
   const storage = win[type];
   const x = '__storage_test__';
 

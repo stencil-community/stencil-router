@@ -92,10 +92,12 @@ export class RouteLink implements ComponentInterface {
       anchorAttributes.class[this.anchorClass] = true;
     }
 
+    const href = this.url && this.root ?  getUrl(this.url, this.root) : this.url;
+
     if (this.custom === 'a') {
       anchorAttributes = {
         ...anchorAttributes,
-        href: this.url,
+        href: href,
         title: this.anchorTitle,
         role: this.anchorRole,
         tabindex: this.anchorTabIndex,

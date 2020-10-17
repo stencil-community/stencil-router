@@ -1,5 +1,5 @@
 {
-  "name": "stencil-router-v2",
+  "name": "@stencil/router",
   "version": "1.0.1",
   "description": "Router based in @stencil/store",
   "main": "dist/index.cjs.js",
@@ -41,6 +41,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/ionic-team/stencil-router-v2.git"
-  }
+    "url": "git://github.com/ionic-team/stencil-router.git"
+  },
+  "homepage": "https://stenciljs.com/"
 }

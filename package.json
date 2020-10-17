@@ -8,7 +8,7 @@
   "scripts": {
     "build": "rm -rf dist && tsc -p . && npm run rollup",
     "lint.prettier": "prettier --write 'src/**/*.ts'",
-    "release": "np",
+    "release": "np --any-branch",
     "rollup": "rollup -c rollup.config.js",
     "test": "stencil test --spec",
     "version": "npm run build"

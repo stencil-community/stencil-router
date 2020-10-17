@@ -1,3 +1,4 @@
+
 # stencil-router-v2
 
 Stencil Router V2 is an experimental new router for stencil that focus in:
@@ -214,16 +215,13 @@ export class AppRoot {
   }
 }
 ```
-
 The routes state includes:
-
 ```tsx
   url: URL;
   activeRoute?: RouteEntry;
   urlParams: { [key: string]: string };
   routes: RouteEntry[];
 ```
-
 
 [wiki]: https://github.com/stencil-community/stencil-router/wiki
 

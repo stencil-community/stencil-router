@@ -1,0 +1,26 @@
+{
+  "name": "stencil-store-tests",
+  "version": "0.0.1",
+  "description": "Stencil Component Starter",
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "es2015": "dist/esm/index.mjs",
+  "es2017": "dist/esm/index.mjs",
+  "types": "dist/types/components.d.ts",
+  "collection": "dist/collection/collection-manifest.json",
+  "collection:main": "dist/collection/index.js",
+  "unpkg": "dist/stencil-store-tests/stencil-store-tests.js",
+  "files": [
+    "dist/",
+    "loader/"
+  ],
+  "scripts": {
+    "build": "../node_modules/.bin/stencil build",
+    "start": "../node_modules/.bin/stencil build --dev --watch --serve",
+    "lint": "npm run lint.prettier"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "stencil-router-v2": "^0.5.0"
+  }
+}

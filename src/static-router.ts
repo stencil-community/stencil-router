@@ -86,7 +86,7 @@ const createWindowStaticRouter = (
   const getDataFetchPath = (url: URL) =>
     `${
       url.pathname.endsWith('/') ? url.pathname : url.pathname + '/'
-    }page.state.json?s-cache=${buildId}`;
+    }page.state.json?v=${buildId}`;
 
   const loadStaticState = async (pushToUrl: URL) => {
     try {

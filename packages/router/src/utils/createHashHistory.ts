@@ -52,7 +52,7 @@ const createHashHistory = (win: Window, props: CreateHashHistoryOptions = {}) =>
   const keyLength = (props.keyLength != null) ? props.keyLength : 6;
 
   const {
-    getUserConfirmation = getConfirmation,
+    getUserConfirmation = getConfirmation.bind(undefined, win),
     hashType = 'slash'
   } = props;
   const basename = props.basename ? stripTrailingSlash(addLeadingSlash(props.basename)) : '';

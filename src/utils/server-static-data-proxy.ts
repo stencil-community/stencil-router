@@ -32,12 +32,8 @@ export const createProxiedStaticData = (inputData: any) => {
     }
 
     if (Array.isArray(propValue)) {
-      const childArr: any[] = [];
-      obj[propName] = childArr;
-
-      return propValue.map((arrValue, arrIndex) => {
-        return getterProxy(childArr, arrIndex, arrValue);
-      });
+      obj[propName] = propValue;
+      return propValue;
     }
 
     if (valueType === 'object') {

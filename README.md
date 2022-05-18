@@ -1,7 +1,7 @@
 [![npm][npm-badge]][npm-badge-url]
 ## Stencil Router
 
-## ☎️ Call for Mainainers ☎️
+## ☎️ Call for Maintainers ☎️
 
 In the past, we’ve created packages under the Stencil name to keep them out of the core compiler. Looking to this year and beyond, we’re going to focus on Stencil as a compiler for web components and begin to move away from creating full-blown web applications using packages maintained by Ionic.
 

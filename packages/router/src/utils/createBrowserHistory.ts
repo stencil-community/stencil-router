@@ -49,7 +49,10 @@ const createBrowserHistory = (win: Window, props: CreateBrowserHistoryOptions = 
   const scrollHistory = createScrollHistory(win);
 
   const forceRefresh = (props.forceRefresh != null) ? props.forceRefresh : false;
-  const getUserConfirmation = (props.getUserConfirmation != null) ? props.getUserConfirmation : getConfirmation;
+  const getUserConfirmation =
+    props.getUserConfirmation != null
+      ? props.getUserConfirmation
+      : getConfirmation.bind(undefined, win);
   const keyLength = (props.keyLength != null) ? props.keyLength : 6;
   const basename = props.basename ? stripTrailingSlash(addLeadingSlash(props.basename)) : '';
 
@@ -83,11 +86,9 @@ const createBrowserHistory = (win: Window, props: CreateBrowserHistoryOptions = 
     return createLocation(path, state, key || createKey(keyLength));
   };
 
-
   const transitionManager = createTransitionManager();
 
   const setState = (nextState?: NextState) => {
-
     // Capture location for the view before changing history.
     scrollHistory.capture(history.location.key);
 
@@ -103,7 +104,7 @@ const createBrowserHistory = (win: Window, props: CreateBrowserHistoryOptions = 
     );
   };
 
-  const handlePopState = (event: any) => {
+  const handlePopState = (event: PopStateEvent) => {
     // Ignore extraneous popstate events in WebKit.
     if (!isExtraneousPopstateEvent(globalNavigator, event)) {
       handlePop(getDOMLocation(event.state));
@@ -113,7 +114,6 @@ const createBrowserHistory = (win: Window, props: CreateBrowserHistoryOptions = 
   const handleHashChange = () => {
     handlePop(getDOMLocation(getHistoryState()));
   };
-
 
   const handlePop = (location: LocationSegments) => {
     if (forceNextPop) {
@@ -262,7 +262,6 @@ const createBrowserHistory = (win: Window, props: CreateBrowserHistoryOptions = 
 
   const goBack = () => go(-1);
   const goForward = () => go(1);
-
 
   const checkDOMListeners = (delta: number) => {
     listenerCount += delta;

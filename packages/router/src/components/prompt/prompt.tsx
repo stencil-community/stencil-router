@@ -1,14 +1,21 @@
-import { Component, Prop, Element, ComponentInterface, Watch, State } from '@stencil/core';
-import { RouterHistory, Prompt } from '../../global/interfaces';
-import ActiveRouter from '../../global/active-router';
+import {
+  Component,
+  Prop,
+  Element,
+  ComponentInterface,
+  Watch,
+  State,
+} from "@stencil/core";
+import { RouterHistory, Prompt } from "../../global/interfaces";
+import ActiveRouter from "../../global/active-router";
 
 @Component({
-  tag: 'stencil-router-prompt'
+  tag: "stencil-router-prompt",
 })
 export class StencilRouterPrompt implements ComponentInterface {
-  @Element() el!: HTMLElement;
+  @Element() el!: HTMLStencilRouterPromptElement;
   @Prop() when = true;
-  @Prop() message: string | Prompt = '';
+  @Prop() message: string | Prompt = "";
   @Prop() history?: RouterHistory;
 
   @State() unblock?: () => void;
@@ -30,20 +37,21 @@ export class StencilRouterPrompt implements ComponentInterface {
   }
 
   componentWillLoad() {
-    if (this.when ) {
+    if (this.when) {
       this.enable(this.message);
     }
   }
 
-  @Watch('message')
-  @Watch('when')
-  updateMessage(newMessage: string, prevMessage: string) {
-    if (this.when) {
-      if (!this.when || prevMessage !== newMessage) {
-        this.enable(this.message);
-      }
-    } else {
+  updateMessage(newMessage: string, prevMessage: string): void; // `message` updated
+  updateMessage(newMessage: boolean, prevMessage: boolean): void; // `when` updated
+
+  @Watch("message")
+  @Watch("when")
+  updateMessage<T extends string | boolean>(newMessage: T, prevMessage: T) {
+    if (!this.when) {
       this.disable();
+    } else if (prevMessage !== newMessage) {
+      this.enable(this.message);
     }
   }
 
@@ -56,6 +64,4 @@ export class StencilRouterPrompt implements ComponentInterface {
   }
 }
 
-ActiveRouter.injectProps(StencilRouterPrompt, [
-  'history',
-]);
+ActiveRouter.injectProps(StencilRouterPrompt, ["history"]);

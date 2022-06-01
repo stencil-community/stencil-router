@@ -10,7 +10,7 @@
     "test.watch": "jest --watch"
   },
   "dependencies": {
-    "@stencil/router": "^0.2.7-1"
+    "@stencil-community/router": "^1.0.2"
   },
   "jest": {
     "transform": {

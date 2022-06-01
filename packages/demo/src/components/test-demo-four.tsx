@@ -1,5 +1,5 @@
 import { Component, Prop } from '@stencil/core';
-import { RouterHistory, MatchResults } from '@stencil/router';
+import { RouterHistory, MatchResults } from '@stencil-community/router';
 
 @Component({
   tag: 'test-demo-four'

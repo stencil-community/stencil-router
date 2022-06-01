@@ -6,13 +6,13 @@
 
 import '@stencil/core';
 
-import '@stencil/router';
+import '@stencil-community/router';
 import '@stencil/state-tunnel';
 import {
   LocationSegments,
   MatchResults,
   RouterHistory,
-} from '@stencil/router';
+} from '@stencil-community/router';
 
 
 export namespace Components {

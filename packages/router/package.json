@@ -1,5 +1,5 @@
 {
-  "name": "@stencil/router",
+  "name": "@stencil-community/router",
   "version": "1.0.1",
   "description": "Stencil Router",
   "main": "dist/index.js",

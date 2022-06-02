@@ -30,5 +30,5 @@ Included components and all other information can be found in our [wiki].
 
 [wiki]: https://github.com/ionic-team/stencil-router/wiki
 
-[npm-badge]: https://img.shields.io/npm/v/@stencil/router.svg
-[npm-badge-url]: https://www.npmjs.com/package/@stencil/router
+[npm-badge]: https://img.shields.io/npm/v/@stencil-community/router.svg
+[npm-badge-url]: https://www.npmjs.com/package/@stencil-community/router

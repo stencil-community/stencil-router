@@ -1,4 +1,4 @@
-import { Component, Element, Prop } from '@stencil/core';
+import { Component, Element, Prop, h } from '@stencil/core';
 import { RouterHistory, LocationSegments, injectHistory } from '@stencil/router';
 
 @Component({
@@ -6,7 +6,7 @@ import { RouterHistory, LocationSegments, injectHistory } from '@stencil/router'
 })
 export class TestDeepComponent {
 
-  @Element() el!: HTMLStencilElement;
+  @Element() el!: HTMLElement;
   @Prop() history?: RouterHistory;
   @Prop() location?: LocationSegments;
 

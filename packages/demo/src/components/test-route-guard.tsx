@@ -1,4 +1,4 @@
-import { Component, ComponentInterface, Prop, State } from '@stencil/core';
+import { Component, ComponentInterface, Prop, State, h } from '@stencil/core';
 import { RouterHistory, MatchResults } from '@stencil/router';
 
 @Component({

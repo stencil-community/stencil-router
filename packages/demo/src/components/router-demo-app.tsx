@@ -1,4 +1,5 @@
-import { Component, FunctionalComponent } from '@stencil/core';
+import '@stencil/router';
+import { Component, FunctionalComponent, h } from '@stencil/core';
 
 const PrivateRoute: FunctionalComponent<{url: string, routeRender: Function }> = ({ url, routeRender }) => (
   <stencil-route url={url} routeRender={

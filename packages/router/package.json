@@ -27,6 +27,7 @@
     "@stencil/state-tunnel": "^1.0.1"
   },
   "devDependencies": {
+    "@types/node": "12.0.0",
     "np": "^5.0.3"
   },
   "author": "Ionic Team",

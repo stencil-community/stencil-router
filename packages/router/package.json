@@ -33,7 +33,7 @@
   "author": "Ionic Team",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/stencil-community/stencil-router"
+    "url": "https://github.com/stencil-community/stencil-router/issues"
   },
   "jest": {
     "moduleFileExtensions": [

@@ -21,7 +21,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ionic-team/stencil-router.git"
+    "url": "git+https://github.com/stencil-community/stencil-router.git"
   },
   "dependencies": {
     "@stencil/state-tunnel": "^1.0.1"
@@ -33,7 +33,7 @@
   "author": "Ionic Team",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/ionic-team/stencil-router"
+    "url": "https://github.com/stencil-community/stencil-router/issues"
   },
   "jest": {
     "moduleFileExtensions": [
@@ -46,5 +46,5 @@
     },
     "testRegex": "/__tests__/.*(test|spec)\\.(ts|tsx)$"
   },
-  "homepage": "https://github.com/ionic-team/stencil-router"
+  "homepage": "https://github.com/stencil-community/stencil-router"
 }

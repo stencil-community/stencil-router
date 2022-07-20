@@ -48,7 +48,6 @@ export const matchPath = (pathname: string, options: MatchOptions = {}): null | 
   if (!match) {
     return null;
   }
-
   const [ url, ...values ] = match;
   const isExact = pathname === url;
 

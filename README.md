@@ -1,5 +1,5 @@
 
-# stencil-router-v2
+# @stencil-community/router
 
 Stencil Router V2 is an experimental new router for stencil that focus in:
 

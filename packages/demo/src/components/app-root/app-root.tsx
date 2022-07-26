@@ -1,5 +1,5 @@
 import { Component, Prop, Host, h } from '@stencil/core';
-import { Route, RouteParams, href, match, staticState } from 'stencil-router-v2';
+import { Route, RouteParams, href, match, staticState } from '@stencil-community/router';
 import { Router } from '../../router';
 
 @Component({

@@ -1,6 +1,9 @@
 dist/
 build/
 
+packages/**/dist
+packages/**/build
+
 *~
 *.sw[mnpcod]
 *.log

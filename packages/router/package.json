@@ -1,0 +1,50 @@
+{
+  "name": "@stencil-community/router",
+  "version": "2.0.0-2",
+  "description": "Router based in @stencil/store",
+  "main": "dist/index.cjs.js",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "rm -rf dist && tsc -p . && npm run rollup",
+    "lint.prettier": "prettier --write 'src/**/*.ts'",
+    "release": "np --any-branch",
+    "rollup": "rollup -c rollup.config.js",
+    "test": "stencil test --spec",
+    "version": "npm run build"
+  },
+  "keywords": [
+    "stencil",
+    "router",
+    "store"
+  ],
+  "files": [
+    "dist"
+  ],
+  "author": "Manu Mtz.-Almeida",
+  "license": "MIT",
+  "peerDependencies": {
+    "@stencil/core": ">=2.1.0-2"
+  },
+  "dependencies": {
+    "@stencil/store": "^2.0.0"
+  },
+  "devDependencies": {
+    "@stencil/core": "^2.17.1",
+    "@types/jest": "^26.0.12",
+    "jest": "^26.5.3",
+    "jest-cli": "^26.5.3",
+    "np": "^6.5.0",
+    "prettier": "^2.1.2",
+    "rollup": "^2.32.0",
+    "typescript": "^4.0.3"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/ionic-team/stencil-router.git"
+  },
+  "homepage": "https://stenciljs.com/",
+  "workspaces": [
+    "packages/*"
+  ]
+}

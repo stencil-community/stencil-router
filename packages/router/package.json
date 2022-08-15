@@ -31,9 +31,10 @@
   },
   "devDependencies": {
     "@stencil/core": "^2.17.1",
-    "@types/jest": "^26.0.12",
-    "jest": "^26.5.3",
-    "jest-cli": "^26.5.3",
+    "@types/jest": "^27.0.3",
+    "jest": "^27.0.3",
+    "jest-cli": "^27.5.1",
+    "jest-config": "^27.5.1",
     "np": "^6.5.0",
     "prettier": "^2.1.2",
     "rollup": "^2.32.0",

@@ -21,6 +21,6 @@
   },
   "license": "MIT",
   "dependencies": {
-    "@stencil-community/router": "^2.0.0-2"
+    "@stencil-community/router": "stencil-community/stencil-router"
   }
 }

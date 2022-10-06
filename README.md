@@ -19,7 +19,7 @@ Functional Components are the used to collect the list of routes, finally the `S
 ## Install
 
 ```bash
-npm install @stencil-community/router
+npm install @stencil-community/router --save-dev
 ```
 
 ## Examples

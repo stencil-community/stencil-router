@@ -19,13 +19,13 @@ Functional Components are the used to collect the list of routes, finally the `S
 ## Install
 
 ```bash
-npm install stencil-router-v2 --save-dev
+npm install @stencil-community/router --save-dev
 ```
 
 ## Examples
 
 ```tsx
-import { createRouter, Route } from 'stencil-router-v2';
+import { createRouter, Route } from '@stencil-community/router';
 
 const Router = createRouter();
 
@@ -75,7 +75,7 @@ Regex or functional matches have the chance to generate an object of params when
 
 
 ```tsx
-import { createRouter, Route, match } from 'stencil-router-v2';
+import { createRouter, Route, match } from '@stencil-community/router';
 
 const Router = createRouter();
 
@@ -116,7 +116,7 @@ A simple router, inspired by React Router v4, for Stencil apps and vanilla Web C
 The `href()` function will inject all the handles to an native `anchor`, without extra DOM.
 
 ```tsx
-import { createRouter, Route, href } from 'stencil-router-v2';
+import { createRouter, Route, href } from '@stencil-community/router';
 
 const Router = createRouter();
 
@@ -172,7 +172,7 @@ export class AppRoot {
 Because the router uses `@stencil/store` its trivial to subscribe to changes in the locations, activeRoute, or even the list of routes.
 
 ```tsx
-import { createRouter, Route } from 'stencil-router-v2';
+import { createRouter, Route } from '@stencil-community/router';
 
 const Router = createRouter();
 

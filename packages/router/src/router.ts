@@ -5,8 +5,8 @@ import {
   VNode,
   h,
   writeTask,
-} from '@stencil/core';
-import { createStore } from '@stencil/store';
+} from "@stencil/core";
+import { createStore } from "@stencil/store";
 import {
   isPromise,
   isString,
@@ -15,7 +15,7 @@ import {
   devDebug,
   isFunction,
   handlePushState,
-} from './utils/helpers';
+} from "./utils/helpers";
 import type {
   Router,
   RouterOptions,
@@ -28,7 +28,7 @@ import type {
   SwitchView,
   OnChangeHandler,
   OnChangeType,
-} from './types';
+} from "./types";
 
 interface MatchResult {
   params: RouteParams;
@@ -42,7 +42,7 @@ export const createWindowRouter = (
   doc: Document,
   loc: Location,
   hstry: History,
-  opts: RouterOptions,
+  opts: RouterOptions
 ) => {
   let hasQueuedView = false;
   let lastHref = loc.href;
@@ -73,7 +73,7 @@ export const createWindowRouter = (
 
   const match = (
     testUrl: URL,
-    routes: RouteEntry[],
+    routes: RouteEntry[]
   ): MatchResult | undefined => {
     for (let i = 0; i < routes.length; i++) {
       const route = routes[i];
@@ -94,7 +94,7 @@ export const createWindowRouter = (
     const pushToUrl = urlFromHref(href);
 
     if (state.href !== pushToUrl.href) {
-      onBeforeChanges.forEach(cb => {
+      onBeforeChanges.forEach((cb) => {
         try {
           cb(urlFromHref(href), urlFromHref(lastHref));
         } catch (e) {
@@ -111,14 +111,14 @@ export const createWindowRouter = (
       }
       state.href = pushToUrl.href;
       state.popState = isFromPopState;
-    } else if (!isFromPopState && pushToUrl.hash !== '') {
+    } else if (!isFromPopState && pushToUrl.hash !== "") {
       loc.href = pushToUrl.href;
     }
   };
 
   const createSwitchChildren = (
     matchedViewChildren: any,
-    hasRouteEntryChanged: boolean,
+    hasRouteEntryChanged: boolean
   ) => {
     pushView(matchedViewChildren);
     hasQueuedView = false;
@@ -160,8 +160,8 @@ export const createWindowRouter = (
           p: [],
         },
         ...views
-          .filter(v => v.s !== VIEW_STATE.QUEUED)
-          .map(v => ({ ...v, s: VIEW_STATE.LEAVING })),
+          .filter((v) => v.s !== VIEW_STATE.QUEUED)
+          .map((v) => ({ ...v, s: VIEW_STATE.LEAVING })),
       ];
     }
   };
@@ -174,7 +174,7 @@ export const createWindowRouter = (
           vnode &&
           !isString(view.c[i]) &&
           isString(vnode.vtag) &&
-          vnode.vtag.includes('-')
+          vnode.vtag.includes("-")
         ) {
           hasQueuedView = true;
         }
@@ -193,7 +193,7 @@ export const createWindowRouter = (
         if (vnode && hasQueuedView && view.s === VIEW_STATE.QUEUED) {
           vnode.vattrs = vnode.vattrs || {};
           vnode.vattrs.class =
-            (vnode.vattrs.class || '') + ' stencil-router-queue';
+            (vnode.vattrs.class || "") + " stencil-router-queue";
           const userRef = vnode.vattrs.ref;
           vnode.vattrs.ref = (el: any) => {
             addComponentOnReady(view, el);
@@ -227,12 +227,12 @@ export const createWindowRouter = (
     if (state.views.length === 1) {
       state.views[0].s = VIEW_STATE.ACTIVE;
     } else {
-      const queuedViews = state.views.filter(v => v.s === VIEW_STATE.QUEUED);
+      const queuedViews = state.views.filter((v) => v.s === VIEW_STATE.QUEUED);
 
       if (queuedViews.length > 0) {
-        queuedViews.forEach(v => {
+        queuedViews.forEach((v) => {
           if (Array.isArray(v.c)) {
-            v.c = v.c.map(c => (isString(c) ? '' : c));
+            v.c = v.c.map((c) => (isString(c) ? "" : c));
           }
         });
 
@@ -298,10 +298,10 @@ export const createWindowRouter = (
         if (Build.isServer) {
           if (isPromise<PageState>(pageState)) {
             return pageState
-              .then(resolvedPagedState =>
-                route.jsx(matchResult.params, resolvedPagedState),
+              .then((resolvedPagedState) =>
+                route.jsx(matchResult.params, resolvedPagedState)
               )
-              .catch(err => {
+              .catch((err) => {
                 console.error(err);
                 return route.jsx(matchResult.params);
               });
@@ -336,13 +336,13 @@ export const createWindowRouter = (
         return state.views
           .slice()
           .reverse()
-          .map(v => v.c);
+          .map((v) => v.c);
       }
     }
   };
 
   const on = (type: OnChangeType, cb: OnChangeHandler) =>
-    (type === 'change' ? onChanges : onBeforeChanges).push(cb);
+    (type === "change" ? onChanges : onBeforeChanges).push(cb);
 
   const router: Router = (defaultRouter = {
     Switch,
@@ -354,19 +354,19 @@ export const createWindowRouter = (
     },
     push,
     on,
-    onHrefRender: navigateToUrl => {
+    onHrefRender: (navigateToUrl) => {
       if (isFunction(opts.onHrefRender)) {
         opts.onHrefRender(navigateToUrl, urlFromHref(state.href));
       }
     },
-    preload: opts => {
+    preload: (opts) => {
       if (!doc.head.querySelector(`link[href="${opts.href}"]`)) {
-        const lnk = doc.createElement('link');
+        const lnk = doc.createElement("link");
         lnk.href = opts.href;
-        if (opts.as === 'module') {
-          lnk.rel = 'modulepreload';
+        if (opts.as === "module") {
+          lnk.rel = "modulepreload";
         } else {
-          lnk.rel = 'prefetch';
+          lnk.rel = "prefetch";
           lnk.as = opts.as;
         }
         doc.head.appendChild(lnk);
@@ -374,14 +374,14 @@ export const createWindowRouter = (
     },
     dispose: () => {
       defaultRouter = undefined;
-      win.removeEventListener('popstate', onPopState);
+      win.removeEventListener("popstate", onPopState);
       dispose();
     },
     serializeURL: urlToPath,
   });
 
   // listen URL changes
-  win.addEventListener('popstate', onPopState);
+  win.addEventListener("popstate", onPopState);
 
   return {
     router,
@@ -391,16 +391,16 @@ export const createWindowRouter = (
 
 export const href = (
   href: string,
-  router: Router | undefined = defaultRouter,
+  router: Router | undefined = defaultRouter
 ) => {
-  if (typeof href !== 'string') {
+  if (typeof href !== "string") {
     return {};
   }
 
   const baseURI = document.baseURI;
   const goToUrl = new URL(href, baseURI);
 
-  if (href.startsWith('#') || goToUrl.host !== new URL(baseURI).host) {
+  if (href.startsWith("#") || goToUrl.host !== new URL(baseURI).host) {
     return {
       href,
     };
@@ -408,17 +408,17 @@ export const href = (
 
   if (Build.isDev) {
     if (!router || !isFunction(router.push)) {
-      console.error('Router must be defined in href()', href);
+      console.error("Router must be defined in href()", href);
       return {
         href,
       };
     }
 
-    const baseName = goToUrl.pathname.split('/').pop();
-    if (baseName!.indexOf('.') > -1) {
+    const baseName = goToUrl.pathname.split("/").pop();
+    if (baseName!.indexOf(".") > -1) {
       console.error(
-        'Router href() should only be used for a page link, without an extension, and not for an asset',
-        href,
+        "Router href() should only be used for a page link, without an extension, and not for an asset",
+        href
       );
       return {
         href,
@@ -428,7 +428,7 @@ export const href = (
 
   router!.onHrefRender(goToUrl);
 
-  const anchor = href.includes('#') ? `#${href.split('#')[1]}` : '';
+  const anchor = href.includes("#") ? `#${href.split("#")[1]}` : "";
 
   return {
     href: router!.serializeURL(goToUrl) + anchor,
@@ -442,7 +442,7 @@ export const href = (
 };
 
 export const Route: FunctionalComponent<RouteProps> = (props, children) => {
-  if ('to' in props) {
+  if ("to" in props) {
     const entry: RouteEntry = {
       path: props.path,
       to: props.to,
@@ -451,7 +451,7 @@ export const Route: FunctionalComponent<RouteProps> = (props, children) => {
   }
   if (Build.isDev && props.render && children.length > 0) {
     console.warn(
-      'Route: if `render` is provided, the component should not have any children',
+      "Route: if `render` is provided, the component should not have any children"
     );
   }
   const entry: RouteEntry = {
@@ -465,7 +465,7 @@ export const Route: FunctionalComponent<RouteProps> = (props, children) => {
 
 const matchPath = (
   pathname: string,
-  path: RoutePath,
+  path: RoutePath
 ): RouteParams | undefined => {
   if (isString(path)) {
     if (path === pathname) {

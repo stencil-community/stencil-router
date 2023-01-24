@@ -1,4 +1,4 @@
-import { Key, Path, pathToRegexp } from './path-to-regex';
+import { Key, Path, pathToRegexp } from "./path-to-regex";
 
 export interface MatchOptions {
   exact?: boolean;
@@ -15,7 +15,10 @@ const patternCache: { [key: string]: any } = {};
 const cacheLimit = 10000;
 
 // Memoized function for creating the path match regex
-const compilePath = (pattern: Path, options: CompileOptions): { re: RegExp; keys: Key[] } => {
+const compilePath = (
+  pattern: Path,
+  options: CompileOptions
+): { re: RegExp; keys: Key[] } => {
   const cacheKey = `${options.end}${options.strict}`;
   const cache = patternCache[cacheKey] || (patternCache[cacheKey] = {});
   const cachePattern = JSON.stringify(pattern);
@@ -56,7 +59,7 @@ export const match = (pathname: string, options: MatchOptions = {}) => {
 };
 
 export const matchAny = (pathnames: string[], options: MatchOptions = {}) => {
-  const matchFns = pathnames.map(pathname => match(pathname, options));
+  const matchFns = pathnames.map((pathname) => match(pathname, options));
   return (path: string) => {
     let result: { [key: string]: string } | undefined;
     for (const matchFn of matchFns) {

@@ -17,7 +17,7 @@
   "scripts": {
     "build": "../../node_modules/.bin/stencil build",
     "start": "../../node_modules/.bin/stencil build --dev --watch --serve",
-    "lint": "npm run lint.prettier"
+    "lint": "prettier --write 'src/**/*.ts'"
   },
   "license": "MIT",
   "dependencies": {

@@ -9,7 +9,7 @@
     "build": "rimraf dist && tsc -p . && npm run rollup",
     "lint": "prettier --write 'src/**/*.ts'",
     "release": "np --any-branch",
-    "rollup": "rollup -c rollup.config.js",
+    "rollup": "rollup -c rollup.config.js --bundleConfigAsCjs",
     "test": "stencil test --spec",
     "version": "npm run build"
   },

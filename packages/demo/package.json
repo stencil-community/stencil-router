@@ -15,12 +15,12 @@
     "loader/"
   ],
   "scripts": {
-    "build": "../../node_modules/.bin/stencil build",
-    "start": "../../node_modules/.bin/stencil build --dev --watch --serve",
+    "build": "stencil build",
+    "start": "stencil build --dev --watch --serve",
     "lint": "prettier --write 'src/**/*.ts'"
   },
   "license": "MIT",
   "dependencies": {
-    "@stencil-community/router": "^2.0.0-2"
+    "@stencil-community/router": "^2.0.0-3"
   }
 }

@@ -10,7 +10,6 @@ import { createStore } from "@stencil/store";
 import {
   isPromise,
   isString,
-  normalizePathname,
   urlToPath,
   devDebug,
   isFunction,
@@ -77,7 +76,7 @@ export const createWindowRouter = (
   ): MatchResult | undefined => {
     for (let i = 0; i < routes.length; i++) {
       const route = routes[i];
-      const params = matchPath(normalizePathname(testUrl), route.path);
+      const params = matchPath(testUrl.pathname, route.path);
       if (params) {
         if (route.to != null) {
           pushState(urlFromHref(route.to));
@@ -489,7 +488,7 @@ const matchPath = (
 export const createRouter = (opts: RouterOptions = {}) =>
   createWindowRouter(window, document, location, history, opts).router;
 
-export const NotFound = () => {};
+export const NotFound = () => { };
 
 const enum VIEW_STATE {
   QUEUED,

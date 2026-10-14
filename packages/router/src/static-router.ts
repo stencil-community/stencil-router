@@ -71,8 +71,12 @@ const createWindowStaticRouter = (
   opts: RouterOptions,
 ) => {
   const buildId = doc.documentElement.dataset.stencilBuild;
-  const getDataFetchPath = (url: URL) =>
-    `${url.pathname.endsWith("/") ? url.pathname : url.pathname + "/"}page.state.json?v=${buildId}`;
+  // Prerendered pages are written at the lowercased paths that href() renders,
+  // so request their state there too, regardless of the casing pushed.
+  const getDataFetchPath = (url: URL) => {
+    const pathname = normalizePathname(url);
+    return `${pathname.endsWith("/") ? pathname : pathname + "/"}page.state.json?v=${buildId}`;
+  };
 
   const loadStaticState = async (pushToUrl: URL) => {
     try {

@@ -1,24 +1,77 @@
-name: Node.js CI
+name: CI
 
 on:
   push:
-    branches: [main]
+    branches: [master]
   pull_request:
 
+permissions:
+  contents: read
+
 jobs:
-  build:
+  check:
+    name: Lint, typecheck & unit tests
     runs-on: ubuntu-latest
-
-    strategy:
-      matrix:
-        node-version: [16.x, 17.x, 18.x]
-
     steps:
-      - uses: actions/checkout@v3
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v3
+      - uses: actions/checkout@v7
+      - uses: pnpm/action-setup@v6
+      - uses: actions/setup-node@v7
         with:
-          node-version: ${{ matrix.node-version }}
-      - run: npm ci
-      - run: npm run build
-      - run: npm run test
+          node-version: 24
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm fmt:check
+      - run: pnpm --filter @stencil-community/router typecheck
+      - run: pnpm --filter @stencil-community/router test
+
+  demo:
+    name: Demo (Stencil ${{ matrix.stencil }}, ${{ matrix.jsx }} JSX, Node ${{ matrix.node }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        node: [22, 24]
+        stencil: ["4", "5-beta"]
+        jsx: [automatic, classic]
+    steps:
+      - uses: actions/checkout@v7
+      - uses: pnpm/action-setup@v6
+      - uses: actions/setup-node@v7
+        with:
+          node-version: ${{ matrix.node }}
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+
+      # Install the beta in every package: the router's type declarations
+      # resolve @stencil/core from its own node_modules, so it must match the
+      # demo's version (as it would in an app with a single install).
+      - name: Install Stencil v5 beta
+        if: matrix.stencil == '5-beta'
+        run: |
+          pnpm -r add -D @stencil/core@beta
+          pnpm --filter @stencil-community/router typecheck
+          pnpm --filter @stencil-community/router test
+
+      - run: pnpm --filter @stencil-community/router build
+
+      - name: Use classic jsxFactory
+        if: matrix.jsx == 'classic'
+        run: node packages/demo/scripts/use-classic-jsx.mjs
+
+      - name: Migrate demo to Stencil v5
+        if: matrix.stencil == '5-beta'
+        working-directory: packages/demo
+        run: pnpm exec stencil migrate
+
+      - name: Build demo
+        working-directory: packages/demo
+        # v5 betas currently prerender light-DOM components without hydration
+        # markers, so they render twice on load. Test a client-only build
+        # until that's fixed upstream.
+        run: pnpm exec stencil build ${{ matrix.stencil == '4' && '--prerender' || '' }}
+
+      - run: pnpm --filter demo exec playwright install --with-deps chromium
+      - name: Browser tests
+        run: pnpm --filter demo test
+        env:
+          NO_PRERENDER: ${{ matrix.stencil != '4' && '1' || '' }}

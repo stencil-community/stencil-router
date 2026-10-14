@@ -17,9 +17,6 @@ test("redirects / to /main", async ({ page }) => {
   await expect(page).toHaveURL(/\/main$/);
 });
 
-// Set NO_PRERENDER=1 when testing a client-only build (no static page state).
-const prerendered = !process.env.NO_PRERENDER;
-
 test("navigates client-side with href() and supports back", async ({ page }) => {
   await page.goto("/main");
   await expect(page.locator("h1")).toHaveText("Main");
@@ -27,8 +24,7 @@ test("navigates client-side with href() and supports back", async ({ page }) => 
 
   await page.getByRole("link", { name: "Go to Hello" }).click();
   await expect(page).toHaveURL(/\/blog\/hello$/i);
-  if (prerendered) await expect(page.locator("h1")).toHaveText("Blog Page hello");
-  else await expect(page.locator("h1")).toHaveText(/^Blog/);
+  await expect(page.locator("h1")).toHaveText("Blog Page hello");
   expect(await page.evaluate(() => (window as any).__noReload)).toBe(true);
 
   await page.goBack();
@@ -36,7 +32,6 @@ test("navigates client-side with href() and supports back", async ({ page }) => 
 });
 
 test("serves prerendered static page state", async ({ page }) => {
-  test.skip(!prerendered, "requires a prerendered build");
   await page.goto("/blog/hello");
   await expect(page.locator("h1")).toHaveText("Blog Page hello");
 });

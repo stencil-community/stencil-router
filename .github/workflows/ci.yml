@@ -85,15 +85,6 @@ jobs:
         working-directory: packages/demo
         run: pnpm exec stencil migrate
 
-      - name: Build demo
-        working-directory: packages/demo
-        # v5 betas currently prerender light-DOM components without hydration
-        # markers, so they render twice on load. Test a client-only build
-        # until that's fixed upstream.
-        run: pnpm exec stencil build ${{ matrix.stencil == '4' && '--prerender' || '' }}
-
+      - run: pnpm --filter demo build
       - run: pnpm --filter demo exec playwright install --with-deps chromium
-      - name: Browser tests
-        run: pnpm --filter demo test
-        env:
-          NO_PRERENDER: ${{ matrix.stencil != '4' && '1' || '' }}
+      - run: pnpm --filter demo test

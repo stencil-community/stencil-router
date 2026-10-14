@@ -225,6 +225,23 @@ pnpm test        # unit tests (vitest) + browser tests (playwright)
 pnpm fmt         # format with oxfmt
 ```
 
+## Releasing
+
+Releases are cut from GitHub: **Actions → Release → Run workflow** on `master`.
+
+- **bump**: `auto` picks patch/minor/major from the [Conventional Commits](https://www.conventionalcommits.org)
+  since the last tag (`fix`/`perf` → patch, `feat` → minor, `!` or `BREAKING CHANGE` → major).
+  You can also choose `patch`, `minor`, `major`, a `pre*` bump, or `current` to release the
+  version already in `package.json`.
+- **preid**: the prerelease identifier for `pre*` bumps (default `beta`). Prereleases publish
+  to the `next` dist-tag.
+- **dry-run**: computes the version and notes, then builds and packs without pushing, publishing
+  or creating a release.
+
+The workflow runs CI, commits `chore(release): vX.Y.Z`, tags and pushes it. It then publishes to
+npm with provenance and creates a GitHub release with notes generated from the commits. PR titles
+are checked against Conventional Commits, so squash merges keep `auto` accurate.
+
 [npm-badge]: https://img.shields.io/npm/v/@stencil-community/router.svg
 [npm-badge-url]: https://www.npmjs.com/package/@stencil-community/router
 [ci-badge]: https://github.com/stencil-community/stencil-router/actions/workflows/ci.yml/badge.svg

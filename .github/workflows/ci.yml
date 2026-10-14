@@ -4,11 +4,33 @@ on:
   push:
     branches: [master]
   pull_request:
+  workflow_call:
 
 permissions:
   contents: read
 
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.event.pull_request.number || github.sha }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
 jobs:
+  pr-title:
+    name: Conventional PR title
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      # Squash-merged PR titles become the commits that `release.yml` reads
+      # to pick the next version automatically.
+      - name: Check title
+        env:
+          TITLE: ${{ github.event.pull_request.title }}
+        run: |
+          pattern='^(feat|fix|perf|refactor|docs|test|build|ci|chore|style|revert)(\([a-z0-9-]+\))?!?: .+'
+          if ! printf '%s' "$TITLE" | grep -Eq "$pattern"; then
+            echo "::error::PR title must follow Conventional Commits, e.g. 'fix(match): handle trailing slashes'. Got: $TITLE"
+            exit 1
+          fi
+
   check:
     name: Lint, typecheck & unit tests
     runs-on: ubuntu-latest

@@ -1,3 +1,4 @@
+import { describe, expect, it, beforeEach } from "vitest";
 import { handlePushState } from "../utils/helpers";
 
 describe("handlePushState", () => {
@@ -6,7 +7,7 @@ describe("handlePushState", () => {
   let pushedStateHref: string;
 
   beforeEach(() => {
-    pushedStateHref = null;
+    pushedStateHref = null as any;
     win = {
       scrollTo(x: number, y: number) {
         win.scrollX = x;

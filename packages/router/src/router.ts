@@ -42,7 +42,7 @@ export const createWindowRouter = (
   doc: Document,
   loc: Location,
   hstry: History,
-  opts: RouterOptions
+  opts: RouterOptions,
 ) => {
   let hasQueuedView = false;
   let lastHref = loc.href;
@@ -71,10 +71,7 @@ export const createWindowRouter = (
     }
   };
 
-  const match = (
-    testUrl: URL,
-    routes: RouteEntry[]
-  ): MatchResult | undefined => {
+  const match = (testUrl: URL, routes: RouteEntry[]): MatchResult | undefined => {
     for (let i = 0; i < routes.length; i++) {
       const route = routes[i];
       const params = matchPath(normalizePathname(testUrl), route.path);
@@ -116,10 +113,7 @@ export const createWindowRouter = (
     }
   };
 
-  const createSwitchChildren = (
-    matchedViewChildren: any,
-    hasRouteEntryChanged: boolean
-  ) => {
+  const createSwitchChildren = (matchedViewChildren: any, hasRouteEntryChanged: boolean) => {
     pushView(matchedViewChildren);
     hasQueuedView = false;
 
@@ -170,12 +164,7 @@ export const createWindowRouter = (
     h((_t: any, _c: VNode[], utils: FunctionalUtilities) => {
       const vchildren = Array.isArray(view.c) ? view.c : [view.c];
       utils.forEach(vchildren, (vnode, i) => {
-        if (
-          vnode &&
-          !isString(view.c[i]) &&
-          isString(vnode.vtag) &&
-          vnode.vtag.includes("-")
-        ) {
+        if (vnode && !isString(view.c[i]) && isString(vnode.vtag) && vnode.vtag.includes("-")) {
           hasQueuedView = true;
         }
       });
@@ -188,12 +177,11 @@ export const createWindowRouter = (
       const hChildren = utils.map(vchildren, (vnode, i) => {
         if (isString(vchildren[i])) {
           // text nodes are not mapped correctly with the function utils
-          return vchildren[i];
+          return vchildren[i] as any;
         }
         if (vnode && hasQueuedView && view.s === VIEW_STATE.QUEUED) {
           vnode.vattrs = vnode.vattrs || {};
-          vnode.vattrs.class =
-            (vnode.vattrs.class || "") + " stencil-router-queue";
+          vnode.vattrs.class = (vnode.vattrs.class || "") + " stencil-router-queue";
           const userRef = vnode.vattrs.ref;
           vnode.vattrs.ref = (el: any) => {
             addComponentOnReady(view, el);
@@ -298,9 +286,7 @@ export const createWindowRouter = (
         if (Build.isServer) {
           if (isPromise<PageState>(pageState)) {
             return pageState
-              .then((resolvedPagedState) =>
-                route.jsx(matchResult.params, resolvedPagedState)
-              )
+              .then((resolvedPagedState) => route.jsx(matchResult.params, resolvedPagedState))
               .catch((err) => {
                 console.error(err);
                 return route.jsx(matchResult.params);
@@ -322,8 +308,7 @@ export const createWindowRouter = (
       const matchedViewChildren = getRouteChildren(matchResult);
 
       const activeMatchResult = match(urlFromHref(loc.href), childrenRoutes);
-      const hasRouteEntryChanged =
-        activeMatchResult?.index !== matchResult?.index;
+      const hasRouteEntryChanged = activeMatchResult?.index !== matchResult?.index;
 
       if (matchedViewChildren) {
         if (Build.isServer) {
@@ -389,10 +374,7 @@ export const createWindowRouter = (
   };
 };
 
-export const href = (
-  href: string,
-  router: Router | undefined = defaultRouter
-) => {
+export const href = (href: string, router: Router | undefined = defaultRouter) => {
   if (typeof href !== "string") {
     return {};
   }
@@ -418,7 +400,7 @@ export const href = (
     if (baseName!.indexOf(".") > -1) {
       console.error(
         "Router href() should only be used for a page link, without an extension, and not for an asset",
-        href
+        href,
       );
       return {
         href,
@@ -450,9 +432,7 @@ export const Route: FunctionalComponent<RouteProps> = (props, children) => {
     return entry as any;
   }
   if (Build.isDev && props.render && children.length > 0) {
-    console.warn(
-      "Route: if `render` is provided, the component should not have any children"
-    );
+    console.warn("Route: if `render` is provided, the component should not have any children");
   }
   const entry: RouteEntry = {
     path: props.path,
@@ -463,10 +443,7 @@ export const Route: FunctionalComponent<RouteProps> = (props, children) => {
   return entry as any;
 };
 
-const matchPath = (
-  pathname: string,
-  path: RoutePath
-): RouteParams | undefined => {
+const matchPath = (pathname: string, path: RoutePath): RouteParams | undefined => {
   if (isString(path)) {
     if (path === pathname) {
       return {};

@@ -32,10 +32,7 @@ export interface PathFunctionOptions {
 
 export type Token = string | Key;
 export type Path = string | RegExp | Array<string | RegExp>;
-export type PathFunction = (
-  data?: { [key: string]: any },
-  options?: PathFunctionOptions
-) => string;
+export type PathFunction = (data?: { [key: string]: any }, options?: PathFunctionOptions) => string;
 
 /**
  * Default configs.
@@ -58,7 +55,7 @@ const PATH_REGEXP = new RegExp(
     // "/route(\\d+)"  => [undefined, undefined, undefined, "\d+", undefined]
     "(?:\\:(\\w+)(?:\\(((?:\\\\.|[^\\\\()])+)\\))?|\\(((?:\\\\.|[^\\\\()])+)\\))([+*?])?",
   ].join("|"),
-  "g"
+  "g",
 );
 
 /**
@@ -124,9 +121,7 @@ export const parse = (str: string, options?: ParseOptions): Token[] => {
       optional: optional,
       repeat: repeat,
       partial: partial,
-      pattern: pattern
-        ? escapeGroup(pattern)
-        : "[^" + escapeString(delimiter) + "]+?",
+      pattern: pattern ? escapeGroup(pattern) : "[^" + escapeString(delimiter) + "]+?",
     });
   }
 
@@ -159,10 +154,7 @@ export const tokensToFunction = (tokens: Token[]): PathFunction => {
     }
   }
 
-  return (
-    data?: { [key: string]: any },
-    options?: PathFunctionOptions
-  ): string => {
+  return (data?: { [key: string]: any }, options?: PathFunctionOptions): string => {
     const encode = (options && options.encode) || encodeURIComponent;
     let path = "";
 
@@ -179,9 +171,7 @@ export const tokensToFunction = (tokens: Token[]): PathFunction => {
 
       if (Array.isArray(value)) {
         if (!token.repeat) {
-          throw new TypeError(
-            'Expected "' + token.name + '" to not repeat, but got array'
-          );
+          throw new TypeError('Expected "' + token.name + '" to not repeat, but got array');
         }
 
         if (value.length === 0) {
@@ -195,11 +185,7 @@ export const tokensToFunction = (tokens: Token[]): PathFunction => {
 
           if (!matches[i].test(segment)) {
             throw new TypeError(
-              'Expected all "' +
-                token.name +
-                '" to match "' +
-                token.pattern +
-                '"'
+              'Expected all "' + token.name + '" to match "' + token.pattern + '"',
             );
           }
 
@@ -209,11 +195,7 @@ export const tokensToFunction = (tokens: Token[]): PathFunction => {
         continue;
       }
 
-      if (
-        typeof value === "string" ||
-        typeof value === "number" ||
-        typeof value === "boolean"
-      ) {
+      if (typeof value === "string" || typeof value === "number" || typeof value === "boolean") {
         segment = encode(String(value));
 
         if (!matches[i].test(segment)) {
@@ -224,7 +206,7 @@ export const tokensToFunction = (tokens: Token[]): PathFunction => {
               token.pattern +
               '", but got "' +
               segment +
-              '"'
+              '"',
           );
         }
 
@@ -240,10 +222,7 @@ export const tokensToFunction = (tokens: Token[]): PathFunction => {
       }
 
       throw new TypeError(
-        'Expected "' +
-          token.name +
-          '" to be ' +
-          (token.repeat ? "an array" : "a string")
+        'Expected "' + token.name + '" to be ' + (token.repeat ? "an array" : "a string"),
       );
     }
 
@@ -254,8 +233,7 @@ export const tokensToFunction = (tokens: Token[]): PathFunction => {
 /**
  * Escape a regular expression string.
  */
-const escapeString = (str: string) =>
-  str.replace(/([.+*?=^!:${}()[\]|/\\])/g, "\\$1");
+const escapeString = (str: string) => str.replace(/([.+*?=^!:${}()[\]|/\\])/g, "\\$1");
 
 /**
  * Escape the capturing group by escaping special characters and meaning.
@@ -265,8 +243,7 @@ const escapeGroup = (group: string) => group.replace(/([=!:$/()])/g, "\\$1");
 /**
  * Get the flags for a regexp from the options.
  */
-const flags = (options: RegExpOptions): string =>
-  options && options.sensitive ? "" : "i";
+const flags = (options: RegExpOptions): string => (options && options.sensitive ? "" : "i");
 
 /**
  * Pull out keys from a regexp.
@@ -300,7 +277,7 @@ const regexpToRegexp = (path: RegExp, keys: Key[]): RegExp => {
 const arrayToRegexp = (
   path: Array<string | RegExp>,
   keys: Key[],
-  options: RegExpOptions
+  options: RegExpOptions,
 ): RegExp => {
   const parts = [];
 
@@ -314,20 +291,13 @@ const arrayToRegexp = (
 /**
  * Create a path regexp from string input.
  */
-const stringToRegexp = (
-  path: string,
-  keys: Key[],
-  options: RegExpOptions
-): RegExp => tokensToRegExp(parse(path, options), keys, options);
+const stringToRegexp = (path: string, keys: Key[], options: RegExpOptions): RegExp =>
+  tokensToRegExp(parse(path, options), keys, options);
 
 /**
  * Expose a function for taking tokens and returning a RegExp.
  */
-export const tokensToRegExp = (
-  tokens: Token[],
-  keys?: Key[],
-  options?: RegExpOptions
-): RegExp => {
+export const tokensToRegExp = (tokens: Token[], keys?: Key[], options?: RegExpOptions): RegExp => {
   options = options || {};
 
   const strict = options.strict;
@@ -348,19 +318,11 @@ export const tokensToRegExp = (
 
     if (typeof token === "string") {
       route += escapeString(token);
-      isEndDelimited =
-        i === tokens.length - 1 &&
-        delimiters.indexOf(token[token.length - 1]) > -1;
+      isEndDelimited = i === tokens.length - 1 && delimiters.indexOf(token[token.length - 1]) > -1;
     } else {
       const prefix = escapeString(token.prefix || "");
       const capture = token.repeat
-        ? "(?:" +
-          token.pattern +
-          ")(?:" +
-          prefix +
-          "(?:" +
-          token.pattern +
-          "))*"
+        ? "(?:" + token.pattern + ")(?:" + prefix + "(?:" + token.pattern + "))*"
         : token.pattern;
 
       if (keys) keys.push(token);
@@ -396,11 +358,7 @@ export const tokensToRegExp = (
  * placeholder key descriptions. For example, using `/user/:id`, `keys` will
  * contain `[{ name: 'id', delimiter: '/', optional: false, repeat: false }]`.
  */
-export const pathToRegexp = (
-  path: Path,
-  keys: Key[],
-  options: RegExpOptions
-): RegExp => {
+export const pathToRegexp = (path: Path, keys: Key[], options: RegExpOptions): RegExp => {
   if (path instanceof RegExp) {
     return regexpToRegexp(path, keys);
   } else if (Array.isArray(path)) {

@@ -1,15 +1,19 @@
 {
   "name": "root",
   "private": true,
-  "devDependencies": {
-    "@stencil/core": "^2.17.3",
-    "lerna": "^6.4.1"
-  },
-  "workspaces": [
-    "packages/*"
-  ],
+  "type": "module",
   "scripts": {
-    "test": "lerna run test",
-    "build": "lerna run build"
-  }
+    "build": "pnpm -r build",
+    "test": "pnpm -r test",
+    "typecheck": "pnpm -r typecheck",
+    "fmt": "oxfmt",
+    "fmt:check": "oxfmt --check"
+  },
+  "devDependencies": {
+    "oxfmt": "^0.73.0"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "packageManager": "pnpm@10.34.7"
 }

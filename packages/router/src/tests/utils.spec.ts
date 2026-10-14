@@ -1,3 +1,4 @@
+import { describe, expect, it } from "vitest";
 import { normalizePathname, shouldPushState } from "../utils/helpers";
 import { match } from "../utils/match";
 
@@ -46,57 +47,51 @@ describe("utils", () => {
 
   it("normalizePathname", () => {
     expect(normalizePathname(new URL("https://stenciljs.com/"))).toBe("/");
-    expect(normalizePathname(new URL("https://stenciljs.com/pathname"))).toBe(
-      "/pathname"
+    expect(normalizePathname(new URL("https://stenciljs.com/pathname"))).toBe("/pathname");
+    expect(normalizePathname(new URL("https://stenciljs.com/PaThName"))).toBe("/pathname");
+    expect(normalizePathname(new URL("https://stenciljs.com/PaThName?search=qs#hash"))).toBe(
+      "/pathname",
     );
-    expect(normalizePathname(new URL("https://stenciljs.com/PaThName"))).toBe(
-      "/pathname"
-    );
-    expect(
-      normalizePathname(
-        new URL("https://stenciljs.com/PaThName?search=qs#hash")
-      )
-    ).toBe("/pathname");
   });
 
-  it('should return a match function', () => {
-    expect(match('/one')).toBeInstanceOf(Function);
+  it("should return a match function", () => {
+    expect(match("/one")).toBeInstanceOf(Function);
   });
 
-  it('should match exact', () => {
-    expect(match('/one', { exact: true })('/one')).toMatchObject({});
-    expect(match('/one', { exact: true })('/one/')).toMatchObject({});
-    expect(match('/one', { exact: true })('/one/two')).toBeUndefined();
-    expect(match('/one', { exact: false })('/one/two')).toMatchObject({});
+  it("should match exact", () => {
+    expect(match("/one", { exact: true })("/one")).toMatchObject({});
+    expect(match("/one", { exact: true })("/one/")).toMatchObject({});
+    expect(match("/one", { exact: true })("/one/two")).toBeUndefined();
+    expect(match("/one", { exact: false })("/one/two")).toMatchObject({});
   });
 
-  it('should match strict', () => {
-    expect(match('/one/', { strict: true })('/one')).toBeUndefined();
-    expect(match('/one/', { strict: true })('/one/')).toMatchObject({});
-    expect(match('/one/', { strict: true })('/one/two')).toMatchObject({});
-    expect(match('/one/', { strict: false })('/one')).toMatchObject({});
+  it("should match strict", () => {
+    expect(match("/one/", { strict: true })("/one")).toBeUndefined();
+    expect(match("/one/", { strict: true })("/one/")).toMatchObject({});
+    expect(match("/one/", { strict: true })("/one/two")).toMatchObject({});
+    expect(match("/one/", { strict: false })("/one")).toMatchObject({});
   });
 
-  it('should match exact strict', () => {
-    expect(match('/one', { exact: true, strict: true })('/one')).toMatchObject({});
-    expect(match('/one', { exact: true, strict: true })('/one/')).toBeUndefined();
-    expect(match('/one', { exact: true, strict: true })('/one/two')).toBeUndefined();
+  it("should match exact strict", () => {
+    expect(match("/one", { exact: true, strict: true })("/one")).toMatchObject({});
+    expect(match("/one", { exact: true, strict: true })("/one/")).toBeUndefined();
+    expect(match("/one", { exact: true, strict: true })("/one/two")).toBeUndefined();
   });
 
-  it('should match tokens', () => {
-    expect(match('/users/:id')('/users/1')).toMatchObject({ id: '1' });
+  it("should match tokens", () => {
+    expect(match("/users/:id")("/users/1")).toMatchObject({ id: "1" });
   });
 
-  it('should match an array', () => {
-    expect(match(['/one', '/two'])('/one')).toMatchObject({});
-    expect(match(['/one', '/two'])('/two')).toMatchObject({});
-    expect(match(['/one', '/two'])('/three')).toBeUndefined();
+  it("should match an array", () => {
+    expect(match(["/one", "/two"])("/one")).toMatchObject({});
+    expect(match(["/one", "/two"])("/two")).toMatchObject({});
+    expect(match(["/one", "/two"])("/three")).toBeUndefined();
   });
 
-  it('should match a regexp', () => {
-    expect(match(/^\/one/)('/one')).toMatchObject({});
-    expect(match(/^\/one/)('/two')).toBeUndefined();
-    expect(match(/^\/two/)('/one')).toBeUndefined();
-    expect(match(/^\/two/)('/two')).toMatchObject({});
+  it("should match a regexp", () => {
+    expect(match(/^\/one/)("/one")).toMatchObject({});
+    expect(match(/^\/one/)("/two")).toBeUndefined();
+    expect(match(/^\/two/)("/one")).toBeUndefined();
+    expect(match(/^\/two/)("/two")).toMatchObject({});
   });
 });

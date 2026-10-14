@@ -1,3 +1,4 @@
+import { describe, expect, it, beforeEach } from "vitest";
 import { createWindowRouter, Route } from "../router";
 import { RouterOptions } from "../index";
 import { Build } from "@stencil/core";
@@ -19,7 +20,7 @@ describe("router", () => {
         popState = cb;
       },
       removeEventListener() {
-        popState = null;
+        popState = null as any;
       },
       scrollTo(x: number, y: number) {
         win.scrollX = x;
@@ -52,17 +53,17 @@ describe("router", () => {
           path: "/page-2",
         }),
       ],
-      null
+      null as any,
     );
   };
 
   it("push same page hash change", async () => {
     const { router } = createWindowRouter(win, doc, loc, hstry, opts);
 
-    let newUrlChange: URL;
-    let oldUrlChange: URL;
-    let newUrlBeforeChange: URL;
-    let oldUrlBeforeChange: URL;
+    let newUrlChange!: URL;
+    let oldUrlChange!: URL;
+    let newUrlBeforeChange!: URL;
+    let oldUrlBeforeChange!: URL;
     router.on("change", (n, o) => {
       newUrlChange = n;
       oldUrlChange = o;
@@ -85,13 +86,9 @@ describe("router", () => {
     expect(win.scrollX).toBe(50);
     expect(win.scrollY).toBe(100);
 
-    expect(newUrlChange.href).toBe(
-      `https://capacitorjs.com/page-1#hash-change`
-    );
+    expect(newUrlChange.href).toBe(`https://capacitorjs.com/page-1#hash-change`);
     expect(oldUrlChange.href).toBe(`https://capacitorjs.com/page-1`);
-    expect(newUrlBeforeChange.href).toBe(
-      `https://capacitorjs.com/page-1#hash-change`
-    );
+    expect(newUrlBeforeChange.href).toBe(`https://capacitorjs.com/page-1#hash-change`);
     expect(oldUrlBeforeChange.href).toBe(`https://capacitorjs.com/page-1`);
   });
 
@@ -105,7 +102,7 @@ describe("router", () => {
     expect(router.path).toBe(`/page-2`);
 
     Object.assign(loc, new URL(`https://capacitorjs.com/page-1`));
-    await popState(null);
+    await popState(null as any);
     renderSwitch(router);
     expect(state.views).toHaveLength(1);
 
@@ -115,10 +112,10 @@ describe("router", () => {
 
   it("push", async () => {
     const { router, state } = createWindowRouter(win, doc, loc, hstry, opts);
-    let newUrlChange: URL;
-    let oldUrlChange: URL;
-    let newUrlBeforeChange: URL;
-    let oldUrlBeforeChange: URL;
+    let newUrlChange!: URL;
+    let oldUrlChange!: URL;
+    let newUrlBeforeChange!: URL;
+    let oldUrlBeforeChange!: URL;
     router.on("change", (n, o) => {
       newUrlChange = n;
       oldUrlChange = o;
@@ -154,10 +151,10 @@ describe("router", () => {
 
   it("set state", () => {
     const { router, state } = createWindowRouter(win, doc, loc, hstry, opts);
-    let newUrlChange: URL;
-    let oldUrlChange: URL;
-    let newUrlBeforeChange: URL;
-    let oldUrlBeforeChange: URL;
+    let newUrlChange!: URL;
+    let oldUrlChange!: URL;
+    let newUrlBeforeChange!: URL;
+    let oldUrlBeforeChange!: URL;
     router.on("change", (n, o) => {
       newUrlChange = n;
       oldUrlChange = o;
@@ -185,5 +182,5 @@ describe("router", () => {
 });
 
 function TestRoute(props: { path: string }) {
-  return Route(props, [], null) as any;
+  return Route(props, [], null as any) as any;
 }

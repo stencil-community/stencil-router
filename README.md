@@ -55,7 +55,6 @@ export class AppRoot {
 }
 ```
 
-
 ### Matching
 
 A route's `path` can be:

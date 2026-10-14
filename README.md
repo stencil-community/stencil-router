@@ -13,15 +13,6 @@ The current location is held in a `@stencil/store`. Routes are declared with
 functional components and `Router.Switch` renders only the first route that
 matches.
 
-## Compatibility
-
-| `@stencil/core` | JSX mode                                                     |
-| --------------- | ------------------------------------------------------------ |
-| 4.x             | `jsxImportSource` (automatic runtime) and `jsxFactory` (`h`) |
-| 5.x             | `jsxImportSource` (automatic runtime) and `jsxFactory` (`h`) |
-
-The package is published as ES modules only.
-
 ## Install
 
 ```bash
@@ -64,19 +55,6 @@ export class AppRoot {
 }
 ```
 
-The examples use the automatic JSX runtime, which needs this in `tsconfig.json`:
-
-```json
-{
-  "compilerOptions": {
-    "jsx": "react-jsx",
-    "jsxImportSource": "@stencil/core"
-  }
-}
-```
-
-With the classic `"jsx": "react", "jsxFactory": "h"` setup, also import `h` from
-`@stencil/core` in each file.
 
 ### Matching
 

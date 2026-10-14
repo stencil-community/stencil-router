@@ -1,0 +1,180 @@
+name: Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      bump:
+        description: Version bump (auto = from conventional commits, current = release package.json as-is)
+        type: choice
+        default: auto
+        options:
+          - auto
+          - current
+          - patch
+          - minor
+          - major
+          - prerelease
+          - prepatch
+          - preminor
+          - premajor
+      preid:
+        description: Prerelease identifier (for pre* bumps)
+        type: string
+        default: beta
+      dry-run:
+        description: Dry run (compute version and notes, build and pack, but do not push, publish or release)
+        type: boolean
+        default: false
+
+concurrency:
+  group: release
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  ci:
+    name: CI
+    uses: ./.github/workflows/ci.yml
+
+  version:
+    name: Version
+    needs: ci
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    outputs:
+      version: ${{ steps.version.outputs.version }}
+      tag: ${{ steps.version.outputs.tag }}
+      prerelease: ${{ steps.version.outputs.prerelease }}
+      dist-tag: ${{ steps.version.outputs.dist-tag }}
+    steps:
+      - name: Require the default branch
+        if: github.ref_name != github.event.repository.default_branch
+        run: |
+          echo "::error::Releases must run from ${{ github.event.repository.default_branch }}"
+          exit 1
+
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+      - uses: pnpm/action-setup@v6
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+
+      - name: Compute version
+        id: version
+        env:
+          BUMP: ${{ inputs.bump }}
+          PREID: ${{ inputs.preid }}
+        run: node scripts/release-version.mjs --bump "$BUMP" --preid "$PREID" --notes release-notes.md
+
+      - name: Check version is unreleased
+        env:
+          VERSION: ${{ steps.version.outputs.version }}
+          TAG: ${{ steps.version.outputs.tag }}
+        run: |
+          if git rev-parse -q --verify "refs/tags/$TAG" >/dev/null; then
+            echo "::error::Tag $TAG already exists"; exit 1
+          fi
+          if npm view "@stencil-community/router@$VERSION" version 2>/dev/null | grep -q .; then
+            echo "::error::@stencil-community/router@$VERSION is already published"; exit 1
+          fi
+
+      - name: Release notes
+        run: cat release-notes.md >> "$GITHUB_STEP_SUMMARY"
+      - uses: actions/upload-artifact@v7
+        with:
+          name: release-notes
+          path: release-notes.md
+
+      - name: Commit, tag and push
+        env:
+          TAG: ${{ steps.version.outputs.tag }}
+          DRY_RUN: ${{ inputs.dry-run }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          if ! git diff --quiet; then
+            git commit -am "chore(release): $TAG"
+          fi
+          git tag -a "$TAG" -m "$TAG"
+          if [ "$DRY_RUN" = "true" ]; then
+            echo "Dry run: would push $(git rev-parse --short HEAD) and $TAG"
+          else
+            git push --atomic origin "HEAD:${{ github.ref_name }}" "$TAG"
+          fi
+
+  publish:
+    name: Publish
+    needs: version
+    runs-on: ubuntu-latest
+    # Add protection rules (e.g. required reviewers) to this environment in
+    # the repository settings to gate publishing.
+    environment: npm
+    permissions:
+      contents: write
+      id-token: write
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          # A dry run never pushed the tag, so build the triggering commit.
+          ref: ${{ inputs.dry-run && github.sha || needs.version.outputs.tag }}
+          fetch-depth: ${{ inputs.dry-run && '0' || '1' }}
+      - uses: pnpm/action-setup@v6
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: pnpm
+          registry-url: https://registry.npmjs.org
+      - run: pnpm install --frozen-lockfile
+
+      - name: Apply version (dry run)
+        if: inputs.dry-run
+        env:
+          BUMP: ${{ inputs.bump }}
+          PREID: ${{ inputs.preid }}
+        run: node scripts/release-version.mjs --bump "$BUMP" --preid "$PREID"
+
+      - name: Check package version
+        working-directory: packages/router
+        env:
+          VERSION: ${{ needs.version.outputs.version }}
+        run: test "$(node -p 'require("./package.json").version')" = "$VERSION"
+
+      - run: pnpm --filter @stencil-community/router build
+
+      - name: Pack
+        working-directory: packages/router
+        run: pnpm pack --pack-destination "$RUNNER_TEMP"
+
+      # Uses npm trusted publishing (OIDC), so no NPM_TOKEN secret is needed.
+      # Configure it at npmjs.com > package settings > Trusted publishing.
+      - name: Publish to npm
+        env:
+          DIST_TAG: ${{ needs.version.outputs.dist-tag }}
+          DRY_RUN: ${{ inputs.dry-run }}
+        run: |
+          npm publish "$RUNNER_TEMP"/stencil-community-router-*.tgz \
+            --access public --provenance --tag "$DIST_TAG" \
+            $([ "$DRY_RUN" = "true" ] && echo --dry-run)
+
+      - uses: actions/download-artifact@v8
+        with:
+          name: release-notes
+
+      - name: Create GitHub release
+        if: ${{ !inputs.dry-run }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ needs.version.outputs.tag }}
+          PRERELEASE: ${{ needs.version.outputs.prerelease }}
+        run: |
+          gh release create "$TAG" "$RUNNER_TEMP"/stencil-community-router-*.tgz \
+            --title "$TAG" --notes-file release-notes.md \
+            $([ "$PRERELEASE" = "true" ] && echo --prerelease) \
+            $([ "$PRERELEASE" = "true" ] || echo --latest)

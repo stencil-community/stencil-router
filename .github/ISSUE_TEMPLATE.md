@@ -7,7 +7,7 @@ Before submitting an issue, please consult our [docs](https://stenciljs.com/).
  insert the output from npm list @stencil/core here
 ```
 
-**I'm submitting a ...**  (check one with "x")
+**I'm submitting a ...** (check one with "x")
 [ ] bug report
 [ ] feature request
 [ ] support request => Please do not submit support requests here, use one of these channels: https://forum.ionicframework.com/ or https://stencil-worldwide.slack.com

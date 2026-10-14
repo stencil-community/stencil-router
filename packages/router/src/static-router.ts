@@ -1,19 +1,13 @@
 import { Build } from "@stencil/core";
 import { createWindowRouter } from "./router";
 import { isPromise, normalizePathname, devDebug } from "./utils/helpers";
-import type {
-  MapParamData,
-  PageState,
-  RouterOptions,
-  RouteParams,
-  StateHistory,
-} from "./types";
+import type { MapParamData, PageState, RouterOptions, RouteParams, StateHistory } from "./types";
 import { setDocumentStaticData } from "./utils/server-static-data-proxy";
 
 const stateHistory: StateHistory = new Map();
 
 export const staticState = (
-  mapFn: MapParamData
+  mapFn: MapParamData,
 ): ((params: RouteParams, url: URL) => PageState) => {
   if (Build.isServer) {
     // server side (async)
@@ -24,11 +18,7 @@ export const staticState = (
   }
 };
 
-const staticServerState = (
-  params: RouteParams,
-  url: URL,
-  mapFn: MapParamData
-): PageState => {
+const staticServerState = (params: RouteParams, url: URL, mapFn: MapParamData): PageState => {
   // server-side only
   const inputData = mapFn(params, url);
 
@@ -53,7 +43,7 @@ const staticClientState = (_params: RouteParams | undefined, url: URL) => {
 
 const getDocumentState = (url: URL | Location, doc: Document) => {
   const staticElm = doc.querySelector(
-    '[data-stencil-static="page.state"]'
+    '[data-stencil-static="page.state"]',
   ) as HTMLScriptElement | null;
   let staticState: any;
   if (staticElm) {
@@ -66,11 +56,9 @@ const getDocumentState = (url: URL | Location, doc: Document) => {
   return setCachedState(url, staticState);
 };
 
-const getCachedState = (url: URL | Location) =>
-  stateHistory.get(normalizePathname(url));
+const getCachedState = (url: URL | Location) => stateHistory.get(normalizePathname(url));
 
-const hasCachedState = (url: URL | Location) =>
-  stateHistory.has(normalizePathname(url));
+const hasCachedState = (url: URL | Location) => stateHistory.has(normalizePathname(url));
 
 const setCachedState = (url: URL | Location, stateData?: any) =>
   stateHistory.set(normalizePathname(url), stateData);
@@ -80,13 +68,15 @@ const createWindowStaticRouter = (
   doc: Document,
   loc: Location,
   hstry: History,
-  opts: RouterOptions
+  opts: RouterOptions,
 ) => {
   const buildId = doc.documentElement.dataset.stencilBuild;
-  const getDataFetchPath = (url: URL) =>
-    `${
-      url.pathname.endsWith("/") ? url.pathname : url.pathname + "/"
-    }page.state.json?s-cache=${buildId}`;
+  // Prerendered pages are written at the lowercased paths that href() renders,
+  // so request their state there too, regardless of the casing pushed.
+  const getDataFetchPath = (url: URL) => {
+    const pathname = normalizePathname(url);
+    return `${pathname.endsWith("/") ? pathname : pathname + "/"}page.state.json?v=${buildId}`;
+  };
 
   const loadStaticState = async (pushToUrl: URL) => {
     try {
@@ -123,9 +113,7 @@ const createWindowStaticRouter = (
           // stop so we don't trigger the location.href
           return true;
         } else {
-          devDebug(
-            `beforePush: ${pushToUrl.pathname} [fetched failed ${res.status}]`
-          );
+          devDebug(`beforePush: ${pushToUrl.pathname} [fetched failed ${res.status}]`);
         }
       }
     } catch (e) {
@@ -150,9 +138,7 @@ const createWindowStaticRouter = (
     if (
       normalizePathname(navigatedToUrl) !== normalizePathname(currentUrl) &&
       !getCachedState(navigatedToUrl) &&
-      !doc.head.querySelector(
-        `link[href="${getDataFetchPath(navigatedToUrl)}"]`
-      )
+      !doc.head.querySelector(`link[href="${getDataFetchPath(navigatedToUrl)}"]`)
     ) {
       const linkElm = doc.createElement("link");
       linkElm.setAttribute("rel", "prefetch");
@@ -177,7 +163,7 @@ const createWindowStaticRouter = (
   if (Build.isBrowser) {
     if (!buildId) {
       console.warn(
-        `Stencil Router: html document has not been prerendered, falling back to non-static router`
+        `Stencil Router: html document has not been prerendered, falling back to non-static router`,
       );
       return createWindowRouter(win, doc, loc, hstry, opts);
     }

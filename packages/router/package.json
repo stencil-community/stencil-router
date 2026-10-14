@@ -1,51 +1,51 @@
 {
   "name": "@stencil-community/router",
-  "version": "2.0.0-2",
-  "description": "Router based in @stencil/store",
-  "main": "dist/index.cjs.js",
-  "module": "dist/index.js",
-  "types": "dist/index.d.ts",
-  "scripts": {
-    "build": "rm -rf dist && tsc -p . && npm run rollup",
-    "lint": "prettier --write 'src/**/*.ts'",
-    "release": "np --any-branch",
-    "rollup": "rollup -c rollup.config.js",
-    "test": "stencil test --spec",
-    "version": "npm run build"
-  },
+  "version": "2.0.0",
+  "description": "A tiny, treeshakable router for Stencil, built on @stencil/store",
   "keywords": [
-    "stencil",
     "router",
+    "stencil",
     "store"
   ],
+  "homepage": "https://github.com/stencil-community/stencil-router#readme",
+  "license": "MIT",
+  "author": "Manu Mtz.-Almeida",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/stencil-community/stencil-router.git",
+    "directory": "packages/router"
+  },
   "files": [
     "dist"
   ],
-  "author": "Manu Mtz.-Almeida",
-  "license": "MIT",
-  "peerDependencies": {
-    "@stencil/core": "^2.17.1"
+  "type": "module",
+  "sideEffects": false,
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "scripts": {
+    "build": "tsdown",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit",
+    "prepack": "cp ../../README.md ../../LICENSE .",
+    "prepublishOnly": "pnpm build"
   },
   "dependencies": {
-    "@stencil/store": "^2.0.0"
+    "@stencil/store": "^2.2.4"
   },
   "devDependencies": {
-    "@stencil/core": "^2.17.1",
-    "@types/jest": "^27.0.3",
-    "jest": "^27.0.3",
-    "jest-cli": "^27.5.1",
-    "jest-config": "^27.5.1",
-    "np": "^6.5.0",
-    "prettier": "^2.1.2",
-    "rollup": "^2.32.0",
-    "typescript": "^4.0.3"
+    "@stencil/core": "^4.45.2",
+    "tsdown": "^0.23.1",
+    "typescript": "^6.0.3",
+    "vitest": "^5.0.4"
   },
-  "repository": {
-    "type": "git",
-    "url": "git://github.com/stencil-community/stencil-router.git"
-  },
-  "homepage": "https://stenciljs.com/",
-  "workspaces": [
-    "packages/*"
-  ]
+  "peerDependencies": {
+    "@stencil/core": "^4.0.0 || >=5.0.0-alpha.0 <5.0.0-next.0 || ^5.0.0"
+  }
 }

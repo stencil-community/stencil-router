@@ -7,11 +7,9 @@ export const isPromise = <T = any>(v: any): v is Promise<T> =>
 
 export const isString = (v: any): v is string => typeof v === "string";
 
-export const normalizePathname = (url: URL | Location) =>
-  url.pathname.toLowerCase();
+export const normalizePathname = (url: URL | Location) => url.pathname.toLowerCase();
 
-export const urlToPath = (url: URL | Location) =>
-  normalizePathname(url) + url.search;
+export const urlToPath = (url: URL | Location) => normalizePathname(url) + url.search;
 
 export const shouldPushState = (loc: URL | Location, newUrl: URL) =>
   urlToPath(loc) !== urlToPath(newUrl);
@@ -21,7 +19,7 @@ export const handlePushState = (
   loc: URL | Location,
   hstry: History,
   isFromPopState: boolean,
-  newUrl: URL
+  newUrl: URL,
 ) => {
   const pathBeforePush = urlToPath(loc);
   const newHref = newUrl.href;

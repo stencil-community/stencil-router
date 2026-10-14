@@ -4,7 +4,7 @@ export const setDocumentStaticData = (inputData: any) => {
 
   addEventListener("DOMContentLoaded", () => {
     let staticDataElm = document.querySelector(
-      '[data-stencil-static="page.state"]'
+      '[data-stencil-static="page.state"]',
     ) as HTMLScriptElement | null;
     if (!staticDataElm) {
       staticDataElm = document.createElement("script");
@@ -39,17 +39,12 @@ export const createProxiedStaticData = (inputData: any) => {
     }
 
     if (Array.isArray(propValue)) {
-      const childArr: any[] = [];
-      obj[propName] = childArr;
-
-      return propValue.map((arrValue, arrIndex) => {
-        return getterProxy(childArr, arrIndex, arrValue);
-      });
+      obj[propName] = propValue;
+      return propValue;
     }
 
     if (valueType === "object") {
-      const childObj: any = (obj[propName] =
-        obj[propName] || Object.create(null));
+      const childObj: any = (obj[propName] = obj[propName] || Object.create(null));
 
       return new Proxy(propValue, {
         get(target, key, receiver) {

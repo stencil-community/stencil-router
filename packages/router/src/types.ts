@@ -47,12 +47,14 @@ export interface RenderProps {
   id?: string;
   mapParams?: (params: RouteParams, url: URL) => PageState;
   render?: (params: RouteParams, mappedState: any | null) => any;
+  /**
+   * Declared so JSX children type-check with the automatic runtime
+   * (`jsx: "react-jsx"` + `jsxImportSource`), which passes them as a prop.
+   */
+  children?: any;
 }
 
-export type MapParamData = (
-  params: RouteParams,
-  url: URL
-) => PageState | Promise<PageState>;
+export type MapParamData = (params: RouteParams, url: URL) => PageState | Promise<PageState>;
 
 export interface RedirectProps {
   path: RoutePath;

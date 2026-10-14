@@ -25,3 +25,7 @@ $RECYCLE.BIN/
 Thumbs.db
 UserInterfaceState.xcuserstate
 .env
+
+# copied in at pack time
+packages/router/README.md
+packages/router/LICENSE

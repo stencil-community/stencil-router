@@ -15,13 +15,13 @@ const patternCache: { [key: string]: any } = {};
 const cacheLimit = 10000;
 
 // Memoized function for creating the path match regex
-const compilePath = (
-  pattern: Path,
-  options: CompileOptions
-): { re: RegExp; keys: Key[] } => {
+const compilePath = (pattern: Path, options: CompileOptions): { re: RegExp; keys: Key[] } => {
   const cacheKey = `${options.end}${options.strict}`;
   const cache = patternCache[cacheKey] || (patternCache[cacheKey] = {});
-  const cachePattern = JSON.stringify(pattern);
+  // RegExps serialize to "{}" with JSON.stringify, so key them by source
+  const cachePattern = JSON.stringify(pattern, (_, v) =>
+    v instanceof RegExp ? `/${v.source}/${v.flags}` : v,
+  );
 
   if (cache[cachePattern]) {
     return cache[cachePattern];
@@ -39,7 +39,7 @@ const compilePath = (
   return compiledPattern;
 };
 
-export const match = (pathname: string, options: MatchOptions = {}) => {
+export const match = (pathname: Path, options: MatchOptions = {}) => {
   const { exact = false, strict = false } = options;
   const { re, keys } = compilePath(pathname, { end: exact, strict });
   return (path: string) => {
@@ -51,14 +51,17 @@ export const match = (pathname: string, options: MatchOptions = {}) => {
     if (exact && path !== url) {
       return undefined;
     }
-    return keys.reduce((memo, key: Key, index) => {
-      memo[key.name] = values[index];
-      return memo;
-    }, {} as { [key: string]: string });
+    return keys.reduce(
+      (memo, key: Key, index) => {
+        memo[key.name] = values[index];
+        return memo;
+      },
+      {} as { [key: string]: string },
+    );
   };
 };
 
-export const matchAny = (pathnames: string[], options: MatchOptions = {}) => {
+export const matchAny = (pathnames: Path[], options: MatchOptions = {}) => {
   const matchFns = pathnames.map((pathname) => match(pathname, options));
   return (path: string) => {
     let result: { [key: string]: string } | undefined;

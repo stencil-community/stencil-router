@@ -1,23 +1,17 @@
 {
   "compilerOptions": {
     "strict": true,
-    "allowSyntheticDefaultImports": true,
     "allowUnreachableCode": false,
     "declaration": true,
-    "experimentalDecorators": true,
-    "lib": ["dom", "es2017"],
-    "outDir": "build",
-    "declarationDir": "dist",
-    "moduleResolution": "node",
+    "isolatedModules": true,
+    "lib": ["dom", "es2022"],
     "module": "esnext",
-    "target": "es2019",
+    "moduleResolution": "bundler",
+    "target": "es2020",
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "jsx": "react",
-    "jsxFactory": "h"
+    "skipLibCheck": true,
+    "types": []
   },
-  "include": [
-    "src"
-  ],
-  "exclude": ["node_modules", "src/**/*.spec.ts"]
+  "include": ["src"]
 }

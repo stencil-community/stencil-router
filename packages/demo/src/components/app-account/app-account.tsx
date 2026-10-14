@@ -1,8 +1,8 @@
-import { Component, Host, h } from '@stencil/core';
-import { Router } from '../../router';
+import { Component, Host } from "@stencil/core";
+import { Router } from "../../router";
 
 @Component({
-  tag: 'app-account',
+  tag: "app-account",
 })
 export class AppAccount {
   render() {
